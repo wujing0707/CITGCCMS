@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2014-5-5 16:40:13 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.wa.cms.model.ChannelModel" table="CHANNEL_MODEL" >
+        <id name="channelModelId" type="long">
+            <column name="CHANNEL_MODEL_ID" precision="10" scale="0" />
+        </id>
+        <many-to-one name="channel" class="com.wa.cms.model.Channel" fetch="select">
+            <column name="CHANNEL_ID" precision="10" scale="0" not-null="true" />
+        </many-to-one>
+        <many-to-one name="model" class="com.wa.cms.model.Model" fetch="select">
+            <column name="MODEL_ID" precision="10" scale="0" not-null="true" />
+        </many-to-one>
+        <property name="tplContent" type="string">
+            <column name="TPL_CONTENT" length="100">
+                <comment>&#196;&#218;&#200;&#221;&#196;&#163;&#176;&#229;</comment>
+            </column>
+        </property>
+        <property name="priority" type="java.lang.Short">
+            <column name="PRIORITY" precision="4" scale="0">
+                <comment>&#203;&#179;&#208;&#242;</comment>
+            </column>
+        </property>
+    </class>
+</hibernate-mapping>

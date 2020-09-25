@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2014-5-5 16:40:13 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.wa.cms.model.Advertisement" table="ADVERTISEMENT" >
+        <comment>&#185;&#227;&#184;&#230;</comment>
+        <id name="advertisementId" type="long">
+            <column name="ADVERTISEMENT_ID" precision="10" scale="0" />
+        </id>
+        <property name="siteName" type="string">
+            <column name="SITE_NAME" length="100" />
+        </property>
+        <property name="logo" type="string">
+            <column name="LOGO" />
+        </property>
+        <property name="description" type="string">
+            <column name="DESCRIPTION" length="512">
+                <comment>&#195;&#232;&#202;&#246;</comment>
+            </column>
+        </property>
+        <property name="priority" type="java.lang.Short">
+            <column name="PRIORITY" precision="4" scale="0" />
+        </property>
+        <property name="domain" type="string">
+            <column name="DOMAIN" />
+        </property>
+        <property name="viewTimes" type="big_decimal">
+            <column name="VIEW_TIMES" precision="22" scale="0" />
+        </property>
+        <property name="position" type="string">
+            <column name="POSITION" length="100">
+                <comment>&#206;&#187;&#214;&#195;</comment>
+            </column>
+        </property>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2014-5-5 16:40:13 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.wa.cms.model.ModelItem" table="MODEL_ITEM">
+        <id name="modelItemId" type="long">
+            <column name="MODEL_ITEM_ID" precision="10" scale="0" />
+        </id>
+        <many-to-one name="model" class="com.wa.cms.model.Model" fetch="select">
+            <column name="MODEL_ID" precision="10" scale="0" not-null="true" />
+        </many-to-one>
+        <property name="field" type="string">
+            <column name="FIELD" length="100">
+                <comment>&#215;&#214;&#182;&#206;</comment>
+            </column>
+        </property>
+        <property name="itemLabel" type="string">
+            <column name="ITEM_LABEL" length="100">
+                <comment>&#177;&#234;&#199;&#169;</comment>
+            </column>
+        </property>
+        <property name="priority" type="java.lang.Short">
+            <column name="PRIORITY" precision="4" scale="0">
+                <comment>&#203;&#179;&#208;&#242;</comment>
+            </column>
+        </property>
+        <property name="dataType" type="string">
+            <column name="DATA_TYPE" length="50">
+                <comment>&#202;&#253;&#190;&#221;&#192;&#224;&#208;&#205;</comment>
+            </column>
+        </property>
+        <property name="defValue" type="string">
+            <column name="DEF_VALUE" length="512">
+                <comment>&#196;&#172;&#200;&#207;&#214;&#181;</comment>
+            </column>
+        </property>
+        <property name="value" type="string">
+            <column name="VALUE" length="512">
+                <comment>&#214;&#181;</comment>
+            </column>
+        </property>
+        <property name="areaRows" type="java.lang.Short">
+            <column name="AREA_ROWS" precision="4" scale="0">
+                <comment>&#208;&#208;&#202;&#253;</comment>
+            </column>
+        </property>
+        <property name="areaCols" type="java.lang.Short">
+            <column name="AREA_COLS" precision="4" scale="0">
+                <comment>&#193;&#208;&#202;&#253;</comment>
+            </column>
+        </property>
+        <property name="textSize" type="big_decimal">
+            <column name="TEXT_SIZE" precision="22" scale="0">
+                <comment>&#206;&#196;&#177;&#190;&#179;&#164;&#182;&#200;</comment>
+            </column>
+        </property>
+        <property name="isSingle" type="java.lang.Byte">
+            <column name="IS_SINGLE" precision="2" scale="0">
+                <comment>&#202;&#199;&#183;&#241;&#182;&#192;&#213;&#188;&#210;&#187;&#208;&#208;</comment>
+            </column>
+        </property>
+        <property name="isCustom" type="java.lang.Byte">
+            <column name="IS_CUSTOM" precision="2" scale="0">
+                <comment>&#202;&#199;&#183;&#241;&#215;&#212;&#182;&#168;&#210;&#229;</comment>
+            </column>
+        </property>
+        <property name="isDisplay" type="java.lang.Byte">
+            <column name="IS_DISPLAY" precision="2" scale="0">
+                <comment>&#202;&#199;&#183;&#241;&#207;&#212;&#202;&#190;</comment>
+            </column>
+        </property>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,88 @@
+/* scrollleft */
+.scrollleft {
+	width: 700px;
+	padding: 0px 0px 20px 0px;
+	margin: 0px auto;
+}
+
+.scrollleft li {
+	float: left;
+	margin-right: 3px;
+	display: inline;
+	width: 125px;
+	text-align: center;
+	line-height: 19px
+}
+
+.scrollleft_shsy {
+    width: 700px;
+    padding: 0px 0px 0px 0px;
+    margin: 0px auto;
+}
+
+.scrollleft_shsy li {
+    float: left;
+    margin-right: 3px;
+    display: inline;
+    width: 170px;
+    text-align: center;
+    line-height: 19px
+}
+
+/* .scrollleft img {
+	width: 136px;
+	height: 100px;
+	padding: 10px;
+	border: solid 1px #ddd;
+} */
+/* scrolltop */
+.scrolltop {
+	width: 230px;
+	height: 270px;
+	overflow: hidden;
+	margin: 10px auto;
+}
+
+.scrolltop li {
+	/* height: 20px; */
+	overflow: hidden;
+	text-align: left;
+	/* line-height: 20px */
+}
+
+.scrolltop_sr {
+    height: 20px;
+    overflow: hidden;
+    margin: 10px auto;
+}
+
+.scrolltop_sr li {
+    overflow: hidden;
+    text-align: left;
+}
+
+/* scrollbirth */
+.scrollbirth {
+	width: 460px;
+	height: 27px;
+	overflow: hidden;
+	margin: 0;
+}
+
+.scrollbirth li {
+	/* height: 20px; */
+	overflow: hidden;
+	text-align: left;
+	/* line-height: 20px */
+}
+
+.scrollbirth_sr {
+    height: 20px;
+    overflow: hidden;
+    margin: 10px auto;
+}
+
+.scrollbirth_sr li {
+    overflow: hidden;
+    text-align: left;
+}

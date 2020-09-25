@@ -1,0 +1,391 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
+<meta name="description" content=""/>
+<meta name="keyWords" content=""/>
+<title>诚信园区</title>
+<link type="text/css" href="css/common.css" rel="stylesheet" />
+<link href="js/artDialog2.0.6/skin/chrome/chrome.css" rel="stylesheet" />
+<script type="text/javascript" src="js/jquery-1.7.2.js"></script>
+<script type="text/javascript" src="js/artDialog2.0.6/artDialog.min.js"></script>
+
+<style type="text/css">  
+        .code{   
+            background-image:url("../html/images/QQ.jpg");   
+            margin-left: 10px !important;
+            font-family:Arial;   
+            font-style:italic;   
+            color:Red;   
+            padding:2px 3px;   
+            letter-spacing:3px;   
+            font-weight:bolder;     
+        }   
+</style> 
+<script type="text/javascript">
+$(function () {
+	createCode(0);
+	createCode(3);
+});
+ var code ; //在全局 定义验证码   
+ function createCode(no){    
+   code = "";   
+   var codeLength = 4;//验证码的长度   
+   var checkCode = document.getElementById("checkCodeID"+no);   
+   var selectChar = new Array(0,1,2,3,4,5,6,7,8,9);//所有候选组成验证码的字符，当然也可以用中文的      
+   for(var i=0;i<codeLength;i++){   
+    var charIndex = Math.floor(Math.random()*10);   
+    code +=selectChar[charIndex];   
+   }    
+   if(checkCode){   
+     checkCode.className="code";   
+     checkCode.value = code;
+     checkCode.blur();   
+   }        
+ }
+  function validate (i,t){  
+    //   var checkCode = document.getElementById("checkCodeID"+i).value;  
+       var inputCode = document.getElementById("validCode"+i).value;
+       var zzjgdm=$('#zzjgdm').val();   
+       var gszch=$('#gszch').val();   
+       var companyname=$('#companyname').val();   
+       if(inputCode.length <=0){   
+           alert("请输入验证码！");   
+       }   
+    //   else if(inputCode.toUpperCase()!=checkCode){   
+      //    alert("验证码输入错误！");   
+       //}
+       else if(zzjgdm==""&&gszch==""&&companyname==""){
+       		alert("请至少输入一个查询条件!");
+       }
+       else{   
+          //window.location.href="../seach/seachdetail.action?zzjgdm="+zzjgdm+"&gszch="+gszch+"&companyname="+companyname+"&template="+2; 
+            $.post('../seach/checkSeachdetail.action',
+            {zzjgdm: zzjgdm, gszch:gszch, companyname:companyname,vcode:inputCode, template:2 },
+            function(data){
+                 if (data == '1') {
+                     $('#seaForm').submit(); 
+                 }else if(data=='2'){
+                 	alert("验证码输入错误！");
+                 } else {
+                    alert("暂无相关数据");
+                 }
+               }, "json");   
+       }    
+ }
+ function seachList(i){
+ 	//   var checkCode = document.getElementById("checkCodeID0").value;  
+       var inputCode = document.getElementById("validCode0").value;
+       var name=$('#name').val();   
+       var sfzhm=$('#sfzhm').val();   
+       var zyzhm=$('#zyzhm').val(); 
+       if(inputCode.length <=0){   
+           alert("请输入验证码！");   
+   //    }else if(inputCode.toUpperCase()!=checkCode){   
+   //       alert("验证码输入错误！");   
+       }else if(name==""&&sfzhm==""&&zyzhm==""){
+       		alert("请至少输入一个查询条件!");
+       }else{   
+         //window.location.href="../seach/personalSeachList.action?zyzhm="+zyzhm+"&sfzhm="+sfzhm+"&name="+name+"&template=2";
+                     $.post('../seach/checkPersonalSeachList.action',
+            {zyzhm: zyzhm, sfzhm:sfzhm, name:name,vcode:inputCode,template:2 },
+            function(data){
+                 if (data == 1) {
+                     $('#personForm').submit(); 
+                 }else if(data=='2'){
+                 	alert("验证码输入错误！");
+                 } else {
+                    alert("暂无相关数据");
+                 }
+               }, "json"); 
+       }  
+ }
+ function reset(){
+  	$('#zzjgdm').val('');   
+    $('#gszch').val('');   
+    $('#companyname').val('');  
+    $('#validCode0').val('');  
+ }  
+ function personalReset(){
+ 	$('#name').val('');  
+ 	$('#sfzhm').val('');  
+ 	$('#zyzhm').val('');  
+ 	$('#validCode0').val(''); 
+ }   
+function show(str){
+		var id=document.getElementById(str+"_0").value;
+		window.location.href='content'+id+"_1.html"; 
+}
+function reload(i){
+	if(i==1)
+ 	 window.location.href="qycheck.html";
+ 	 if(i==2)
+ 	 window.location.href="mycheck.html";
+ 	 if(i==3)
+ 	 window.location.href="qyyyshensu.html";
+}
+function goto(staus,name,index,size){
+	if(staus=='up'&&index!=1){
+		window.location.href=name+"_"+(index-1)+".html"; 
+	}else if(staus=='first'){
+		window.location.href=name+"_"+"1.html"; 
+	}else if(staus=='down'){
+		if(index!=size){
+			window.location.href=name+"_"+(index+1)+".html"; 
+		}
+	}else if(staus=='last'){
+		window.location.href=name+"_"+size+".html"; 
+	}
+}
+ function seachContent(){
+ 	//var channelid=document.getElementById("channelid").value;
+ 	//var title=document.getElementById("title").value;
+ 	//if(title==""){
+ 		//return;
+ 	//}else{
+ 		//window.location.href="../content/listContentByChannelId.action?channelid="+channelid+"&title="+title;   
+ 	//	window.location.href="../content/listContentByTitle.action?title="+title;   
+ 	//}
+ 	var title=document.getElementById("title").value;
+ 	if (title == '' || title == '请输入关键字') {
+ 	   alert('请输入关键字');
+ 	   return;
+ 	}
+ 	title = encodeURIComponent(title);
+ 	window.location.href="../content/listContentByTitle.action?title="+title; 
+ }
+ function query(){
+ 	 var checknumber=document.getElementById("checkNumber").value;
+ 	  var reg = new RegExp("^[0-9]*$");  
+    if(!reg.test(checknumber)){  
+        alert("请输入数字!");  
+        return;
+    }  
+ 	 if (checknumber == "") {
+ 	    alert("信用核查码不能为空！");
+ 	 } else {
+ 	        $.post('../seach/approveContent.action',
+            {checknumber: checknumber},
+            function(data){
+                 if (data == 1) {
+                      window.open("http://172.25.119.13/creditVerification/getDetailVerificationInfo.action?checkcode=" + checknumber,
+	               'newwindow','height=900,width=1000,top='+(window.screen.availHeight-30-900)/2+
+	                   ',left='+(window.screen.availWidth-10-1000)/2+
+	                 ',toolbar=no,menubar=no,scrollbars=yes,resizable=yes,location=no,status=no');
+               } else if (data == 2) {
+                     window.open("http://172.25.119.13/creditVerification/getgroupsDetailVerificationInfo.action?checkcode=" + checknumber,
+	                  'newwindow','height=900,width=1000,top='+(window.screen.availHeight-30-900)/2+
+	                   ',left='+(window.screen.availWidth-10-1000)/2+
+	                 ',toolbar=no,menubar=no,scrollbars=yes,resizable=yes,location=no,status=no');
+               }else {
+                   if (data == '-1') {
+                     alert("信用查询码不存在！");
+                   } else if (data == '-2') {
+                     alert("信用查询码已过期！");
+                   } else if (data == '-3') {
+                     alert("信用查询码已重新生成,请输入最新核查码!");
+                   }
+                }
+            },'json');
+ 	 }
+ }
+function SetWinHeight(obj)
+{
+
+} 
+
+function gotoPage(total,cid){
+	var p=$("#textFooter").val();
+	var i = parseInt(total);
+	if(p!=""){
+		var a=parseInt(p);
+		if(a>0&&a<=i)
+		window.location.href="../content"+cid+"_"+p+".html";
+		if(a>i)
+		window.location.href="../content"+cid+"_"+1+".html";
+	}
+}
+$(document).ready(function() {
+ 	$.ajax({
+        type: "post",//使用post方法访问后台
+        dataType: "json",//返回json格式的数据
+        url: "../getCCS.action",//要访问的后台地址
+        data:{},//要发送的数据
+        complete :function(){$("#load").hide();},//AJAX请求完成时隐藏loading提示
+        success: function(msg){//msg为返回的数据，在这里做数据绑定
+				$("#thrNum").html(msg);
+        }
+    });
+    $.ajax({
+        type: "post",//使用post方法访问后台
+        dataType: "json",//返回json格式的数据
+        url: "../content/findHOTKeyword.action",//要访问的后台地址
+        data:{},//要发送的数据
+        complete :function(){$("#load").hide();},//AJAX请求完成时隐藏loading提示
+        success: function(msg){//msg为返回的数据，在这里做数据绑定
+        	var b='关键字:&nbsp;';
+        	$.each(msg.rows, function(i, n){
+        	var a = '<a href="javascript:void(0)" onclick="byHotKwSeachContent(\''+msg.rows[i]+'\')" >'+msg.rows[i]+'</a>&nbsp;&nbsp;';
+        	b+=a;
+           });
+           $("#hotkw").html(b);
+        }
+    });
+});
+	function byHotKwSeachContent(str) {
+		var title = encodeURIComponent(str);
+		window.location.href = "../content/listContentByTitle.action?title="
+				+ title;
+	}	
+	function queryOfPreview(contentId, category){
+   		 window.location.href="../content/queryOfPreview.action?contentId="+contentId+"&date="+new Date();
+	}
+</script>
+</head>
+
+<body>
+<!--header begin-->
+<div class="header">
+	<div class="wrap">
+    	<div class="logo f_l"><a href="http://www.sipac.gov.cn/" target="_blank"><img src="images/logo.png" /></a></div>
+    	<div class="number f_r" id="thrNum">
+        </div>
+    </div>
+</div>
+<!--header over-->
+
+<!--nav begin-->
+<div class="nav">
+    <ul class="wrap tabs">
+        <li><a href="../goToIndex.action">首页</a></li>
+        	<li><a href="javascript:void(0)" id="22" onclick='show("22")'>信用动态</a></li>
+		        	<input type="hidden" id="22_0" value="365">
+		        	<input type="hidden" id="22_1" value="364">
+		        	<input type="hidden" id="22_2" value="335">
+        	<li><a href="javascript:void(0)" id="420" onclick='show("420")'>信用公示</a></li>
+		        	<input type="hidden" id="420_0" value="318">
+		        	<input type="hidden" id="420_1" value="60">
+		        	<input type="hidden" id="420_2" value="61">
+        	<li><a href="javascript:void(0)" id="26" onclick='show("26")'>重点领域</a></li>
+		        	<input type="hidden" id="26_0" value="486">
+		        	<input type="hidden" id="26_1" value="487">
+		        	<input type="hidden" id="26_2" value="488">
+		        	<input type="hidden" id="26_3" value="489">
+		        	<input type="hidden" id="26_4" value="490">
+		        	<input type="hidden" id="26_5" value="491">
+		        	<input type="hidden" id="26_6" value="492">
+		        	<input type="hidden" id="26_7" value="493">
+        	<li><a href="javascript:void(0)" id="423" onclick='show("423")'>专项资金</a></li>
+		        	<input type="hidden" id="423_0" value="469">
+        	<li><a href="javascript:void(0)" id="416" onclick='show("416")'>政策法规</a></li>
+		        	<input type="hidden" id="416_0" value="306">
+		        	<input type="hidden" id="416_1" value="334">
+		        	<input type="hidden" id="416_2" value="309">
+        <li><a href="http://gzjd.sipac.gov.cn/Web/BBS/MainList.aspx"  target="_blank">在线交流</a></li>
+    </ul>
+</div>
+<!--nav over-->
+
+<!--content begin-->
+<div class="cloud">
+    <!--notice begin-->
+    <div class="wrap">
+    	<div class="notice f_l"> 
+            <div class="notice_tit f_l f_b">通知公告</div>
+            <div class="f_l notice_list"  id="mq" onmouseover=iScrollAmount=0 style="overflow:hidden; width:500px; height:30px;color:#000" onmouseout=iScrollAmount=1 >
+                <ul>
+		                    <li><a href="javascript:queryOfPreview('1911122')">苏州出台省内首部《住房公积金个人失信惩戒实施细则》</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911059')">关于印发江苏省推行食品生产企业 “黑名单”制度指导意见(试行)的通知(苏食药监规</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911231')">家庭成员不履行抚养义务记入个人信用档案</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911061')">2015年我市电梯维保单位星级评定结果公示</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910971')">2015年度“诚信宣传周”活动开始啦</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910519')">2015年12月苏州工业园区公积金（社会保险）公示欠费单位名单</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910520')">苏州工业园区从业建筑业企业不良信用处罚公示汇总</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910381')">2015年11月苏州工业园区社会保险基金（公积金）公示欠费单位名单</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910282')">园区信用体系建设项目接受市领导专项督查并开展座谈会</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911034')">苏州积分落户制度2016年1月15日起实施 失信行为将扣减分</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910988')">关于做好2015年园区建筑业企业信用综合评价良好行为信息录入工作的通知</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910976')">诚信记录纳入流动人口积分管理</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910972')">江苏省研究生考试26日开考 省考试院提醒考生诚信参考</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910518')">2015年中国十佳诚信政府排行榜发布</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910467')">老忘交电费 当心成老赖失信</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910361')">首个国际征信论坛即将在沪登陆</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910338')">居民身份证将可异地换领补领 有不良信用记录的不予受理</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910329')">双十一”消费信用大数据监测评价启动</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910328')">发改委：年底前全面实施统一社会信用代码制度</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910310')">信用社会临近 央行征信系统已收录8.7亿人数据</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910307')">市食药监公布19批次质量不合格食品（附名单）</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910302')">园区地税提交457户企业列入园区失信法人库</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910177')">关于联合发布2014年长三角地区备案信用服务机构名单的通知</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910179')">2014年度“苏州市级信用管理示范企业”认定公示</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="search f_r">
+            <form id="searchform" action="../content/listContentByTitle.action" method="post">
+                <fieldset>
+                <table>
+                 	<tr>
+				      <td width="70%">
+				      	 <input type="text" onfocus="if(this.value =='请输入关键字') {this.value=''; }" onblur="if(this.value==''){this.value='请输入关键字';}" class="text_input" style="width:200px" value="请输入关键字" name="title" id="title">
+				         <input type="button" onclick="seachContent()" name="button"> 
+				      </td>
+				   	</tr>
+				   	<tr>
+				   		 <td id="hotkw"></td>
+				   	</tr>
+				  </table> 
+                </fieldset>
+            </form>
+        </div>
+    </div>
+    <script type="text/javascript" src="js/muqruujs.js"></script>
+    <!--notice over-->
+    <!--center begin-->
+    <div class="wrap mt5 content">
+        <div class="breadcrumbs">
+            <ul>
+                <li>当前位置：</li>
+          		<li><a href="content365_1.html">信用动态</a> > </li>
+            <li><a href="content335_1.html">国内动态</a> > </li>
+                <li><em>详细</em></li>
+            </ul>
+        </div>
+        
+        <div class="pad50">
+            <div class="art_head">
+                <h1>收藏界诚信危机：国宝帮抱团忽悠 伪国宝泛滥成灾</h1>
+                <div class="tc art_date"> 【发布日期： 】【<a href="javascript:void(0)" onclick="window.print();">打印</a>】 </div>
+            </div>
+            <div class="artnr">
+                <p><div style='font-size: 18px;'><p style="margin: 0px 0px 16px; text-align: left; line-height: 2em; text-indent: 28px;"><span style="font-size: 18px;"><strong><span style="font-family: 宋体;"><span style="line-height: 0px;">﻿</span>“国宝帮”抱团忽悠，“伪国宝”泛滥成灾</span></strong></span></p><p style="margin: 0px 0px 16px; text-align: left; line-height: 2em; text-indent: 28px;"><span style="font-family: 宋体; font-size: 18px;">“尧舜时期的彩瓷、商代的青花，还有‘三英战赵云’等很多牛头马面、花里胡哨的臆造品，我一进门就被荒唐的展品吓傻了，连夜跑回了北京。”一位专家对记者讲述自己受骗的亲身经历时仍心有余悸。</span></p><p style="margin: 0px 0px 16px; text-align: left; line-height: 2em; text-indent: 28px;"><span style="font-family: 宋体; font-size: 18px;">近年来，文物艺术品展览逐渐从专业领域进入大众视野，越来越多的人开始爱好收藏，迈入“藏家”行列。然而，由于监管松散，一些真假难辨的民间博物馆、艺术馆利用了人们渴望接触、了解文物艺术品的心理，将粗制滥造的工艺品当成“国宝”展陈、出售甚至拍卖；一些伪专家则游走于电视收藏节目、拍卖会场，标称自己是资深鉴定专家，“抱团”蒙骗新入门的藏家购买赝品。这个松散而庞大的群体被业内称为“国宝帮”。</span></p><p style="margin: 0px 0px 16px; text-align: left; line-height: 2em; text-indent: 28px;"><span style="font-family: 宋体; font-size: 18px;">业内人士与专家表示，“国宝帮”抱团忽悠，误导了民众、扰乱了市场，对文物艺术品市场良性发展造成巨大伤害，对此现象，专家与媒体应加强责任心，也应强化行业监管，提高展陈门槛，让“伪国宝”无处藏身。</span></p><p style="margin: 0px 0px 16px; text-align: left; line-height: 2em; text-indent: 28px;"><span style="font-size: 18px;"><strong><span style="font-family: 宋体; font-size: 18px;">“伪国宝”层出不穷，收藏界诚信脆弱</span></strong></span></p><p style="margin: 0px 0px 16px; text-align: left; line-height: 2em; text-indent: 28px;"><span style="font-size: 18px;"><span style="font-family: 宋体; font-size: 18px;">如果你没听说过“金缕玉衣”、“汉代玉凳”这等收藏界的笑话，那一定要小心谨慎了。它们是近年最知名的“伪国宝”事件。前者说的是商人通过伪造的一件玉衣，请五位文博界知名专家鉴定后，骗取了大额银行贷款；后者说的则是经“专家”鉴定、在拍卖会上以</span><span style="font-family: Calibri; font-size: 18px;">2.2</span><span style="font-family: 宋体; font-size: 18px;">亿元成交的“汉代玉凳”，被众人指出是荒唐的赝品。</span></span></p><p style="margin: 0px 0px 16px; text-align: left; line-height: 2em; text-indent: 28px;"><span style="font-size: 18px;"><span style="font-family: 宋体; font-size: 18px;">“以假乱真”在民间博物馆、艺术馆中表现得尤为突出。据海南省文物局一位知情人士介绍，</span><span style="font-family: Calibri; font-size: 18px;">2014</span><span style="font-family: 宋体; font-size: 18px;">年元旦成立于万宁兴隆的海南昊天艺术博物馆，号称藏品达万余件，实际上大部分都是“伪国宝”，展厅内陈列着大量夏代陶器、商代青铜大鼎、编钟、铜奔马等，让人真假难辨，“北宋范宽的《溪山行旅图》明明收藏在台北故宫博物院，他们也敢摆出来误导观众。”这位知情人士说，更为可怕的是，这家民间艺术博物馆还经常将藏品拿到海南省博物馆交流展出，也将藏品拿到国内拍卖市场拍卖。</span></span></p><p style="margin: 0px 0px 16px; text-align: left; line-height: 2em; text-indent: 28px;"><span style="font-family: 宋体; font-size: 18px;">“能够到官方博物馆交流展出，无疑为其藏品真伪提供了有力注脚。”这位知情人士说，更扰乱视听的是，还有不少文博界人士在不明真相的情况下为民间博物馆、艺术馆“站台”。记者翻看海南昊天艺术博物馆各种活动新闻发现，出席活动的不乏海南文博界重要人士，不少人在讲话中称赞其馆藏丰富、馆舍精美、运营创新。</span></p><p style="margin: 0px 0px 16px; text-align: left; line-height: 2em; text-indent: 28px;"><span style="font-family: 宋体; font-size: 18px;">业内人士指出，官方及文博界重要人士的出席为“伪国宝”充斥的民间博物馆增添了官方“严肃”“真实”等重要色彩，这样的民间博物馆面向游客开放，容易误人视听，不但不能提高海南国际旅游岛的文化内涵，反而令明眼人心生厌恶。</span></p><p style="margin: 0px 0px 16px; text-align: left; line-height: 2em; text-indent: 28px;"><span style="font-size: 18px;"><strong><span style="font-family: 宋体; font-size: 18px;">“国宝帮”颠倒黑白，真专家三缄其口</span></strong></span></p><p style="margin: 0px 0px 16px; text-align: left; line-height: 2em; text-indent: 28px;"><span style="font-family: 宋体; font-size: 18px;">北京艺术博物馆馆长张树伟说，堂而皇之地展出“伪国宝”由来已久。那些业内专家一眼就能看出的假货，被主办者认为是“捡漏”到的国宝级古董，最可怕的是，有的“业内专家”明知假货却“抱团”蒙骗新入门的藏家购买，这个松散而庞大的群体被业内称为“国宝帮”。</span></p><p style="margin: 0px 0px 16px; text-align: left; line-height: 2em; text-indent: 28px;"><span style="font-family: 宋体; font-size: 18px;">一位专家对记者讲述了自己受骗的亲身经历，几年前他应邀参加位于河北冀州的一家民间博物馆“冀宝斋”的开幕式。“主办方说第二天才正式开幕，不让看展品。我不放心，跟着布展人员溜进去，一进门就被荒唐的展品吓傻了，连夜跑回了北京。”这位专家说，展品中有尧舜时期的彩瓷、商代的青花，还有“三英战赵云”等很多牛头马面、花里胡哨的臆造品，整个五层楼一件真品也没有。在闭馆整顿前，该馆还先后被确定为河北省少先队实践教育基地、衡水爱国主义教育基地。</span></p><p style="margin: 0px 0px 16px; text-align: left; line-height: 2em; text-indent: 28px;"><span style="font-family: 宋体; font-size: 18px;">业内人士指出，在公众场合展出伪国宝危害甚远。一方面，许多私人艺术馆作为青少年教育基地提供教育功能，使得许多初次接触文物的年轻人误以为“国宝”水准低劣，丧失了继续探究的兴趣，令人悲哀；另一方面，一些博物馆等学术机构的业内专家在利益的驱使下被“卷入”其中，不惜冒着名誉被毁的风险为假货“站台”，令行业诚信受到极大冲击。由于人数众多，“国宝帮”比业内专家的声音更大，在一些场合会造成假货猖獗、黑白颠倒的怪现象。</span></p><p style="margin: 0px 0px 16px; text-align: left; line-height: 2em; text-indent: 28px;"><span style="font-size: 18px;"><strong><span style="font-family: 宋体; font-size: 18px;">收藏者心态浮躁，捡漏不成反踩雷</span></strong></span></p><p style="margin: 0px 0px 16px; text-align: left; line-height: 2em; text-indent: 28px;"><span style="font-family: 宋体; font-size: 18px;">业内人士认为，近年来“国宝帮”的猖獗归根到底是很多收藏者心态浮躁，渴望通过文物“一夜暴富”的心态所致。如今文玩市场上赝品数量巨大，抱着“捡漏”心态容易上当受骗。</span></p><p style="margin: 0px 0px 16px; text-align: left; line-height: 2em; text-indent: 28px;"><span style="font-family: 宋体; font-size: 18px;">专家提醒收藏者，首先，对媒体上的“专家鉴定”不要盲目相信。陶瓷研究者、苏富比艺术学院原中国首席代表梁晓新说，一些媒体，甚至是主流媒体的“鉴宝”节目缺乏专业知识，严重误导了公众。他们表面上是传播知识，实际上请来的“伪专家”是通过电视节目为自己做宣传。最令他担心的是，一些老人被电视节目忽悠，误以为有可能“捡漏”买到好东西，被误导拿重金购买“伪国宝”，还当成一种爱国行为。</span></p><p style="margin: 0px 0px 16px; text-align: left; line-height: 2em; text-indent: 28px;"><span style="font-family: 宋体; font-size: 18px;">通常情况下，真正的专家不愿意在电视上“鉴定真伪”，更不会在电视上“谈钱”。民间藏家马未都说：“我在电视上聊文物有一个原则就是不谈钱。记得有一次到知名电视台录节目，主持人拿一个拉杆箱做道具，打开一看里面都是假钱，我当时就决定不参加录制了。”</span></p><p style="margin: 0px 0px 16px; text-align: left; line-height: 2em; text-indent: 28px;"><span style="font-family: 宋体; font-size: 18px;">其次，做好知识储备，不要抱有“捡漏”的心态。一些古玩爱好者起初并不全是利益驱动，他们出于对文物的喜爱而开始在地摊古玩市场中淘宝，结果被人误导而走入歧途。实际上，缺少文物方面的知识和经验，没有分辨能力，才会出现上当受骗的情况。</span></p><p style="margin: 0px 0px 16px; text-align: left; line-height: 2em; text-indent: 28px;"><span style="font-family: 宋体; font-size: 18px;">对此，马未都给大众提供了三点“收藏之道”：做好严格理论准备，切忌走捷径，量力而行。严格的理论准备就是要大量、广泛阅读严格的理论著作，他说：“收藏没有捷径，所有人告诉你的捷径一定是个弯路，是个陷阱。不要认为任何一个简单的知识就可以判定这个东西的全部。”</span></p><p style="margin: 0px 0px 16px; text-align: left; line-height: 2em; text-indent: 28px;"><span style="font-size: 18px;"><strong><span style="font-family: 宋体; font-size: 18px;">行业造假风气日盛，加强监管迫在眉睫</span></strong></span></p><p style="margin: 0px 0px 16px; text-align: left; line-height: 2em; text-indent: 28px;"><span style="font-family: 宋体; font-size: 18px;">自古以来，我国文物交易都是民间行为，一些私人艺术馆、博物馆对展出的文玩艺术品的真假不负责，拍卖行对拍品也是“不保真”，加上文玩爱好者“捡漏”心态，整个行业造假、贩假、售假的风气盛行。</span></p><p style="margin: 0px 0px 16px; text-align: left; line-height: 2em; text-indent: 28px;"><span style="font-family: 宋体; font-size: 18px;">专家指出，面对“国宝帮”的猖獗，专家与媒体应加强责任心。与“国宝帮”不断营造舆论、“抱团忽悠”相比，大部分专家不发声，抱着不蹚浑水的态度自保，任由普通民众被“忽悠”危害更广。</span></p><p style="margin: 0px 0px 16px; text-align: left; line-height: 2em; text-indent: 28px;"><span style="font-family: 宋体; font-size: 18px;">与此同时，应加强监管，提高展览门槛，促进文物艺术品市场的良性发展。明显的“大赝品”不应进入高校、博物馆等场所。在公共场合展览文物具有广泛的影响力，高校、博物馆等公共文化场所应担负起教育、研究等承载文物艺术品价值的责任，相关主管部门应对展品质量严格把关。</span></p><p style="margin: 0px 0px 16px; text-align: left; line-height: 2em; text-indent: 28px;"><span style="font-family: 宋体; font-size: 18px;">此外，应按照《博物馆条例》的要求，建立健全民办博物馆准入制度，强化行业管理措施，同时完善年检和退出机制，让“伪国宝”无处藏身。在我国，民间艺术馆、博物馆长期被定性为民办非企业单位性质，注册登记在当地民政局，在管理上处于松散、不规范的情况，其中相当一部分没有获得文物部门的专业认可，为“伪国宝”的滋长提供了土壤。</span></p><p style="margin: 0px 0px 16px; text-align: right; line-height: 2em; text-indent: 28px;"><span style="font-family: 宋体; font-size: 18px;">来源：经济参考报</span></p></div></p>
+            </div>
+        </div>
+    </div>
+    <!--center over-->
+        
+    <!--footer begin-->
+    <div class="wrap mt10">
+        <div class="link">
+            <h1>友情链接</h1>
+            <ul class="l_list">
+                <li><a href="http://www.creditchina.gov.cn/" target="_blank">信用中国</a></li>
+                <li><a href="http://www.js.gov.cn/jsxy/index.htm" target="_blank">诚信江苏</a></li>
+                <li><a href="http://www.njcredit.gov.cn/" target="_blank">诚信南京</a></li>
+                <li><a href="http://www.szcredit.gov.cn/" target="_blank">诚信苏州</a></li>
+                <li><a href="http://credit.zjg.gov.cn/toIndex.action" target="_blank">诚信张家港</a></li>
+            </ul>
+        </div>
+        
+         <div class="foot">
+            <p><span>主办单位：苏州工业园区信用办 </span><span>技术支持：江苏中集科技有限公司</span><span><script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1256639142'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1256639142' type='text/javascript'%3E%3C/script%3E"));</script></span></p>
+        </div>
+        
+    </div>
+    <!--footer over-->
+</div>
+<!--content over-->
+    
+</body>
+</html>

@@ -1,0 +1,122 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2014-5-5 16:40:13 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.wa.cms.model.Channel" table="CHANNEL">
+        <comment>&#192;&#184;&#196;&#191;&#177;&#237;</comment>
+        <id name="channelId" type="long">
+            <column name="CHANNEL_ID" precision="10" scale="0" />
+			<generator class="native"></generator>
+        </id>
+        <many-to-one name="channel" class="com.wa.cms.model.Channel" fetch="select">
+            <column name="PARENT_ID" precision="10" scale="0" />
+        </many-to-one>
+        <many-to-one name="model" class="com.wa.cms.model.Model" fetch="select">
+            <column name="MODEL_ID" precision="10" scale="0" />
+        </many-to-one>
+        <property name="name" type="string">
+            <column name="NAME" length="100">
+                <comment>&#195;&#251;&#179;&#198;</comment>
+            </column>
+        </property>
+        <property name="path" type="string">
+            <column name="PATH" length="100">
+                <comment>&#194;&#183;&#190;&#182;</comment>
+            </column>
+        </property>
+        <property name="priority" type="java.lang.Byte">
+            <column name="PRIORITY" precision="2" scale="0">
+                <comment>&#203;&#179;&#208;&#242;</comment>
+            </column>
+        </property>
+        <property name="hasContent" type="java.lang.Byte">
+            <column name="HAS_CONTENT" precision="2" scale="0">
+                <comment>&#202;&#199;&#183;&#241;&#211;&#208;&#196;&#218;&#200;&#221;</comment>
+            </column>
+        </property>
+        <property name="hasImage" type="java.lang.Integer">
+            <column name="HAS_IMG"/>
+        </property>
+        <property name="isDisplay" type="java.lang.Byte">
+            <column name="IS_DISPLAY" precision="2" scale="0" />
+        </property>
+        <property name="pageSize" type="java.lang.Short">
+            <column name="PAGE_SIZE" precision="4" scale="0">
+                <comment>&#195;&#191;&#210;&#179;&#188;&#199;&#194;&#188;&#202;&#253;</comment>
+            </column>
+        </property>
+        <property name="creatorId" type="string">
+            <column name="CREATOR_ID" length="50" />
+        </property>
+        <property name="createTime" type="timestamp">
+            <column name="CREATE_TIME" length="7" />
+        </property>
+        <property name="updatorId" type="string">
+            <column name="UPDATOR_ID" length="50" />
+        </property>
+        <property name="updateTime" type="timestamp">
+            <column name="UPDATE_TIME" length="7" />
+        </property>
+        <property name="tplChannel" type="string">
+            <column name="TPL_CHANNEL">
+                <comment>&#192;&#184;&#196;&#191;&#196;&#163;&#176;&#229;</comment>
+            </column>
+        </property>
+        <property name="tplContent" type="string">
+            <column name="TPL_CONTENT">
+                <comment>&#196;&#218;&#200;&#221;&#196;&#163;&#176;&#229;</comment>
+            </column>
+        </property>
+        <property name="title" type="string">
+            <column name="TITLE">
+                <comment>&#177;&#234;&#204;&#226;</comment>
+            </column>
+        </property>
+        <property name="keywords" type="string">
+            <column name="KEYWORDS">
+                <comment>&#185;&#216;&#188;&#252;&#215;&#214;</comment>
+            </column>
+        </property>
+        <property name="description" type="string">
+            <column name="DESCRIPTION">
+                <comment>&#195;&#232;&#202;&#246;</comment>
+            </column>
+        </property>
+        <property name="txt" type="string">
+            <column name="TXT">
+                <comment>&#206;&#196;&#177;&#190;</comment>
+            </column>
+        </property>
+        <property name="status" type="java.lang.Byte">
+            <column name="STATUS" precision="2" scale="0" />
+        </property>
+        <property name="isLock" type="java.lang.Integer">
+            <column name="is_lock" />
+        </property>
+        <set name="channelContents" table="CHANNEL_CONTENT" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="CHANNEL_ID" precision="10" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="com.wa.cms.model.ChannelContent" />
+        </set>
+       <!--  <set name="channels" table="CHANNEL" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="PARENT_ID" precision="10" scale="0" />
+            </key>
+            <one-to-many class="com.wa.cms.model.Channel" />
+        </set> -->
+        <bag name="channels" order-by="priority asc,createTime desc" table="CHANNEL" inverse="true" lazy="true" fetch="select">
+        	<key>
+        		<column name="PARENT_ID" precision="10" scale="0"></column>
+        	</key>
+        	<one-to-many class="com.wa.cms.model.Channel" />
+        </bag>
+        <set name="channelModels" table="CHANNEL_MODEL" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="CHANNEL_ID" precision="10" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="com.wa.cms.model.ChannelModel" />
+        </set>
+    </class>
+</hibernate-mapping>

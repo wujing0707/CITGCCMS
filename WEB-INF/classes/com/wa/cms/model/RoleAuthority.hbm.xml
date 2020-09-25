@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2014-5-5 16:40:13 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.wa.cms.model.RoleAuthority" table="ROLE_AUTHORITY">
+        <comment>&#189;&#199;&#201;&#171;&#200;&#168;&#207;&#222;&#177;&#237;</comment>
+        <id name="roleAuthorityId" type="long">
+            <column name="ROLE_AUTHORITY_ID" precision="10" scale="0" />
+        </id>
+        <many-to-one name="authority" class="com.wa.cms.model.Authority" fetch="select">
+            <column name="AUTHORITY_ID" precision="10" scale="0" not-null="true" />
+        </many-to-one>
+        <many-to-one name="role" class="com.wa.cms.model.Role" fetch="select">
+            <column name="ROLE_ID" precision="10" scale="0" not-null="true" />
+        </many-to-one>
+    </class>
+</hibernate-mapping>

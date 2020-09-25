@@ -1,0 +1,90 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2014-5-5 16:40:13 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.wa.cms.model.SysMember" table="SYS_MEMBER">
+        <comment>&#199;&#176;&#204;&#168;&#211;&#195;&#187;&#167;&#177;&#237;</comment>
+        <id name="memberId" type="long">
+            <column name="MEMBER_ID" precision="10" scale="0" />
+        </id>
+        <many-to-one name="sysGroup" class="com.wa.cms.model.SysGroup" fetch="select">
+            <column name="GROUP_ID" precision="10" scale="0" />
+        </many-to-one>
+        <property name="username" type="string">
+            <column name="USERNAME" length="100" />
+        </property>
+        <property name="password" type="string">
+            <column name="PASSWORD" length="100" />
+        </property>
+        <property name="realname" type="string">
+            <column name="REALNAME" length="100">
+                <comment>&#213;&#230;&#202;&#181;&#208;&#213;&#195;&#251;</comment>
+            </column>
+        </property>
+        <property name="gender" type="java.lang.Byte">
+            <column name="GENDER" precision="2" scale="0">
+                <comment>&#208;&#212;&#177;&#240;(0-&#196;&#208;&#163;&#172;1-&#197;&#174;)</comment>
+            </column>
+        </property>
+        <property name="birthdate" type="date">
+            <column name="BIRTHDATE" length="7">
+                <comment>&#179;&#246;&#201;&#250;&#196;&#234;&#212;&#194;&#200;&#213;</comment>
+            </column>
+        </property>
+        <property name="email" type="string">
+            <column name="EMAIL" length="100">
+                <comment>&#211;&#202;&#207;&#228;</comment>
+            </column>
+        </property>
+        <property name="phone" type="string">
+            <column name="PHONE" length="50">
+                <comment>&#181;&#231;&#187;&#176;</comment>
+            </column>
+        </property>
+        <property name="address" type="string">
+            <column name="ADDRESS">
+                <comment>&#181;&#216;&#214;&#183;</comment>
+            </column>
+        </property>
+        <property name="qq" type="big_decimal">
+            <column name="QQ" precision="20" scale="0" />
+        </property>
+        <property name="intro" type="string">
+            <column name="INTRO">
+                <comment>&#189;&#233;&#201;&#220;</comment>
+            </column>
+        </property>
+        <property name="registerIp" type="string">
+            <column name="REGISTER_IP" length="50">
+                <comment>&#215;&#162;&#178;&#225;ip</comment>
+            </column>
+        </property>
+        <property name="registerTime" type="timestamp">
+            <column name="REGISTER_TIME" length="7">
+                <comment>&#215;&#162;&#178;&#225;&#202;&#177;&#188;&#228;</comment>
+            </column>
+        </property>
+        <property name="lastLoginIp" type="string">
+            <column name="LAST_LOGIN_IP" length="100">
+                <comment>&#215;&#238;&#186;&#243;&#181;&#199;&#194;&#188;ip</comment>
+            </column>
+        </property>
+        <property name="lastLoginTime" type="timestamp">
+            <column name="LAST_LOGIN_TIME" length="7">
+                <comment>&#215;&#238;&#186;&#243;&#181;&#199;&#194;&#188;&#202;&#177;&#188;&#228;</comment>
+            </column>
+        </property>
+        <property name="loginAccount" type="string">
+            <column name="LOGIN_ACCOUNT" length="100">
+                <comment>&#181;&#199;&#194;&#188;&#180;&#206;&#202;&#253;</comment>
+            </column>
+        </property>
+        <property name="status" type="string">
+            <column name="STATUS" length="10" />
+        </property>
+        <property name="idcard" type="string">
+            <column name="IDCARD" length="50" />
+        </property>
+    </class>
+</hibernate-mapping>

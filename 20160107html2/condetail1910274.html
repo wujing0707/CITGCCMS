@@ -1,0 +1,391 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
+<meta name="description" content=""/>
+<meta name="keyWords" content=""/>
+<title>诚信园区</title>
+<link type="text/css" href="css/common.css" rel="stylesheet" />
+<link href="js/artDialog2.0.6/skin/chrome/chrome.css" rel="stylesheet" />
+<script type="text/javascript" src="js/jquery-1.7.2.js"></script>
+<script type="text/javascript" src="js/artDialog2.0.6/artDialog.min.js"></script>
+
+<style type="text/css">  
+        .code{   
+            background-image:url("../html/images/QQ.jpg");   
+            margin-left: 10px !important;
+            font-family:Arial;   
+            font-style:italic;   
+            color:Red;   
+            padding:2px 3px;   
+            letter-spacing:3px;   
+            font-weight:bolder;     
+        }   
+</style> 
+<script type="text/javascript">
+$(function () {
+	createCode(0);
+	createCode(3);
+});
+ var code ; //在全局 定义验证码   
+ function createCode(no){    
+   code = "";   
+   var codeLength = 4;//验证码的长度   
+   var checkCode = document.getElementById("checkCodeID"+no);   
+   var selectChar = new Array(0,1,2,3,4,5,6,7,8,9);//所有候选组成验证码的字符，当然也可以用中文的      
+   for(var i=0;i<codeLength;i++){   
+    var charIndex = Math.floor(Math.random()*10);   
+    code +=selectChar[charIndex];   
+   }    
+   if(checkCode){   
+     checkCode.className="code";   
+     checkCode.value = code;
+     checkCode.blur();   
+   }        
+ }
+  function validate (i,t){  
+    //   var checkCode = document.getElementById("checkCodeID"+i).value;  
+       var inputCode = document.getElementById("validCode"+i).value;
+       var zzjgdm=$('#zzjgdm').val();   
+       var gszch=$('#gszch').val();   
+       var companyname=$('#companyname').val();   
+       if(inputCode.length <=0){   
+           alert("请输入验证码！");   
+       }   
+    //   else if(inputCode.toUpperCase()!=checkCode){   
+      //    alert("验证码输入错误！");   
+       //}
+       else if(zzjgdm==""&&gszch==""&&companyname==""){
+       		alert("请至少输入一个查询条件!");
+       }
+       else{   
+          //window.location.href="../seach/seachdetail.action?zzjgdm="+zzjgdm+"&gszch="+gszch+"&companyname="+companyname+"&template="+2; 
+            $.post('../seach/checkSeachdetail.action',
+            {zzjgdm: zzjgdm, gszch:gszch, companyname:companyname,vcode:inputCode, template:2 },
+            function(data){
+                 if (data == '1') {
+                     $('#seaForm').submit(); 
+                 }else if(data=='2'){
+                 	alert("验证码输入错误！");
+                 } else {
+                    alert("暂无相关数据");
+                 }
+               }, "json");   
+       }    
+ }
+ function seachList(i){
+ 	//   var checkCode = document.getElementById("checkCodeID0").value;  
+       var inputCode = document.getElementById("validCode0").value;
+       var name=$('#name').val();   
+       var sfzhm=$('#sfzhm').val();   
+       var zyzhm=$('#zyzhm').val(); 
+       if(inputCode.length <=0){   
+           alert("请输入验证码！");   
+   //    }else if(inputCode.toUpperCase()!=checkCode){   
+   //       alert("验证码输入错误！");   
+       }else if(name==""&&sfzhm==""&&zyzhm==""){
+       		alert("请至少输入一个查询条件!");
+       }else{   
+         //window.location.href="../seach/personalSeachList.action?zyzhm="+zyzhm+"&sfzhm="+sfzhm+"&name="+name+"&template=2";
+                     $.post('../seach/checkPersonalSeachList.action',
+            {zyzhm: zyzhm, sfzhm:sfzhm, name:name,vcode:inputCode,template:2 },
+            function(data){
+                 if (data == 1) {
+                     $('#personForm').submit(); 
+                 }else if(data=='2'){
+                 	alert("验证码输入错误！");
+                 } else {
+                    alert("暂无相关数据");
+                 }
+               }, "json"); 
+       }  
+ }
+ function reset(){
+  	$('#zzjgdm').val('');   
+    $('#gszch').val('');   
+    $('#companyname').val('');  
+    $('#validCode0').val('');  
+ }  
+ function personalReset(){
+ 	$('#name').val('');  
+ 	$('#sfzhm').val('');  
+ 	$('#zyzhm').val('');  
+ 	$('#validCode0').val(''); 
+ }   
+function show(str){
+		var id=document.getElementById(str+"_0").value;
+		window.location.href='content'+id+"_1.html"; 
+}
+function reload(i){
+	if(i==1)
+ 	 window.location.href="qycheck.html";
+ 	 if(i==2)
+ 	 window.location.href="mycheck.html";
+ 	 if(i==3)
+ 	 window.location.href="qyyyshensu.html";
+}
+function goto(staus,name,index,size){
+	if(staus=='up'&&index!=1){
+		window.location.href=name+"_"+(index-1)+".html"; 
+	}else if(staus=='first'){
+		window.location.href=name+"_"+"1.html"; 
+	}else if(staus=='down'){
+		if(index!=size){
+			window.location.href=name+"_"+(index+1)+".html"; 
+		}
+	}else if(staus=='last'){
+		window.location.href=name+"_"+size+".html"; 
+	}
+}
+ function seachContent(){
+ 	//var channelid=document.getElementById("channelid").value;
+ 	//var title=document.getElementById("title").value;
+ 	//if(title==""){
+ 		//return;
+ 	//}else{
+ 		//window.location.href="../content/listContentByChannelId.action?channelid="+channelid+"&title="+title;   
+ 	//	window.location.href="../content/listContentByTitle.action?title="+title;   
+ 	//}
+ 	var title=document.getElementById("title").value;
+ 	if (title == '' || title == '请输入关键字') {
+ 	   alert('请输入关键字');
+ 	   return;
+ 	}
+ 	title = encodeURIComponent(title);
+ 	window.location.href="../content/listContentByTitle.action?title="+title; 
+ }
+ function query(){
+ 	 var checknumber=document.getElementById("checkNumber").value;
+ 	  var reg = new RegExp("^[0-9]*$");  
+    if(!reg.test(checknumber)){  
+        alert("请输入数字!");  
+        return;
+    }  
+ 	 if (checknumber == "") {
+ 	    alert("信用核查码不能为空！");
+ 	 } else {
+ 	        $.post('../seach/approveContent.action',
+            {checknumber: checknumber},
+            function(data){
+                 if (data == 1) {
+                      window.open("http://172.25.119.13/creditVerification/getDetailVerificationInfo.action?checkcode=" + checknumber,
+	               'newwindow','height=900,width=1000,top='+(window.screen.availHeight-30-900)/2+
+	                   ',left='+(window.screen.availWidth-10-1000)/2+
+	                 ',toolbar=no,menubar=no,scrollbars=yes,resizable=yes,location=no,status=no');
+               } else if (data == 2) {
+                     window.open("http://172.25.119.13/creditVerification/getgroupsDetailVerificationInfo.action?checkcode=" + checknumber,
+	                  'newwindow','height=900,width=1000,top='+(window.screen.availHeight-30-900)/2+
+	                   ',left='+(window.screen.availWidth-10-1000)/2+
+	                 ',toolbar=no,menubar=no,scrollbars=yes,resizable=yes,location=no,status=no');
+               }else {
+                   if (data == '-1') {
+                     alert("信用查询码不存在！");
+                   } else if (data == '-2') {
+                     alert("信用查询码已过期！");
+                   } else if (data == '-3') {
+                     alert("信用查询码已重新生成,请输入最新核查码!");
+                   }
+                }
+            },'json');
+ 	 }
+ }
+function SetWinHeight(obj)
+{
+
+} 
+
+function gotoPage(total,cid){
+	var p=$("#textFooter").val();
+	var i = parseInt(total);
+	if(p!=""){
+		var a=parseInt(p);
+		if(a>0&&a<=i)
+		window.location.href="../content"+cid+"_"+p+".html";
+		if(a>i)
+		window.location.href="../content"+cid+"_"+1+".html";
+	}
+}
+$(document).ready(function() {
+ 	$.ajax({
+        type: "post",//使用post方法访问后台
+        dataType: "json",//返回json格式的数据
+        url: "../getCCS.action",//要访问的后台地址
+        data:{},//要发送的数据
+        complete :function(){$("#load").hide();},//AJAX请求完成时隐藏loading提示
+        success: function(msg){//msg为返回的数据，在这里做数据绑定
+				$("#thrNum").html(msg);
+        }
+    });
+    $.ajax({
+        type: "post",//使用post方法访问后台
+        dataType: "json",//返回json格式的数据
+        url: "../content/findHOTKeyword.action",//要访问的后台地址
+        data:{},//要发送的数据
+        complete :function(){$("#load").hide();},//AJAX请求完成时隐藏loading提示
+        success: function(msg){//msg为返回的数据，在这里做数据绑定
+        	var b='关键字:&nbsp;';
+        	$.each(msg.rows, function(i, n){
+        	var a = '<a href="javascript:void(0)" onclick="byHotKwSeachContent(\''+msg.rows[i]+'\')" >'+msg.rows[i]+'</a>&nbsp;&nbsp;';
+        	b+=a;
+           });
+           $("#hotkw").html(b);
+        }
+    });
+});
+	function byHotKwSeachContent(str) {
+		var title = encodeURIComponent(str);
+		window.location.href = "../content/listContentByTitle.action?title="
+				+ title;
+	}	
+	function queryOfPreview(contentId, category){
+   		 window.location.href="../content/queryOfPreview.action?contentId="+contentId+"&date="+new Date();
+	}
+</script>
+</head>
+
+<body>
+<!--header begin-->
+<div class="header">
+	<div class="wrap">
+    	<div class="logo f_l"><a href="http://www.sipac.gov.cn/" target="_blank"><img src="images/logo.png" /></a></div>
+    	<div class="number f_r" id="thrNum">
+        </div>
+    </div>
+</div>
+<!--header over-->
+
+<!--nav begin-->
+<div class="nav">
+    <ul class="wrap tabs">
+        <li><a href="../goToIndex.action">首页</a></li>
+        	<li><a href="javascript:void(0)" id="22" onclick='show("22")'>信用动态</a></li>
+		        	<input type="hidden" id="22_0" value="365">
+		        	<input type="hidden" id="22_1" value="364">
+		        	<input type="hidden" id="22_2" value="335">
+        	<li><a href="javascript:void(0)" id="420" onclick='show("420")'>信用公示</a></li>
+		        	<input type="hidden" id="420_0" value="318">
+		        	<input type="hidden" id="420_1" value="60">
+		        	<input type="hidden" id="420_2" value="61">
+        	<li><a href="javascript:void(0)" id="26" onclick='show("26")'>重点领域</a></li>
+		        	<input type="hidden" id="26_0" value="486">
+		        	<input type="hidden" id="26_1" value="487">
+		        	<input type="hidden" id="26_2" value="488">
+		        	<input type="hidden" id="26_3" value="489">
+		        	<input type="hidden" id="26_4" value="490">
+		        	<input type="hidden" id="26_5" value="491">
+		        	<input type="hidden" id="26_6" value="492">
+		        	<input type="hidden" id="26_7" value="493">
+        	<li><a href="javascript:void(0)" id="423" onclick='show("423")'>专项资金</a></li>
+		        	<input type="hidden" id="423_0" value="469">
+        	<li><a href="javascript:void(0)" id="416" onclick='show("416")'>政策法规</a></li>
+		        	<input type="hidden" id="416_0" value="306">
+		        	<input type="hidden" id="416_1" value="334">
+		        	<input type="hidden" id="416_2" value="309">
+        <li><a href="http://gzjd.sipac.gov.cn/Web/BBS/MainList.aspx"  target="_blank">在线交流</a></li>
+    </ul>
+</div>
+<!--nav over-->
+
+<!--content begin-->
+<div class="cloud">
+    <!--notice begin-->
+    <div class="wrap">
+    	<div class="notice f_l"> 
+            <div class="notice_tit f_l f_b">通知公告</div>
+            <div class="f_l notice_list"  id="mq" onmouseover=iScrollAmount=0 style="overflow:hidden; width:500px; height:30px;color:#000" onmouseout=iScrollAmount=1 >
+                <ul>
+		                    <li><a href="javascript:queryOfPreview('1911122')">苏州出台省内首部《住房公积金个人失信惩戒实施细则》</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911059')">关于印发江苏省推行食品生产企业 “黑名单”制度指导意见(试行)的通知(苏食药监规</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911231')">家庭成员不履行抚养义务记入个人信用档案</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911061')">2015年我市电梯维保单位星级评定结果公示</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910971')">2015年度“诚信宣传周”活动开始啦</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910519')">2015年12月苏州工业园区公积金（社会保险）公示欠费单位名单</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910520')">苏州工业园区从业建筑业企业不良信用处罚公示汇总</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910381')">2015年11月苏州工业园区社会保险基金（公积金）公示欠费单位名单</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910282')">园区信用体系建设项目接受市领导专项督查并开展座谈会</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911034')">苏州积分落户制度2016年1月15日起实施 失信行为将扣减分</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910988')">关于做好2015年园区建筑业企业信用综合评价良好行为信息录入工作的通知</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910976')">诚信记录纳入流动人口积分管理</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910972')">江苏省研究生考试26日开考 省考试院提醒考生诚信参考</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910518')">2015年中国十佳诚信政府排行榜发布</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910467')">老忘交电费 当心成老赖失信</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910361')">首个国际征信论坛即将在沪登陆</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910338')">居民身份证将可异地换领补领 有不良信用记录的不予受理</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910329')">双十一”消费信用大数据监测评价启动</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910328')">发改委：年底前全面实施统一社会信用代码制度</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910310')">信用社会临近 央行征信系统已收录8.7亿人数据</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910307')">市食药监公布19批次质量不合格食品（附名单）</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910302')">园区地税提交457户企业列入园区失信法人库</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910177')">关于联合发布2014年长三角地区备案信用服务机构名单的通知</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910179')">2014年度“苏州市级信用管理示范企业”认定公示</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="search f_r">
+            <form id="searchform" action="../content/listContentByTitle.action" method="post">
+                <fieldset>
+                <table>
+                 	<tr>
+				      <td width="70%">
+				      	 <input type="text" onfocus="if(this.value =='请输入关键字') {this.value=''; }" onblur="if(this.value==''){this.value='请输入关键字';}" class="text_input" style="width:200px" value="请输入关键字" name="title" id="title">
+				         <input type="button" onclick="seachContent()" name="button"> 
+				      </td>
+				   	</tr>
+				   	<tr>
+				   		 <td id="hotkw"></td>
+				   	</tr>
+				  </table> 
+                </fieldset>
+            </form>
+        </div>
+    </div>
+    <script type="text/javascript" src="js/muqruujs.js"></script>
+    <!--notice over-->
+    <!--center begin-->
+    <div class="wrap mt5 content">
+        <div class="breadcrumbs">
+            <ul>
+                <li>当前位置：</li>
+          		<li><a href="content365_1.html">信用动态</a> > </li>
+            <li><a href="content335_1.html">国内动态</a> > </li>
+                <li><em>详细</em></li>
+            </ul>
+        </div>
+        
+        <div class="pad50">
+            <div class="art_head">
+                <h1>各地“三证合一、一照一码”改革进展顺利</h1>
+                <div class="tc art_date"> 【发布日期： 】【<a href="javascript:void(0)" onclick="window.print();">打印</a>】 </div>
+            </div>
+            <div class="artnr">
+                <p><div style='font-size: 18px;'><p style="text-indent: 2em;"><span style="font-size: 18px;">浙江</span></p><br/><p style="text-indent: 2em;"><span style="font-size: 18px;">9月29日上午，浙江省铁投物资股份有限公司等10家企业从省工商局副局长马剑平手里接过印有18位国家标准统一社会信用代码的营业执照，这是该省颁发的首批具有国家标准“一照一码”的营业执照。从即日起，“五证合一、一照一码”改革在浙江省推开。</span></p><br/><p style="text-indent: 2em;"><span style="font-size: 18px;">与以往的营业执照有所不同，新的营业执照既是“五证合一”，即把以往的工商营业执照、组织机构代码证、税务登记证、社会保险登记证、统计登记证合在一个证里，同时还是“一照一码”，即一张营业执照上印有一个18位编码标准的社会信用代码。简单来讲，就是企业有了唯一的“身份证”。</span></p><br/><p style="text-indent: 2em;"><span style="font-size: 18px;">“五证合一、一照一码”实施后，新设立的企业在成立时即可领到“一照一码”营业执照；已设立企业则在向工商、市场监管部门申请办理变更登记时，企业登记机关直接为其换发加载统一社会信用代码的营业执照。企业如有需求，也可直接申请换发加载统一社会信用代码的营业执照。</span></p><p><br/></p><br/><p style="text-indent: 2em;"><span style="font-size: 18px;">吉林</span></p><br/><p style="text-indent: 2em;"><span style="font-size: 18px;">10月8日上午10时，吉林省副省长隋忠诚在省政务服务大厅向企业申请人华创智库大数据科技有限公司执行董事、总经理姜镪颁发了吉林省首张“五证合一、一照一码”营业执照，标志着吉林省“五证合一、一照一码”登记制度全面实施。</span></p><br/><p style="text-indent: 2em;"><span style="font-size: 18px;">在吉林省政务服务大厅工商窗口，吉林省“五证合一”登记制度改革服务指南、统一社会信用代码说明等材料一一陈列在展示栏内。拿着全省首张新版营业执照，姜镪兴奋地说：“作为全省‘五证合一、一照一码’登记制度改革受益第一人，我感到十分荣幸。”他表示，以前企业在办理“五证”时要跑工商、质监、税务、社保、公安等多个窗口，光材料就要准备不少，现在“五证合一”改革真的方便企业，一个窗口搞定，只需要提交一份资料，企业省时、省事又省心。</span></p><br/><p style="text-indent: 2em;"><span style="font-size: 18px;">据悉，吉林省结合本省实际，于10月1日起在全省范围内推行工商营业执照、组织机构代码证、税务登记证、社保登记证和刻制公章准许证明“五证合一、一照一码”登记制度改革。改革适用于吉林省内各类企业，包括公司制和非公司制企业法人、个人独资企业、合伙企业以及农民专业合作社，但个体工商户暂不纳入本次改革实施范围。</span></p><br/><p style="text-indent: 2em;"><span style="font-size: 18px;">据介绍，各级工商（市场监管）部门登记窗口负责受理企业“五证合一”登记申请材料，审核后发放载有统一社会信用代码的营业执照，做到源头统一赋码，准入登记与赋码同步完成。质监、国地税、社保、公安部门对企业不再发放组织机构代码证、税务登记证、社保登记证和刻制公章准许证明。</span></p><p><br/></p><br/><p style="text-indent: 2em;"><span style="font-size: 18px;">辽宁</span></p><br/><p style="text-indent: 2em;"><span style="font-size: 18px;">10月8日，辽宁省首张加载了统一社会信用代码的营业执照在沈阳市和平区政务服务中心发出，辽宁省副省长冮瑞将营业执照颁发给某企业负责人，省工商局、国税局、地税局、质监局有关负责同志见证了执照颁发时刻。</span></p><br/><p style="text-indent: 2em;"><span style="font-size: 18px;">从10月1日起，辽宁省全面实行“一照一码”登记制度，实现“一窗受理、互联互通、信息共享”，并将办理时限由8天压缩到3天以内。同时，辽宁省将“三证合一、一照一码”的适用范围从企业扩大到农民专业合作社、外国（地区）企业常驻代表机构。</span></p><br/><p style="text-indent: 2em;"><span style="font-size: 18px;">据介绍，辽宁省实行统一的企业“一照一码”登记条件、登记程序和登记申请文书材料规范。申请人办理企业注册登记时只需填写一表，向工商窗口提交一套材料，工商登记机关审核后，直接核发加载统一社会信用代码的营业执照，并通过全省企业信用信息公示系统向社会公示企业的基本信息。工商部门在核准登记一个工作日内，将登记基本信息通过全省“三证合一”综合登记业务系统平台共享给质监、税务部门，实现数据交换、信息互认。依托网上审批平台，全省积极推进企业“一照一码”申请、受理、审查、核准、发照等全程电子化登记管理，力争2016年年底前实现全省范围内“一照一码”网上办理。</span></p><p><br/></p><br/><p style="text-indent: 2em;"><span style="font-size: 18px;">重庆</span></p><br/><p style="text-indent: 2em;"><span style="font-size: 18px;">“太令人惊讶了，真是快得不可思议！”10月8日，重庆卓识远见艺术培训有限公司负责人卓毅山从江北区行政服务中心工作人员手中接过了该市首张“三证合一、一照一码”营业执照。这也标志着“三证合一、一照一码”登记制度在重庆市正式实施。此后，主城64%至68%的企业能够做到营业执照手续当日办结，99%的企业能够在3日内办结，5日内办结率达100%。区县企业基本能够实现当日办结。</span></p><br/><p style="text-indent: 2em;"><span style="font-size: 18px;">卓毅山此前刚从加拿大回国创办公司。他说：“加拿大没有‘三证合一’，我要跑好几个部门提交材料，而且填表的时候也没有人来帮你，但在江北区行政服务中心，搞不懂的地方立刻就会得到工作人员帮助，整个填表时间只花了20多分钟。”</span></p><br/><p style="text-indent: 2em;"><span style="font-size: 18px;">据了解，重庆市工商系统建立完善配套制度，牵头会同有关部门，明确企业登记的相关业务流程和数据交换共享，确保各部门、各环节工作衔接顺畅。工商、质监、税务等部门密切配合，细化措施、对接系统，及时通报进展，增强了协同性。目前，工商、质监、税务部门之间的数据信息已能顺畅传输和交换。</span></p><p><br/></p><br/><p style="text-indent: 2em;"><span style="font-size: 18px;">贵州</span></p><br/><p style="text-indent: 2em;"><span style="font-size: 18px;">9月30日下午，在贵州省政府政务服务中心工商窗口，贵州省副省长王江平向中检溯源（贵州）食品安全技术有限公司法定代表人宋筑颁发全省首张“一照一码”营业执照，标志着贵州省“三证合一、一照一码”登记制度正式启动实施。</span></p><br/><p style="text-indent: 2em;"><span style="font-size: 18px;">宋筑说：“以前办营业执照需要十天半个月，现在只需在工商窗口递交一套材料就行了，我今天刚递交材料就拿到了执照，实在太便利了，增强了我们服务贵州加快发展的信心。”</span></p><br/><p style="text-indent: 2em;"><span style="font-size: 18px;">据了解，“一照一码”登记制度改革实施后设立过渡期。在过渡期内，原营业执照、组织机构代码证、税务登记证以及该省试点地区核发的“一照三号”营业执照仍然有效，可继续使用到2017年12月31日；过渡期结束后一律使用加载统一社会信用代码的营业执照办理相关业务，未换发的营业执照不再有效。</span></p><br/><p style="text-indent: 2em;"><span style="font-size: 18px;">“一照一码”登记模式极大地简化了审批流程，缩短了审批时间，实现了“一窗受理、一表申请、一套材料、一次审核、一个号码、一张执照”，为创业者提供了更为便捷、高效的注册登记服务，对激发大众创业、万众创新活力具有积极的推动作用。贵州省工商局党组书记、局长杨正国提醒广大市场主体，尽早到企业登记机关换发“一照一码”营业执照，办理新照和旧照换新照，工商部门不收取任何费用。<br/></span></p></div></p>
+            </div>
+        </div>
+    </div>
+    <!--center over-->
+        
+    <!--footer begin-->
+    <div class="wrap mt10">
+        <div class="link">
+            <h1>友情链接</h1>
+            <ul class="l_list">
+                <li><a href="http://www.creditchina.gov.cn/" target="_blank">信用中国</a></li>
+                <li><a href="http://www.js.gov.cn/jsxy/index.htm" target="_blank">诚信江苏</a></li>
+                <li><a href="http://www.njcredit.gov.cn/" target="_blank">诚信南京</a></li>
+                <li><a href="http://www.szcredit.gov.cn/" target="_blank">诚信苏州</a></li>
+                <li><a href="http://credit.zjg.gov.cn/toIndex.action" target="_blank">诚信张家港</a></li>
+            </ul>
+        </div>
+        
+         <div class="foot">
+            <p><span>主办单位：苏州工业园区信用办 </span><span>技术支持：江苏中集科技有限公司</span><span><script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1256639142'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1256639142' type='text/javascript'%3E%3C/script%3E"));</script></span></p>
+        </div>
+        
+    </div>
+    <!--footer over-->
+</div>
+<!--content over-->
+    
+</body>
+</html>

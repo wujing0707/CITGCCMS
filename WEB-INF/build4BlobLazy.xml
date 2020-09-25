@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<project name="hibernatelazy" default="instrument" basedir=".">  
+       <property name="lib.dir" value="./lib"/>  
+       <property name="classes.dir" value="./classes"/>  
+  
+       <path id="lib.class.path">  
+             <fileset dir="${lib.dir}">  
+                    <include name="*.jar"/>  
+              </fileset>  
+        </path>  
+        <target name="instrument">  
+            <taskdef name="instrument" classname="org.hibernate.tool.instrument.cglib.InstrumentTask">  
+                     <classpath path="${classes.dir}"/>  
+                     <classpath refid="lib.class.path"/>  
+             </taskdef>  
+             <instrument verbose="true">  
+                      <fileset dir="${classes.dir}/com/wa/cms/model">  
+                            <include name="*.class"/>  
+                      </fileset>  
+              </instrument>  
+         </target>  
+</project>  

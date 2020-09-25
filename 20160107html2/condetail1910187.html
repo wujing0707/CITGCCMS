@@ -1,0 +1,498 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
+<meta name="description" content=""/>
+<meta name="keyWords" content=""/>
+<title>诚信园区</title>
+<link type="text/css" href="css/common.css" rel="stylesheet" />
+<link href="js/artDialog2.0.6/skin/chrome/chrome.css" rel="stylesheet" />
+<script type="text/javascript" src="js/jquery-1.7.2.js"></script>
+<script type="text/javascript" src="js/artDialog2.0.6/artDialog.min.js"></script>
+
+<style type="text/css">  
+        .code{   
+            background-image:url("../html/images/QQ.jpg");   
+            margin-left: 10px !important;
+            font-family:Arial;   
+            font-style:italic;   
+            color:Red;   
+            padding:2px 3px;   
+            letter-spacing:3px;   
+            font-weight:bolder;     
+        }   
+</style> 
+<script type="text/javascript">
+$(function () {
+	createCode(0);
+	createCode(3);
+});
+ var code ; //在全局 定义验证码   
+ function createCode(no){    
+   code = "";   
+   var codeLength = 4;//验证码的长度   
+   var checkCode = document.getElementById("checkCodeID"+no);   
+   var selectChar = new Array(0,1,2,3,4,5,6,7,8,9);//所有候选组成验证码的字符，当然也可以用中文的      
+   for(var i=0;i<codeLength;i++){   
+    var charIndex = Math.floor(Math.random()*10);   
+    code +=selectChar[charIndex];   
+   }    
+   if(checkCode){   
+     checkCode.className="code";   
+     checkCode.value = code;
+     checkCode.blur();   
+   }        
+ }
+  function validate (i,t){  
+    //   var checkCode = document.getElementById("checkCodeID"+i).value;  
+       var inputCode = document.getElementById("validCode"+i).value;
+       var zzjgdm=$('#zzjgdm').val();   
+       var gszch=$('#gszch').val();   
+       var companyname=$('#companyname').val();   
+       if(inputCode.length <=0){   
+           alert("请输入验证码！");   
+       }   
+    //   else if(inputCode.toUpperCase()!=checkCode){   
+      //    alert("验证码输入错误！");   
+       //}
+       else if(zzjgdm==""&&gszch==""&&companyname==""){
+       		alert("请至少输入一个查询条件!");
+       }
+       else{   
+          //window.location.href="../seach/seachdetail.action?zzjgdm="+zzjgdm+"&gszch="+gszch+"&companyname="+companyname+"&template="+2; 
+            $.post('../seach/checkSeachdetail.action',
+            {zzjgdm: zzjgdm, gszch:gszch, companyname:companyname,vcode:inputCode, template:2 },
+            function(data){
+                 if (data == '1') {
+                     $('#seaForm').submit(); 
+                 }else if(data=='2'){
+                 	alert("验证码输入错误！");
+                 } else {
+                    alert("暂无相关数据");
+                 }
+               }, "json");   
+       }    
+ }
+ function seachList(i){
+ 	//   var checkCode = document.getElementById("checkCodeID0").value;  
+       var inputCode = document.getElementById("validCode0").value;
+       var name=$('#name').val();   
+       var sfzhm=$('#sfzhm').val();   
+       var zyzhm=$('#zyzhm').val(); 
+       if(inputCode.length <=0){   
+           alert("请输入验证码！");   
+   //    }else if(inputCode.toUpperCase()!=checkCode){   
+   //       alert("验证码输入错误！");   
+       }else if(name==""&&sfzhm==""&&zyzhm==""){
+       		alert("请至少输入一个查询条件!");
+       }else{   
+         //window.location.href="../seach/personalSeachList.action?zyzhm="+zyzhm+"&sfzhm="+sfzhm+"&name="+name+"&template=2";
+                     $.post('../seach/checkPersonalSeachList.action',
+            {zyzhm: zyzhm, sfzhm:sfzhm, name:name,vcode:inputCode,template:2 },
+            function(data){
+                 if (data == 1) {
+                     $('#personForm').submit(); 
+                 }else if(data=='2'){
+                 	alert("验证码输入错误！");
+                 } else {
+                    alert("暂无相关数据");
+                 }
+               }, "json"); 
+       }  
+ }
+ function reset(){
+  	$('#zzjgdm').val('');   
+    $('#gszch').val('');   
+    $('#companyname').val('');  
+    $('#validCode0').val('');  
+ }  
+ function personalReset(){
+ 	$('#name').val('');  
+ 	$('#sfzhm').val('');  
+ 	$('#zyzhm').val('');  
+ 	$('#validCode0').val(''); 
+ }   
+function show(str){
+		var id=document.getElementById(str+"_0").value;
+		window.location.href='content'+id+"_1.html"; 
+}
+function reload(i){
+	if(i==1)
+ 	 window.location.href="qycheck.html";
+ 	 if(i==2)
+ 	 window.location.href="mycheck.html";
+ 	 if(i==3)
+ 	 window.location.href="qyyyshensu.html";
+}
+function goto(staus,name,index,size){
+	if(staus=='up'&&index!=1){
+		window.location.href=name+"_"+(index-1)+".html"; 
+	}else if(staus=='first'){
+		window.location.href=name+"_"+"1.html"; 
+	}else if(staus=='down'){
+		if(index!=size){
+			window.location.href=name+"_"+(index+1)+".html"; 
+		}
+	}else if(staus=='last'){
+		window.location.href=name+"_"+size+".html"; 
+	}
+}
+ function seachContent(){
+ 	//var channelid=document.getElementById("channelid").value;
+ 	//var title=document.getElementById("title").value;
+ 	//if(title==""){
+ 		//return;
+ 	//}else{
+ 		//window.location.href="../content/listContentByChannelId.action?channelid="+channelid+"&title="+title;   
+ 	//	window.location.href="../content/listContentByTitle.action?title="+title;   
+ 	//}
+ 	var title=document.getElementById("title").value;
+ 	if (title == '' || title == '请输入关键字') {
+ 	   alert('请输入关键字');
+ 	   return;
+ 	}
+ 	title = encodeURIComponent(title);
+ 	window.location.href="../content/listContentByTitle.action?title="+title; 
+ }
+ function query(){
+ 	 var checknumber=document.getElementById("checkNumber").value;
+ 	  var reg = new RegExp("^[0-9]*$");  
+    if(!reg.test(checknumber)){  
+        alert("请输入数字!");  
+        return;
+    }  
+ 	 if (checknumber == "") {
+ 	    alert("信用核查码不能为空！");
+ 	 } else {
+ 	        $.post('../seach/approveContent.action',
+            {checknumber: checknumber},
+            function(data){
+                 if (data == 1) {
+                      window.open("http://172.25.119.13/creditVerification/getDetailVerificationInfo.action?checkcode=" + checknumber,
+	               'newwindow','height=900,width=1000,top='+(window.screen.availHeight-30-900)/2+
+	                   ',left='+(window.screen.availWidth-10-1000)/2+
+	                 ',toolbar=no,menubar=no,scrollbars=yes,resizable=yes,location=no,status=no');
+               } else if (data == 2) {
+                     window.open("http://172.25.119.13/creditVerification/getgroupsDetailVerificationInfo.action?checkcode=" + checknumber,
+	                  'newwindow','height=900,width=1000,top='+(window.screen.availHeight-30-900)/2+
+	                   ',left='+(window.screen.availWidth-10-1000)/2+
+	                 ',toolbar=no,menubar=no,scrollbars=yes,resizable=yes,location=no,status=no');
+               }else {
+                   if (data == '-1') {
+                     alert("信用查询码不存在！");
+                   } else if (data == '-2') {
+                     alert("信用查询码已过期！");
+                   } else if (data == '-3') {
+                     alert("信用查询码已重新生成,请输入最新核查码!");
+                   }
+                }
+            },'json');
+ 	 }
+ }
+function SetWinHeight(obj)
+{
+
+} 
+
+function gotoPage(total,cid){
+	var p=$("#textFooter").val();
+	var i = parseInt(total);
+	if(p!=""){
+		var a=parseInt(p);
+		if(a>0&&a<=i)
+		window.location.href="../content"+cid+"_"+p+".html";
+		if(a>i)
+		window.location.href="../content"+cid+"_"+1+".html";
+	}
+}
+$(document).ready(function() {
+ 	$.ajax({
+        type: "post",//使用post方法访问后台
+        dataType: "json",//返回json格式的数据
+        url: "../getCCS.action",//要访问的后台地址
+        data:{},//要发送的数据
+        complete :function(){$("#load").hide();},//AJAX请求完成时隐藏loading提示
+        success: function(msg){//msg为返回的数据，在这里做数据绑定
+				$("#thrNum").html(msg);
+        }
+    });
+    $.ajax({
+        type: "post",//使用post方法访问后台
+        dataType: "json",//返回json格式的数据
+        url: "../content/findHOTKeyword.action",//要访问的后台地址
+        data:{},//要发送的数据
+        complete :function(){$("#load").hide();},//AJAX请求完成时隐藏loading提示
+        success: function(msg){//msg为返回的数据，在这里做数据绑定
+        	var b='关键字:&nbsp;';
+        	$.each(msg.rows, function(i, n){
+        	var a = '<a href="javascript:void(0)" onclick="byHotKwSeachContent(\''+msg.rows[i]+'\')" >'+msg.rows[i]+'</a>&nbsp;&nbsp;';
+        	b+=a;
+           });
+           $("#hotkw").html(b);
+        }
+    });
+});
+	function byHotKwSeachContent(str) {
+		var title = encodeURIComponent(str);
+		window.location.href = "../content/listContentByTitle.action?title="
+				+ title;
+	}	
+	function queryOfPreview(contentId, category){
+   		 window.location.href="../content/queryOfPreview.action?contentId="+contentId+"&date="+new Date();
+	}
+</script>
+</head>
+
+<body>
+<!--header begin-->
+<div class="header">
+	<div class="wrap">
+    	<div class="logo f_l"><a href="http://www.sipac.gov.cn/" target="_blank"><img src="images/logo.png" /></a></div>
+    	<div class="number f_r" id="thrNum">
+        </div>
+    </div>
+</div>
+<!--header over-->
+
+<!--nav begin-->
+<div class="nav">
+    <ul class="wrap tabs">
+        <li><a href="../goToIndex.action">首页</a></li>
+        	<li><a href="javascript:void(0)" id="22" onclick='show("22")'>信用动态</a></li>
+		        	<input type="hidden" id="22_0" value="365">
+		        	<input type="hidden" id="22_1" value="364">
+		        	<input type="hidden" id="22_2" value="335">
+        	<li><a href="javascript:void(0)" id="420" onclick='show("420")'>信用公示</a></li>
+		        	<input type="hidden" id="420_0" value="318">
+		        	<input type="hidden" id="420_1" value="60">
+		        	<input type="hidden" id="420_2" value="61">
+        	<li><a href="javascript:void(0)" id="26" onclick='show("26")'>重点领域</a></li>
+		        	<input type="hidden" id="26_0" value="486">
+		        	<input type="hidden" id="26_1" value="487">
+		        	<input type="hidden" id="26_2" value="488">
+		        	<input type="hidden" id="26_3" value="489">
+		        	<input type="hidden" id="26_4" value="490">
+		        	<input type="hidden" id="26_5" value="491">
+		        	<input type="hidden" id="26_6" value="492">
+		        	<input type="hidden" id="26_7" value="493">
+        	<li><a href="javascript:void(0)" id="423" onclick='show("423")'>专项资金</a></li>
+		        	<input type="hidden" id="423_0" value="469">
+        	<li><a href="javascript:void(0)" id="416" onclick='show("416")'>政策法规</a></li>
+		        	<input type="hidden" id="416_0" value="306">
+		        	<input type="hidden" id="416_1" value="334">
+		        	<input type="hidden" id="416_2" value="309">
+        <li><a href="http://gzjd.sipac.gov.cn/Web/BBS/MainList.aspx"  target="_blank">在线交流</a></li>
+    </ul>
+</div>
+<!--nav over-->
+
+<!--content begin-->
+<div class="cloud">
+    <!--notice begin-->
+    <div class="wrap">
+    	<div class="notice f_l"> 
+            <div class="notice_tit f_l f_b">通知公告</div>
+            <div class="f_l notice_list"  id="mq" onmouseover=iScrollAmount=0 style="overflow:hidden; width:500px; height:30px;color:#000" onmouseout=iScrollAmount=1 >
+                <ul>
+		                    <li><a href="javascript:queryOfPreview('1911122')">苏州出台省内首部《住房公积金个人失信惩戒实施细则》</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911059')">关于印发江苏省推行食品生产企业 “黑名单”制度指导意见(试行)的通知(苏食药监规</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911231')">家庭成员不履行抚养义务记入个人信用档案</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911061')">2015年我市电梯维保单位星级评定结果公示</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910971')">2015年度“诚信宣传周”活动开始啦</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910519')">2015年12月苏州工业园区公积金（社会保险）公示欠费单位名单</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910520')">苏州工业园区从业建筑业企业不良信用处罚公示汇总</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910381')">2015年11月苏州工业园区社会保险基金（公积金）公示欠费单位名单</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910282')">园区信用体系建设项目接受市领导专项督查并开展座谈会</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911034')">苏州积分落户制度2016年1月15日起实施 失信行为将扣减分</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910988')">关于做好2015年园区建筑业企业信用综合评价良好行为信息录入工作的通知</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910976')">诚信记录纳入流动人口积分管理</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910972')">江苏省研究生考试26日开考 省考试院提醒考生诚信参考</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910518')">2015年中国十佳诚信政府排行榜发布</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910467')">老忘交电费 当心成老赖失信</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910361')">首个国际征信论坛即将在沪登陆</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910338')">居民身份证将可异地换领补领 有不良信用记录的不予受理</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910329')">双十一”消费信用大数据监测评价启动</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910328')">发改委：年底前全面实施统一社会信用代码制度</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910310')">信用社会临近 央行征信系统已收录8.7亿人数据</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910307')">市食药监公布19批次质量不合格食品（附名单）</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910302')">园区地税提交457户企业列入园区失信法人库</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910177')">关于联合发布2014年长三角地区备案信用服务机构名单的通知</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910179')">2014年度“苏州市级信用管理示范企业”认定公示</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="search f_r">
+            <form id="searchform" action="../content/listContentByTitle.action" method="post">
+                <fieldset>
+                <table>
+                 	<tr>
+				      <td width="70%">
+				      	 <input type="text" onfocus="if(this.value =='请输入关键字') {this.value=''; }" onblur="if(this.value==''){this.value='请输入关键字';}" class="text_input" style="width:200px" value="请输入关键字" name="title" id="title">
+				         <input type="button" onclick="seachContent()" name="button"> 
+				      </td>
+				   	</tr>
+				   	<tr>
+				   		 <td id="hotkw"></td>
+				   	</tr>
+				  </table> 
+                </fieldset>
+            </form>
+        </div>
+    </div>
+    <script type="text/javascript" src="js/muqruujs.js"></script>
+    <!--notice over-->
+    <!--center begin-->
+    <div class="wrap mt5 content">
+        <div class="breadcrumbs">
+            <ul>
+                <li>当前位置：</li>
+          		<li><a href="content306_1.html">政策法规</a> > </li>
+            <li><a href="content306_1.html">国家法规</a> > </li>
+                <li><em>详细</em></li>
+            </ul>
+        </div>
+        
+        <div class="pad50">
+            <div class="art_head">
+                <h1>《国务院办公厅关于运用大数据加强对市场主体服务和监管的若干意见》</h1>
+                <div class="tc art_date"> 【发布日期： 】【<a href="javascript:void(0)" onclick="window.print();">打印</a>】 </div>
+            </div>
+            <div class="artnr">
+                <p><div style='font-size: 19px;'><p style="text-align: center; line-height: 35px;"><span style="font-family: 楷体; font-size: 19px;">国办发〔2015〕51号</span></p><p style="line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">各省、自治区、直辖市人民政府，国务院各部委、各直属机构：</span></span></p><p style="line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　　为充分运用大数据先进理念、技术和资源，加强对市场主体的服务和监管，推进简政放权和政府职能转变，提高政府治理能力，经国务院同意，现提出以下意见。</span></span></p><p style="line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　　一、充分认识运用大数据加强对市场主体服务和监管的重要性</span></span></p><p style="line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　
+　简政放权和工商登记制度改革措施的稳步推进，降低了市场准入门槛，简化了登记手续，激发了市场主体活力，有力带动和促进了就业。为确保改革措施顺利推
+进、取得实效，一方面要切实加强和改进政府服务，充分保护创业者的积极性，使其留得下、守得住、做得强;另一方面要切实加强和改进市场监管，在宽进的同时
+实行严管，维护市场正常秩序，促进市场公平竞争。</span></span></p><p style="line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　
+　当前，市场主体数量快速增长，市场活跃度不断提升，全社会信息量爆炸式增长，数量巨大、来源分散、格式多样的大数据对政府服务和监管能力提出了新的挑
+战，也带来了新的机遇。既要高度重视信息公开和信息流动带来的安全问题，也要充分认识推进信息公开、整合信息资源、加强大数据运用对维护国家统一、提升国
+家治理能力、提高经济社会运行效率的重大意义。充分运用大数据的先进理念、技术和资源，是提升国家竞争力的战略选择，是提高政府服务和监管能力的必然要
+求，有利于政府充分获取和运用信息，更加准确地了解市场主体需求，提高服务和监管的针对性、有效性;有利于顺利推进简政放权，实现放管结合，切实转变政府
+职能;有利于加强社会监督，发挥公众对规范市场主体行为的积极作用;有利于高效利用现代信息技术、社会数据资源和社会化的信息服务，降低行政监管成本。国
+务院有关部门和地方各级人民政府要结合工作实际，在公共服务和市场监管中积极稳妥、充分有效、安全可靠地运用大数据等现代信息技术，不断提升政府治理能
+力。</span></span></p><p style="line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　　二、总体要求</span></span></p><p style="line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　
+　(一)指导思想。全面贯彻落实党的十八大和十八届二中、三中、四中全会精神，按照党中央、国务院决策部署，围绕使市场在资源配置中起决定性作用和更好发
+挥政府作用，推进简政放权和政府职能转变，以社会信用体系建设和政府信息公开、数据开放为抓手，充分运用大数据、云计算等现代信息技术，提高政府服务水
+平，加强事中事后监管，维护市场正常秩序，促进市场公平竞争，释放市场主体活力，进一步优化发展环境。</span></span></p><p style="line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　　(二)主要目标。</span></span></p><p style="line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　　提高大数据运用能力，增强政府服务和监管的有效性。高效采集、有效整合、充分运用政府数据和社会数据，健全政府运用大数据的工作机制，将运用大数据作为提高政府治理能力的重要手段，不断提高政府服务和监管的针对性、有效性。</span></span></p><p style="line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　
+　推动简政放权和政府职能转变，促进市场主体依法诚信经营。运用大数据提高政府公共服务能力，加强对市场主体的事中事后监管，为推进简政放权和政府职能转
+变提供基础支撑。以国家统一的信用信息共享交换平台为基础，运用大数据推动社会信用体系建设，建立跨地区、多部门的信用联动奖惩机制，构建公平诚信的市场
+环境。</span></span></p><p style="line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　　提高政府服务水平和监管效率，降低服务和监管成本。充分运用大数据的理念、技术和资源，完善对市场主体的全方位服务，加强对市场主体的全生命周期监管。根据服务和监管需要，有序推进政府购买服务，不断降低政府运行成本。</span></span></p><p style="line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　　政府监管和社会监督有机结合，构建全方位的市场监管体系。通过政府信息公开和数据开放、社会信息资源开放共享，提高市场主体生产经营活动的透明度。有效调动社会力量监督市场主体的积极性，形成全社会广泛参与的市场监管格局。</span></span></p><p style="line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　　三、运用大数据提高为市场主体服务水平</span></span></p><p style="line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　
+　(三)运用大数据创新政府服务理念和服务方式。充分运用大数据技术，积极掌握不同地区、不同行业、不同类型企业的共性、个性化需求，在注册登记、市场准
+入、政府采购、政府购买服务、项目投资、政策动态、招标投标、检验检测、认证认可、融资担保、税收征缴、进出口、市场拓展、技术改造、上下游协作配套、产
+业联盟、兼并重组、培训咨询、成果转化、人力资源、法律服务、知识产权等方面主动提供更具针对性的服务，推动企业可持续发展。</span></span></p><p style="line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　
+　(四)提高注册登记和行政审批效率。加快建立公民、法人和其他组织统一社会信用代码制度。全面实行工商营业执照、组织机构代码证和税务登记证“三证合
+一”、“一照一码”登记制度改革，以简化办理程序、方便市场主体、减轻社会负担为出发点，做好制度设计。鼓励建立多部门网上项目并联审批平台，实现跨部
+门、跨层级项目审批、核准、备案的“统一受理、同步审查、信息共享、透明公开”。运用大数据推动行政管理流程优化再造。</span></span></p><p style="line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　
+　(五)提高信息服务水平。鼓励政府部门利用网站和微博、微信等新兴媒体，紧密结合企业需求，整合相关信息为企业提供服务，组织开展企业与金融机构融资对
+接、上下游企业合作对接等活动。充分发挥公共信用服务机构作用，为司法和行政机关、社会信用服务机构、社会公众提供基础性、公共性信用记录查询服务。</span></span></p><p style="line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　
+　(六)建立健全守信激励机制。在市场监管和公共服务过程中，同等条件下，对诚实守信者实行优先办理、简化程序等“绿色通道”支持激励政策。在财政资金补
+助、政府采购、政府购买服务、政府投资工程建设招投标过程中，应查询市场主体信用记录或要求其提供由具备资质的信用服务机构出具的信用报告，优先选择信用
+状况较好的市场主体。</span></span></p><p style="line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　
+　(七)加强统计监测和数据加工服务。创新统计调查信息采集和挖掘分析技术。加强跨部门数据关联比对分析等加工服务，充分挖掘政府数据价值。根据宏观经济
+数据、产业发展动态、市场供需状况、质量管理状况等信息，充分运用大数据技术，改进经济运行监测预测和风险预警，并及时向社会发布相关信息，合理引导市场
+预期。</span></span></p><p style="line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　
+　(八)引导专业机构和行业组织运用大数据完善服务。发挥政府组织协调作用，在依法有序开放政府信息资源的基础上，制定切实有效的政策措施，支持银行、证
+券、信托、融资租赁、担保、保险等专业服务机构和行业协会、商会运用大数据更加便捷高效地为企业提供服务，支持企业发展。支持和推动金融信息服务企业积极
+运用大数据技术开发新产品，切实维护国家金融信息安全。</span></span></p><p style="line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　　(九)运用大数据评估政府服务绩效。综合利用政府和社会信息资源，委托第三方机构对政府面向市场主体开展公共服务的绩效进行综合评估，或者对具体服务政策和措施进行专项评估，并根据评估结果及时调整和优化，提高各级政府及其部门施政和服务的有效性。</span></span></p><p style="line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　　四、运用大数据加强和改进市场监管</span></span></p><p style="line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　
+　(十)健全事中事后监管机制。创新市场经营交易行为监管方式，在企业监管、环境治理、食品药品安全、消费安全、安全生产、信用体系建设等领域，推动汇总
+整合并及时向社会公开有关市场监管数据、法定检验监测数据、违法失信数据、投诉举报数据和企业依法依规应公开的数据，鼓励和引导企业自愿公示更多生产经营
+数据、销售物流数据等，构建大数据监管模型，进行关联分析，及时掌握市场主体经营行为、规律与特征，主动发现违法违规现象，提高政府科学决策和风险预判能
+力，加强对市场主体的事中事后监管。对企业的商业轨迹进行整理和分析，全面、客观地评估企业经营状况和信用等级，实现有效监管。建立行政执法与司法、金融
+等信息共享平台，增强联合执法能力。</span></span></p><p style="line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　　(十一)建立健全信用承诺制度。全面建立市场主体准入前信用承诺制度，要求市场主体以规范格式向社会作出公开承诺，违法失信经营后将自愿接受约束和惩戒。信用承诺纳入市场主体信用记录，接受社会监督，并作为事中事后监管的参考。</span></span></p><p style="line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　
+　(十二)加快建立统一的信用信息共享交换平台。以社会信用信息系统先导工程为基础，充分发挥国家人口基础信息库、法人单位信息资源库的基础作用和企业信
+用信息公示系统的依托作用，建立国家统一的信用信息共享交换平台，整合金融、工商登记、税收缴纳、社保缴费、交通违法、安全生产、质量监管、统计调查等领
+域信用信息，实现各地区、各部门信用信息共建共享。具有市场监管职责的部门在履职过程中应准确采集市场主体信用记录，建立部门和行业信用信息系统，按要求
+纳入国家统一的信用信息共享交换平台。</span></span></p><p style="line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　
+　(十三)建立健全失信联合惩戒机制。各级人民政府应将使用信用信息和信用报告嵌入行政管理和公共服务的各领域、各环节，作为必要条件或重要参考依据。充
+分发挥行政、司法、金融、社会等领域的综合监管效能，在市场准入、行政审批、资质认定、享受财政补贴和税收优惠政策、企业法定代表人和负责人任职资格审
+查、政府采购、政府购买服务、银行信贷、招标投标、国有土地出让、企业上市、货物通关、税收征缴、社保缴费、外汇管理、劳动用工、价格制定、电子商务、产
+品质量、食品药品安全、消费品安全、知识产权、环境保护、治安管理、人口管理、出入境管理、授予荣誉称号等方面，建立跨部门联动响应和失信约束机制，对违
+法失信主体依法予以限制或禁入。建立各行业“黑名单”制度和市场退出机制。推动将申请人良好的信用状况作为各类行政许可的必备条件。</span></span></p><p style="line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　
+　(十四)建立产品信息溯源制度。对食品、药品、农产品、日用消费品、特种设备、地理标志保护产品等关系人民群众生命财产安全的重要产品加强监督管理，利
+用物联网、射频识别等信息技术，建立产品质量追溯体系，形成来源可查、去向可追、责任可究的信息链条，方便监管部门监管和社会公众查询。</span></span></p><p style="line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　
+　(十五)加强对电子商务领域的市场监管。明确电子商务平台责任，加强对交易行为的监督管理，推行网络经营者身份标识制度，完善网店实名制和交易信用评价
+制度，加强网上支付安全保障，严厉打击电子商务领域违法失信行为。加强对电子商务平台的监督管理，加强电子商务信息采集和分析，指导开展电子商务网站可信
+认证服务，推广应用网站可信标识，推进电子商务可信交易环境建设。健全权益保护和争议调处机制。</span></span></p><p style="line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　
+　(十六)运用大数据科学制定和调整监管制度和政策。在研究制定市场监管制度和政策过程中，应充分运用大数据，建立科学合理的仿真模型，对监管对象、市场
+和社会反应进行预测，并就可能出现的风险提出处置预案。跟踪监测有关制度和政策的实施效果，定期评估并根据需要及时调整。</span></span></p><p style="line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　
+　(十七)推动形成全社会共同参与监管的环境和机制。通过政府信息公开和数据开放、社会信息资源开放共享，提高市场主体生产经营活动的透明度，为新闻媒
+体、行业组织、利益相关主体和消费者共同参与对市场主体的监督创造条件。引导有关方面对违法失信者进行市场性、行业性、社会性约束和惩戒，形成全社会广泛
+参与的监管格局。</span></span></p><p style="line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　　五、推进政府和社会信息资源开放共享</span></span></p><p style="line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　　(十八)进一步加大政府信息公开和数据开放力度。除法律法规另有规定外，应将行政许可、行政处罚等信息自作出行政决定之日起7个工作日内上网公开，提高行政管理透明度和政府公信力。提高政府数据开放意识，有序开放政府数据，方便全社会开发利用。</span></span></p><p style="line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　
+　(十九)大力推进市场主体信息公示。严格执行《企业信息公示暂行条例》，加快实施经营异常名录制度和严重违法失信企业名单制度。建设国家企业信用信息公
+示系统，依法对企业注册登记、行政许可、行政处罚等基本信用信息以及企业年度报告、经营异常名录和严重违法失信企业名单进行公示，提高市场透明度，并与国
+家统一的信用信息共享交换平台实现有机对接和信息共享。支持探索开展社会化的信用信息公示服务。建设“信用中国”网站，归集整合各地区、各部门掌握的应向
+社会公开的信用信息，实现信用信息一站式查询，方便社会了解市场主体信用状况。各级政府及其部门网站要与“信用中国”网站连接，并将本单位政务公开信息和
+相关市场主体违法违规信息在“信用中国”网站公开。</span></span></p><p style="line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　
+　(二十)积极推进政府内部信息交换共享。打破信息的地区封锁和部门分割，着力推动信息共享和整合。各地区、各部门已建、在建信息系统要实现互联互通和信
+息交换共享。除法律法规明确规定外，对申请立项新建的部门信息系统，凡未明确部门间信息共享需求的，一概不予审批;对在建的部门信息系统，凡不能与其他部
+门互联共享信息的，一概不得通过验收;凡不支持地方信息共享平台建设、不向地方信息共享平台提供信息的部门信息系统，一概不予审批或验收。</span></span></p><p style="line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　
+　(二十一)有序推进全社会信息资源开放共享。支持征信机构依法采集市场交易和社会交往中的信用信息，支持互联网企业、行业组织、新闻媒体、科研机构等社
+会力量依法采集相关信息。引导各类社会机构整合和开放数据，构建政府和社会互动的信息采集、共享和应用机制，形成政府信息与社会信息交互融合的大数据资
+源。</span></span></p><p style="line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　　六、提高政府运用大数据的能力</span></span></p><p style="line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　
+　(二十二)加强电子政务建设。健全国家电子政务网络，整合网络资源，实现互联互通，为各级政府及其部门履行职能提供服务。加快推进国家政务信息化工程建
+设，统筹建立人口、法人单位、自然资源和空间地理、宏观经济等国家信息资源库，加快建设完善国家重要信息系统，提高政务信息化水平。</span></span></p><p style="line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　
+　(二十三)加强和规范政府数据采集。建立健全政府大数据采集制度，明确信息采集责任。各部门在履职过程中，要依法及时、准确、规范、完整地记录和采集相
+关信息，妥善保存并及时更新。加强对市场主体相关信息的记录，形成信用档案，对严重违法失信的市场主体，按照有关规定列入“黑名单”并公开曝光。</span></span></p><p style="line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　
+　(二十四)建立政府信息资源管理体系。全面推行政府信息电子化、系统化管理。探索建立政府信息资源目录。在战略规划、管理方式、技术手段、保障措施等方
+面加大创新力度，增强政府信息资源管理能力，充分挖掘政府信息资源价值。鼓励地方因地制宜统一政府信息资源管理力量，统筹推进政府信息资源的建设、管理和
+开发利用。</span></span></p><p style="line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　　(二十五)加强政府信息标准化建设和分类管理。建立健全政府信息化建设和政府信息资源管理标准体系。严格区分涉密信息和非涉密信息，依法推进政府信息在采集、共享、使用等环节的分类管理，合理设定政府信息公开范围。</span></span></p><p style="line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　
+　(二十六)推动政府向社会力量购买大数据资源和技术服务。各地区、各部门要按照有利于转变政府职能、有利于降低行政成本、有利于提升服务质量水平和财政
+资金效益的原则，充分发挥市场机构在信息基础设施建设、信息技术、信息资源整合开发和服务等方面的优势，通过政府购买服务、协议约定、依法提供等方式，加
+强政府与企业合作，为政府科学决策、依法监管和高效服务提供支撑保障。按照规范、安全、经济的要求，建立健全政府向社会力量购买信息产品和信息技术服务的
+机制，加强采购需求管理和绩效评价。加强对所购买信息资源准确性、可靠性的评估。</span></span></p><p style="line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　　七、积极培育和发展社会化征信服务</span></span></p><p style="line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　
+　(二十七)推动征信机构建立市场主体信用记录。支持征信机构与政府部门、企事业单位、社会组织等深入合作，依法开展征信业务，建立以自然人、法人和其他
+组织为对象的征信系统，依法采集、整理、加工和保存在市场交易和社会交往活动中形成的信用信息，采取合理措施保障信用信息的准确性，建立起全面覆盖经济社
+会各领域、各环节的市场主体信用记录。</span></span></p><p style="line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　
+　(二十八)鼓励征信机构开展专业化征信服务。引导征信机构根据市场需求，大力加强信用服务产品创新，提供专业化的征信服务。建立健全并严格执行内部风险
+防范、避免利益冲突和保障信息安全的规章制度，依法向客户提供便捷高效的征信服务。进一步扩大信用报告在行政管理和公共服务及银行、证券、保险等领域的应
+用。</span></span></p><p style="line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　
+　(二十九)大力培育发展信用服务业。鼓励发展信用咨询、信用评估、信用担保和信用保险等信用服务业。对符合条件的信用服务机构，按有关规定享受国家和地
+方关于现代服务业和高新技术产业的各项优惠政策。加强信用服务市场监管，进一步提高信用服务行业的市场公信力和社会影响力。支持鼓励国内有实力的信用服务
+机构参与国际合作，拓展国际市场，为我国企业实施海外并购、国际招投标等提供服务。</span></span></p><p style="line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　　八、健全保障措施，加强组织领导</span></span></p><p style="line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　
+　(三十)提升产业支撑能力。进一步健全创新体系，鼓励相关企业、高校和科研机构开展产学研合作，推进大数据协同融合创新，加快突破大规模数据仓库、非关
+系型数据库、数据挖掘、数据智能分析、数据可视化等大数据关键共性技术，支持高性能计算机、存储设备、网络设备、智能终端和大型通用数据库软件等产品创
+新。支持企事业单位开展大数据公共技术服务平台建设。鼓励具有自主知识产权和技术创新能力的大数据企业做强做大。推动各领域大数据创新应用，提升社会治
+理、公共服务和科学决策水平，培育新的增长点。落实和完善支持大数据产业发展的财税、金融、产业、人才等政策，推动大数据产业加快发展。</span></span></p><p style="line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　
+　(三十一)建立完善管理制度。处理好大数据发展、服务、应用与安全的关系。加快研究完善规范电子政务，监管信息跨境流动，保护国家经济安全、信息安全，
+以及保护企业商业秘密、个人隐私方面的管理制度，加快制定出台相关法律法规。建立统一社会信用代码制度。建立健全各部门政府信息记录和采集制度。建立政府
+信息资源管理制度，加强知识产权保护。加快出台关于推进公共信息资源开放共享的政策意见。制定政务信用信息公开共享办法和信息目录。推动出台相关法规，对
+政府部门在行政管理、公共服务中使用信用信息和信用报告作出规定，为联合惩戒市场主体违法失信行为提供依据。</span></span></p><p style="line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　　(三十二)完善标准规范。建立大数据标准体系，研究制定有关大数据的基础标准、技术标准、应用标准和管理标准等。加快建立政府信息采集、存储、公开、共享、使用、质量保障和安全管理的技术标准。引导建立企业间信息共享交换的标准规范，促进信息资源开发利用。</span></span></p><p style="line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　
+　(三十三)加强网络和信息安全保护。落实国家信息安全等级保护制度要求，加强对涉及国家安全重要数据的管理，加强对大数据相关技术、设备和服务提供商的
+风险评估和安全管理。加大网络和信息安全技术研发和资金投入，建立健全信息安全保障体系。采取必要的管理和技术手段，切实保护国家信息安全以及公民、法人
+和其他组织信息安全。</span></span></p><p style="line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　　(三十四)加强人才队伍建设。鼓励高校、人力资源服务机构和企业重点培养跨界复合型、应用创新型大数据专业人才，完善大数据技术、管理和服务人才培养体系。加强政府工作人员培训，增强运用大数据能力。</span></span></p><p style="line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　　(三十五)加强领导，明确分工。各地区、各部门要切实加强对大数据运用工作的组织领导，按照职责分工，研究出台具体方案和实施办法，做好本地区、本部门的大数据运用工作，不断提高服务和监管能力。</span></span></p><p style="line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　
+　(三十六)联系实际，突出重点。紧密结合各地区、各部门实际，整合数据资源为社会、政府、企业提供服务。在工商登记、统计调查、质量监管、竞争执法、消
+费维权等领域率先开展大数据示范应用工程，实现大数据汇聚整合。在宏观管理、税收征缴、资源利用与环境保护、食品药品安全、安全生产、信用体系建设、健康
+医疗、劳动保障、教育文化、交通旅游、金融服务、中小企业服务、工业制造、现代农业、商贸物流、社会综合治理、收入分配调节等领域实施大数据示范应用工
+程。</span></span></p><p style="line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　　各地区、各部门要加强对本意见落实工作的监督检查，推动在服务和监管过程中广泛深入运用大数据。发展改革委负责对本意见落实工作的统筹协调、跟踪了解、督促检查，确保各项任务和措施落实到位。</span></span></p><p style="line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　　</span></span></p><p style="text-align: right; line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　　国务院办公厅</span></span></p><p style="text-align: right; line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　　2015年6月24日</span></span></p><p>
+							
+							</p><table>
+								
+							<tbody><tr class="firstRow"></tr></tbody></table><p><br/></p></div></p>
+            </div>
+        </div>
+    </div>
+    <!--center over-->
+        
+    <!--footer begin-->
+    <div class="wrap mt10">
+        <div class="link">
+            <h1>友情链接</h1>
+            <ul class="l_list">
+                <li><a href="http://www.creditchina.gov.cn/" target="_blank">信用中国</a></li>
+                <li><a href="http://www.js.gov.cn/jsxy/index.htm" target="_blank">诚信江苏</a></li>
+                <li><a href="http://www.njcredit.gov.cn/" target="_blank">诚信南京</a></li>
+                <li><a href="http://www.szcredit.gov.cn/" target="_blank">诚信苏州</a></li>
+                <li><a href="http://credit.zjg.gov.cn/toIndex.action" target="_blank">诚信张家港</a></li>
+            </ul>
+        </div>
+        
+         <div class="foot">
+            <p><span>主办单位：苏州工业园区信用办 </span><span>技术支持：江苏中集科技有限公司</span><span><script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1256639142'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1256639142' type='text/javascript'%3E%3C/script%3E"));</script></span></p>
+        </div>
+        
+    </div>
+    <!--footer over-->
+</div>
+<!--content over-->
+    
+</body>
+</html>

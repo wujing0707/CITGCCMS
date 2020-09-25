@@ -1,0 +1,391 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
+<meta name="description" content=""/>
+<meta name="keyWords" content=""/>
+<title>诚信园区</title>
+<link type="text/css" href="css/common.css" rel="stylesheet" />
+<link href="js/artDialog2.0.6/skin/chrome/chrome.css" rel="stylesheet" />
+<script type="text/javascript" src="js/jquery-1.7.2.js"></script>
+<script type="text/javascript" src="js/artDialog2.0.6/artDialog.min.js"></script>
+
+<style type="text/css">  
+        .code{   
+            background-image:url("../html/images/QQ.jpg");   
+            margin-left: 10px !important;
+            font-family:Arial;   
+            font-style:italic;   
+            color:Red;   
+            padding:2px 3px;   
+            letter-spacing:3px;   
+            font-weight:bolder;     
+        }   
+</style> 
+<script type="text/javascript">
+$(function () {
+	createCode(0);
+	createCode(3);
+});
+ var code ; //在全局 定义验证码   
+ function createCode(no){    
+   code = "";   
+   var codeLength = 4;//验证码的长度   
+   var checkCode = document.getElementById("checkCodeID"+no);   
+   var selectChar = new Array(0,1,2,3,4,5,6,7,8,9);//所有候选组成验证码的字符，当然也可以用中文的      
+   for(var i=0;i<codeLength;i++){   
+    var charIndex = Math.floor(Math.random()*10);   
+    code +=selectChar[charIndex];   
+   }    
+   if(checkCode){   
+     checkCode.className="code";   
+     checkCode.value = code;
+     checkCode.blur();   
+   }        
+ }
+  function validate (i,t){  
+    //   var checkCode = document.getElementById("checkCodeID"+i).value;  
+       var inputCode = document.getElementById("validCode"+i).value;
+       var zzjgdm=$('#zzjgdm').val();   
+       var gszch=$('#gszch').val();   
+       var companyname=$('#companyname').val();   
+       if(inputCode.length <=0){   
+           alert("请输入验证码！");   
+       }   
+    //   else if(inputCode.toUpperCase()!=checkCode){   
+      //    alert("验证码输入错误！");   
+       //}
+       else if(zzjgdm==""&&gszch==""&&companyname==""){
+       		alert("请至少输入一个查询条件!");
+       }
+       else{   
+          //window.location.href="../seach/seachdetail.action?zzjgdm="+zzjgdm+"&gszch="+gszch+"&companyname="+companyname+"&template="+2; 
+            $.post('../seach/checkSeachdetail.action',
+            {zzjgdm: zzjgdm, gszch:gszch, companyname:companyname,vcode:inputCode, template:2 },
+            function(data){
+                 if (data == '1') {
+                     $('#seaForm').submit(); 
+                 }else if(data=='2'){
+                 	alert("验证码输入错误！");
+                 } else {
+                    alert("暂无相关数据");
+                 }
+               }, "json");   
+       }    
+ }
+ function seachList(i){
+ 	//   var checkCode = document.getElementById("checkCodeID0").value;  
+       var inputCode = document.getElementById("validCode0").value;
+       var name=$('#name').val();   
+       var sfzhm=$('#sfzhm').val();   
+       var zyzhm=$('#zyzhm').val(); 
+       if(inputCode.length <=0){   
+           alert("请输入验证码！");   
+   //    }else if(inputCode.toUpperCase()!=checkCode){   
+   //       alert("验证码输入错误！");   
+       }else if(name==""&&sfzhm==""&&zyzhm==""){
+       		alert("请至少输入一个查询条件!");
+       }else{   
+         //window.location.href="../seach/personalSeachList.action?zyzhm="+zyzhm+"&sfzhm="+sfzhm+"&name="+name+"&template=2";
+                     $.post('../seach/checkPersonalSeachList.action',
+            {zyzhm: zyzhm, sfzhm:sfzhm, name:name,vcode:inputCode,template:2 },
+            function(data){
+                 if (data == 1) {
+                     $('#personForm').submit(); 
+                 }else if(data=='2'){
+                 	alert("验证码输入错误！");
+                 } else {
+                    alert("暂无相关数据");
+                 }
+               }, "json"); 
+       }  
+ }
+ function reset(){
+  	$('#zzjgdm').val('');   
+    $('#gszch').val('');   
+    $('#companyname').val('');  
+    $('#validCode0').val('');  
+ }  
+ function personalReset(){
+ 	$('#name').val('');  
+ 	$('#sfzhm').val('');  
+ 	$('#zyzhm').val('');  
+ 	$('#validCode0').val(''); 
+ }   
+function show(str){
+		var id=document.getElementById(str+"_0").value;
+		window.location.href='content'+id+"_1.html"; 
+}
+function reload(i){
+	if(i==1)
+ 	 window.location.href="qycheck.html";
+ 	 if(i==2)
+ 	 window.location.href="mycheck.html";
+ 	 if(i==3)
+ 	 window.location.href="qyyyshensu.html";
+}
+function goto(staus,name,index,size){
+	if(staus=='up'&&index!=1){
+		window.location.href=name+"_"+(index-1)+".html"; 
+	}else if(staus=='first'){
+		window.location.href=name+"_"+"1.html"; 
+	}else if(staus=='down'){
+		if(index!=size){
+			window.location.href=name+"_"+(index+1)+".html"; 
+		}
+	}else if(staus=='last'){
+		window.location.href=name+"_"+size+".html"; 
+	}
+}
+ function seachContent(){
+ 	//var channelid=document.getElementById("channelid").value;
+ 	//var title=document.getElementById("title").value;
+ 	//if(title==""){
+ 		//return;
+ 	//}else{
+ 		//window.location.href="../content/listContentByChannelId.action?channelid="+channelid+"&title="+title;   
+ 	//	window.location.href="../content/listContentByTitle.action?title="+title;   
+ 	//}
+ 	var title=document.getElementById("title").value;
+ 	if (title == '' || title == '请输入关键字') {
+ 	   alert('请输入关键字');
+ 	   return;
+ 	}
+ 	title = encodeURIComponent(title);
+ 	window.location.href="../content/listContentByTitle.action?title="+title; 
+ }
+ function query(){
+ 	 var checknumber=document.getElementById("checkNumber").value;
+ 	  var reg = new RegExp("^[0-9]*$");  
+    if(!reg.test(checknumber)){  
+        alert("请输入数字!");  
+        return;
+    }  
+ 	 if (checknumber == "") {
+ 	    alert("信用核查码不能为空！");
+ 	 } else {
+ 	        $.post('../seach/approveContent.action',
+            {checknumber: checknumber},
+            function(data){
+                 if (data == 1) {
+                      window.open("http://172.25.119.13/creditVerification/getDetailVerificationInfo.action?checkcode=" + checknumber,
+	               'newwindow','height=900,width=1000,top='+(window.screen.availHeight-30-900)/2+
+	                   ',left='+(window.screen.availWidth-10-1000)/2+
+	                 ',toolbar=no,menubar=no,scrollbars=yes,resizable=yes,location=no,status=no');
+               } else if (data == 2) {
+                     window.open("http://172.25.119.13/creditVerification/getgroupsDetailVerificationInfo.action?checkcode=" + checknumber,
+	                  'newwindow','height=900,width=1000,top='+(window.screen.availHeight-30-900)/2+
+	                   ',left='+(window.screen.availWidth-10-1000)/2+
+	                 ',toolbar=no,menubar=no,scrollbars=yes,resizable=yes,location=no,status=no');
+               }else {
+                   if (data == '-1') {
+                     alert("信用查询码不存在！");
+                   } else if (data == '-2') {
+                     alert("信用查询码已过期！");
+                   } else if (data == '-3') {
+                     alert("信用查询码已重新生成,请输入最新核查码!");
+                   }
+                }
+            },'json');
+ 	 }
+ }
+function SetWinHeight(obj)
+{
+
+} 
+
+function gotoPage(total,cid){
+	var p=$("#textFooter").val();
+	var i = parseInt(total);
+	if(p!=""){
+		var a=parseInt(p);
+		if(a>0&&a<=i)
+		window.location.href="../content"+cid+"_"+p+".html";
+		if(a>i)
+		window.location.href="../content"+cid+"_"+1+".html";
+	}
+}
+$(document).ready(function() {
+ 	$.ajax({
+        type: "post",//使用post方法访问后台
+        dataType: "json",//返回json格式的数据
+        url: "../getCCS.action",//要访问的后台地址
+        data:{},//要发送的数据
+        complete :function(){$("#load").hide();},//AJAX请求完成时隐藏loading提示
+        success: function(msg){//msg为返回的数据，在这里做数据绑定
+				$("#thrNum").html(msg);
+        }
+    });
+    $.ajax({
+        type: "post",//使用post方法访问后台
+        dataType: "json",//返回json格式的数据
+        url: "../content/findHOTKeyword.action",//要访问的后台地址
+        data:{},//要发送的数据
+        complete :function(){$("#load").hide();},//AJAX请求完成时隐藏loading提示
+        success: function(msg){//msg为返回的数据，在这里做数据绑定
+        	var b='关键字:&nbsp;';
+        	$.each(msg.rows, function(i, n){
+        	var a = '<a href="javascript:void(0)" onclick="byHotKwSeachContent(\''+msg.rows[i]+'\')" >'+msg.rows[i]+'</a>&nbsp;&nbsp;';
+        	b+=a;
+           });
+           $("#hotkw").html(b);
+        }
+    });
+});
+	function byHotKwSeachContent(str) {
+		var title = encodeURIComponent(str);
+		window.location.href = "../content/listContentByTitle.action?title="
+				+ title;
+	}	
+	function queryOfPreview(contentId, category){
+   		 window.location.href="../content/queryOfPreview.action?contentId="+contentId+"&date="+new Date();
+	}
+</script>
+</head>
+
+<body>
+<!--header begin-->
+<div class="header">
+	<div class="wrap">
+    	<div class="logo f_l"><a href="http://www.sipac.gov.cn/" target="_blank"><img src="images/logo.png" /></a></div>
+    	<div class="number f_r" id="thrNum">
+        </div>
+    </div>
+</div>
+<!--header over-->
+
+<!--nav begin-->
+<div class="nav">
+    <ul class="wrap tabs">
+        <li><a href="../goToIndex.action">首页</a></li>
+        	<li><a href="javascript:void(0)" id="22" onclick='show("22")'>信用动态</a></li>
+		        	<input type="hidden" id="22_0" value="365">
+		        	<input type="hidden" id="22_1" value="364">
+		        	<input type="hidden" id="22_2" value="335">
+        	<li><a href="javascript:void(0)" id="420" onclick='show("420")'>信用公示</a></li>
+		        	<input type="hidden" id="420_0" value="318">
+		        	<input type="hidden" id="420_1" value="60">
+		        	<input type="hidden" id="420_2" value="61">
+        	<li><a href="javascript:void(0)" id="26" onclick='show("26")'>重点领域</a></li>
+		        	<input type="hidden" id="26_0" value="486">
+		        	<input type="hidden" id="26_1" value="487">
+		        	<input type="hidden" id="26_2" value="488">
+		        	<input type="hidden" id="26_3" value="489">
+		        	<input type="hidden" id="26_4" value="490">
+		        	<input type="hidden" id="26_5" value="491">
+		        	<input type="hidden" id="26_6" value="492">
+		        	<input type="hidden" id="26_7" value="493">
+        	<li><a href="javascript:void(0)" id="423" onclick='show("423")'>专项资金</a></li>
+		        	<input type="hidden" id="423_0" value="469">
+        	<li><a href="javascript:void(0)" id="416" onclick='show("416")'>政策法规</a></li>
+		        	<input type="hidden" id="416_0" value="306">
+		        	<input type="hidden" id="416_1" value="334">
+		        	<input type="hidden" id="416_2" value="309">
+        <li><a href="http://gzjd.sipac.gov.cn/Web/BBS/MainList.aspx"  target="_blank">在线交流</a></li>
+    </ul>
+</div>
+<!--nav over-->
+
+<!--content begin-->
+<div class="cloud">
+    <!--notice begin-->
+    <div class="wrap">
+    	<div class="notice f_l"> 
+            <div class="notice_tit f_l f_b">通知公告</div>
+            <div class="f_l notice_list"  id="mq" onmouseover=iScrollAmount=0 style="overflow:hidden; width:500px; height:30px;color:#000" onmouseout=iScrollAmount=1 >
+                <ul>
+		                    <li><a href="javascript:queryOfPreview('1911122')">苏州出台省内首部《住房公积金个人失信惩戒实施细则》</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911059')">关于印发江苏省推行食品生产企业 “黑名单”制度指导意见(试行)的通知(苏食药监规</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911231')">家庭成员不履行抚养义务记入个人信用档案</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911061')">2015年我市电梯维保单位星级评定结果公示</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910971')">2015年度“诚信宣传周”活动开始啦</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910519')">2015年12月苏州工业园区公积金（社会保险）公示欠费单位名单</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910520')">苏州工业园区从业建筑业企业不良信用处罚公示汇总</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910381')">2015年11月苏州工业园区社会保险基金（公积金）公示欠费单位名单</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910282')">园区信用体系建设项目接受市领导专项督查并开展座谈会</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911034')">苏州积分落户制度2016年1月15日起实施 失信行为将扣减分</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910988')">关于做好2015年园区建筑业企业信用综合评价良好行为信息录入工作的通知</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910976')">诚信记录纳入流动人口积分管理</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910972')">江苏省研究生考试26日开考 省考试院提醒考生诚信参考</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910518')">2015年中国十佳诚信政府排行榜发布</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910467')">老忘交电费 当心成老赖失信</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910361')">首个国际征信论坛即将在沪登陆</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910338')">居民身份证将可异地换领补领 有不良信用记录的不予受理</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910329')">双十一”消费信用大数据监测评价启动</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910328')">发改委：年底前全面实施统一社会信用代码制度</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910310')">信用社会临近 央行征信系统已收录8.7亿人数据</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910307')">市食药监公布19批次质量不合格食品（附名单）</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910302')">园区地税提交457户企业列入园区失信法人库</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910177')">关于联合发布2014年长三角地区备案信用服务机构名单的通知</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910179')">2014年度“苏州市级信用管理示范企业”认定公示</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="search f_r">
+            <form id="searchform" action="../content/listContentByTitle.action" method="post">
+                <fieldset>
+                <table>
+                 	<tr>
+				      <td width="70%">
+				      	 <input type="text" onfocus="if(this.value =='请输入关键字') {this.value=''; }" onblur="if(this.value==''){this.value='请输入关键字';}" class="text_input" style="width:200px" value="请输入关键字" name="title" id="title">
+				         <input type="button" onclick="seachContent()" name="button"> 
+				      </td>
+				   	</tr>
+				   	<tr>
+				   		 <td id="hotkw"></td>
+				   	</tr>
+				  </table> 
+                </fieldset>
+            </form>
+        </div>
+    </div>
+    <script type="text/javascript" src="js/muqruujs.js"></script>
+    <!--notice over-->
+    <!--center begin-->
+    <div class="wrap mt5 content">
+        <div class="breadcrumbs">
+            <ul>
+                <li>当前位置：</li>
+          		<li><a href="content365_1.html">信用动态</a> > </li>
+            <li><a href="content335_1.html">国内动态</a> > </li>
+                <li><em>详细</em></li>
+            </ul>
+        </div>
+        
+        <div class="pad50">
+            <div class="art_head">
+                <h1>食药局对仿制药动真格 相关方或被列入黑名单</h1>
+                <div class="tc art_date"> 【发布日期： 】【<a href="javascript:void(0)" onclick="window.print();">打印</a>】 </div>
+            </div>
+            <div class="artnr">
+                <p><div style='font-size: 18px;'><p style="margin: 0px 0px 16px; line-height: 2em; text-indent: 2em;"><span style="font-size: 18px;"><span style="font-family: 宋体;">近日，</span><span style="font-family: Calibri;">CFDA(</span><span style="font-family: 宋体;">国家食药监总局</span><span style="font-family: Calibri;">)</span><span style="font-family: 宋体;">公布了</span><span style="font-family: Calibri;">10</span><span style="font-family: 宋体;">月</span><span style="font-family: Calibri;">26-31</span><span style="font-family: 宋体;">日开展的药品注册现场核查抽查结果：</span><span style="font-family: Calibri;">8</span><span style="font-family: 宋体;">家企业</span><span style="font-family: Calibri;">11</span><span style="font-family: 宋体;">个药品注册申请不予批准，</span><span style="font-family: Calibri;">5</span><span style="font-family: 宋体;">家相关临床研究机构被立案调查。</span></span></p><p style="margin: 0px 0px 16px; line-height: 2em; text-indent: 2em;"><span style="font-size: 18px;"><span style="font-family: 宋体; font-size: 18px;">上述</span><span style="font-family: Calibri; font-size: 18px;">11</span><span style="font-family: 宋体; font-size: 18px;">个药品注册申请涉及“擅自修改数据、瞒报数据以及数据不可溯源等涉嫌弄虚作假问题”，其中，仿制药成为“重灾区”，据统计，涉事申请中有</span><span style="font-family: Calibri; font-size: 18px;">6</span><span style="font-family: 宋体; font-size: 18px;">家药企申报的</span><span style="font-family: Calibri; font-size: 18px;">8</span><span style="font-family: 宋体; font-size: 18px;">项药品均为仿制药。</span></span></p><p style="margin: 0px 0px 16px; line-height: 2em; text-indent: 2em;"><span style="font-size: 18px;"><span style="font-family: 宋体; font-size: 18px;">根据公告，此次检查项目主要为“生物等效性试验”，在选择上是“有针对性的”，选取范围仅为“部分”真实性存疑的品种。对此，</span><span style="font-family: Calibri; font-size: 18px;">CFDA</span><span style="font-family: 宋体; font-size: 18px;">强调，主动报告问题品种的临床机构和</span><span style="font-family: Calibri; font-size: 18px;">CRO(</span><span style="font-family: 宋体; font-size: 18px;">医药研发服务外包公司</span><span style="font-family: Calibri; font-size: 18px;">)</span><span style="font-family: 宋体; font-size: 18px;">将免受处罚。</span></span></p><p style="margin: 0px 0px 16px; line-height: 2em; text-indent: 2em;"><span style="font-size: 18px;"><span style="font-family: 宋体; font-size: 18px;">在业内人士看来，仿制药申报牵涉制药企业、临床机构、</span><span style="font-family: Calibri; font-size: 18px;">CRO</span><span style="font-family: 宋体; font-size: 18px;">三方，数据造假三方都可能有责任。而对于造假的原因，除</span><span style="font-family: Calibri; font-size: 18px;">CRO</span><span style="font-family: 宋体; font-size: 18px;">公司弄虚作假外，一位不愿透露</span> <span style="font-family: 宋体; font-size: 18px;">姓名的业内人士称，目前</span><span style="font-family: Calibri; font-size: 18px;">CFDA</span><span style="font-family: 宋体; font-size: 18px;">积压的注册申请近万件，但负责审批的人手严重不足，与此同时，国内仿制药的申报费用仅为</span><span style="font-family: Calibri; font-size: 18px;">2</span><span style="font-family: 宋体; font-size: 18px;">万元人民币。“过量申请与无力审</span> <span style="font-family: 宋体; font-size: 18px;">批的矛盾，在部分</span><span style="font-family: Calibri; font-size: 18px;">CRO</span><span style="font-family: 宋体; font-size: 18px;">的操作下，很多药企企图蒙混过关。”</span></span></p><p style="margin: 0px 0px 16px; line-height: 2em; text-indent: 2em;"><span style="font-size: 18px;"><span style="font-family: Calibri; font-size: 18px;">CDFA</span><span style="font-family: 宋体; font-size: 18px;">也意识到该问题的严重性。</span><span style="font-family: Calibri; font-size: 18px;">7</span><span style="font-family: 宋体; font-size: 18px;">月</span><span style="font-family: Calibri; font-size: 18px;">22</span><span style="font-family: 宋体; font-size: 18px;">日，</span><span style="font-family: Calibri; font-size: 18px;">CFDA</span><span style="font-family: 宋体; font-size: 18px;">发布《关于开展药物临床试验数据自查核查工作的公告》，列入药物临床试验数据自查核查品种清单的</span> <span style="font-family: 宋体; font-size: 18px;">共有</span><span style="font-family: Calibri; font-size: 18px;">1622</span><span style="font-family: 宋体; font-size: 18px;">个受理号，其中</span><span style="font-family: Calibri; font-size: 18px;">309</span><span style="font-family: 宋体; font-size: 18px;">个受理号分别属于国内</span><span style="font-family: Calibri; font-size: 18px;">103</span><span style="font-family: 宋体; font-size: 18px;">家上市公司</span><span style="font-family: Calibri; font-size: 18px;">;11</span><span style="font-family: 宋体; font-size: 18px;">月</span><span style="font-family: Calibri; font-size: 18px;">18</span><span style="font-family: 宋体; font-size: 18px;">日，更是连夜发布《关于开展仿制药质量和疗效一致性评价的意见</span><span style="font-family: Calibri; font-size: 18px;">(</span><span style="font-family: 宋体; font-size: 18px;">征求</span> <span style="font-family: 宋体; font-size: 18px;">意见稿</span><span style="font-family: Calibri; font-size: 18px;">)</span><span style="font-family: 宋体; font-size: 18px;">》，意见稿措辞严厉，重申了完成时限。</span></span></p><p style="margin: 0px 0px 16px; line-height: 2em; text-indent: 2em;"><span style="font-family: 宋体; font-size: 18px;"><strong>数据造假泛滥</strong></span></p><p style="margin: 0px 0px 16px; line-height: 2em; text-indent: 2em;"><span style="font-size: 18px;"><span style="font-family: Calibri; font-size: 18px;">11</span><span style="font-family: 宋体; font-size: 18px;">月</span><span style="font-family: Calibri; font-size: 18px;">11</span><span style="font-family: 宋体; font-size: 18px;">日，</span><span style="font-family: Calibri; font-size: 18px;">CFDA</span><span style="font-family: 宋体; font-size: 18px;">发布公告称，在对部分药品注册申请进行现场核查时，发现包括华海药业申报的坎地沙坦酯片、康芝药业申报的消旋卡多曲干混悬剂以及</span> <span style="font-family: 宋体; font-size: 18px;">山大华特子公司达因药业申报的布洛芬混悬滴剂和布洛芬混悬液等</span><span style="font-family: Calibri; font-size: 18px;">11</span><span style="font-family: 宋体; font-size: 18px;">个品种临床试验数据存在不真实和不完整的问题，不予批准。</span></span></p><p style="margin: 0px 0px 16px; line-height: 2em; text-indent: 2em;"><span style="font-size: 18px;"><span style="font-family: 宋体; font-size: 18px;">另据了解，在上述</span><span style="font-family: Calibri; font-size: 18px;">11</span><span style="font-family: 宋体; font-size: 18px;">个不予批准的产品中，博济医药负责了部分品种注册的临床</span><span style="font-family: Calibri; font-size: 18px;">CRO</span><span style="font-family: 宋体; font-size: 18px;">工作，将被</span><span style="font-family: Calibri; font-size: 18px;">CFDA</span><span style="font-family: 宋体; font-size: 18px;">问责。</span></span></p><p style="margin: 0px 0px 16px; line-height: 2em; text-indent: 2em;"><span style="font-size: 18px;"><span style="font-family: 宋体; font-size: 18px;">针对上述临床试验数据中存在的问题，</span><span style="font-family: Calibri; font-size: 18px;">CFDA</span><span style="font-family: 宋体; font-size: 18px;">还决定对广州市精神病医院和辽宁中医药大学附属第二医院的药物临床试验数据涉嫌弄虚造假行为立案调查，对其</span> <span style="font-family: 宋体; font-size: 18px;">所承接的其他药物临床试验数据进行延伸检查，对相关合同研究组织进行延伸检查</span><span style="font-family: Calibri; font-size: 18px;">;</span><span style="font-family: 宋体; font-size: 18px;">对华中科技大学同济医学院附属协和医院、蚌埠医学院附属医院、山东大学齐鲁</span> <span style="font-family: 宋体; font-size: 18px;">医院药物临床试验数据涉嫌弄虚造假行为，分别由湖北、安徽、山东省食品药品监督管理局立案调查。</span></span></p><p style="margin: 0px 0px 16px; line-height: 2em; text-indent: 2em;"><span style="font-size: 18px;"><span style="font-family: Calibri; font-size: 18px;">CFDA</span><span style="font-family: 宋体; font-size: 18px;">表示，所有已申报生产并待审的申报企业、临床试验机构和临床试验合同研究组织要继续进行自查，凡自查发现存在不真实问题的品种，可以撤回相关申请，主动报告问题的将免予处罚。</span></span></p><p style="margin: 0px 0px 16px; line-height: 2em; text-indent: 2em;"><span style="font-size: 18px;"><span style="font-family: 宋体; font-size: 18px;">在业内人士看来，仿制药申报牵涉制药企业、临床机构、</span><span style="font-family: Calibri; font-size: 18px;">CRO</span><span style="font-family: 宋体; font-size: 18px;">三方，数据造假三方都可能有责任。</span></span></p><p style="margin: 0px 0px 16px; line-height: 2em; text-indent: 2em;"><span style="font-family: 宋体; font-size: 18px;">“此次主动撤回的药企也存在数据造假问题。”中国医药企业管理协会会长于明德告诉记者。新药注册的研发和临床数据至关重要，但我国新药注册的研发和临床数据造假现象严重，已是公开的秘密。</span></p><p style="margin: 0px 0px 16px; line-height: 2em; text-indent: 2em;"><span style="font-size: 18px;"><span style="font-family: 宋体; font-size: 18px;">“很多医药企业为了把更多的精力集中在核心业务，利用外部资源和技术，控制成本，缩短新药上市周期，会选择把新药审批注册申请外包给</span><span style="font-family: Calibri; font-size: 18px;">CRO</span><span style="font-family: 宋体; font-size: 18px;">公司。”广州博济医药生物技术股份有限公司临床研究业务负责人韩先生告诉</span><span style="font-family: Calibri; font-size: 18px;">21</span><span style="font-family: 宋体; font-size: 18px;">世纪经济报道记者。</span></span></p><p style="margin: 0px 0px 16px; line-height: 2em; text-indent: 2em;"><span style="font-size: 18px;"><span style="font-family: Calibri; font-size: 18px;">CRO</span><span style="font-family: 宋体; font-size: 18px;">在</span><span style="font-family: Calibri; font-size: 18px;">20</span><span style="font-family: 宋体; font-size: 18px;">世纪</span><span style="font-family: Calibri; font-size: 18px;">80</span><span style="font-family: 宋体; font-size: 18px;">年代发源于美国，是一种专业要求极高的外包服务。服务主要包括临床试验方案和病例报告表的设计和咨询，临床试验监查工作，数据管</span> <span style="font-family: 宋体; font-size: 18px;">理，统计分析以及统计分析报告的撰写等。目标市场主要集中在医药公司对药物做医学统计和临床试验等业务，其业务几乎涵盖了新药研发的整个过程。</span></span></p><p style="margin: 0px 0px 16px; line-height: 2em; text-indent: 2em;"><span style="font-size: 18px;"><span style="font-family: 宋体; font-size: 18px;">随着我国制药产业的发展和规模的扩大，近几年来，一些国际</span><span style="font-family: Calibri; font-size: 18px;">CRO</span><span style="font-family: 宋体; font-size: 18px;">公司纷纷进驻中国，国内的</span><span style="font-family: Calibri; font-size: 18px;">CRO</span><span style="font-family: 宋体; font-size: 18px;">公司也发展快速，但业内缺乏准入标准，全国</span><span style="font-family: Calibri; font-size: 18px;">400</span><span style="font-family: 宋体; font-size: 18px;">多家</span><span style="font-family: Calibri; font-size: 18px;">CRO</span><span style="font-family: 宋体; font-size: 18px;">企业水平良莠不齐，临床试验状况不容乐观。</span></span></p><p style="margin: 0px 0px 16px; line-height: 2em; text-indent: 2em;"><span style="font-size: 18px;"><span style="font-family: 宋体; font-size: 18px;">“中国的</span><span style="font-family: Calibri; font-size: 18px;">CRO</span><span style="font-family: 宋体; font-size: 18px;">从</span><span style="font-family: Calibri; font-size: 18px;">2010</span><span style="font-family: 宋体; font-size: 18px;">年后整体水平有所上升，但按照国家现在的严格标准审查，国内任何一家</span><span style="font-family: Calibri; font-size: 18px;">CRO</span><span style="font-family: 宋体; font-size: 18px;">公司或者临床研究机构都是达不到相应要求的。”上述韩先生告诉记者。</span></span></p><p style="margin: 0px 0px 16px; line-height: 2em; text-indent: 2em;"><span style="font-size: 18px;"><span style="font-family: 宋体; font-size: 18px;">今年</span><span style="font-family: Calibri; font-size: 18px;">9</span><span style="font-family: 宋体; font-size: 18px;">月，食药监总局副局长吴浈在国务院新闻发布会答记者问时提到，国家药品审评中心现有</span><span style="font-family: Calibri; font-size: 18px;">21000</span><span style="font-family: 宋体; font-size: 18px;">件申请待批，其中</span><span style="font-family: Calibri; font-size: 18px;">90%</span><span style="font-family: 宋体; font-size: 18px;">是化药仿制药，化学药品里</span><span style="font-family: Calibri; font-size: 18px;"> 80%</span><span style="font-family: 宋体; font-size: 18px;">以上是仿制药。造成此局面的一个原因是，现在企业申报质量不太高，大家普遍求快，药品申报资料，不完整、不规范情况比较普遍，甚至还有的资料弄虚作</span> <span style="font-family: 宋体; font-size: 18px;">假。</span></span></p><p style="margin: 0px 0px 16px; line-height: 2em; text-indent: 2em;"><span style="font-family: 宋体; font-size: 18px;"><strong>对仿制药动真格</strong></span></p><p style="margin: 0px 0px 16px; line-height: 2em; text-indent: 2em;"><span style="font-size: 18px;"><span style="font-family: 宋体; font-size: 18px;">据了解，此次涉事申请药企中有</span><span style="font-family: Calibri; font-size: 18px;">6</span><span style="font-family: 宋体; font-size: 18px;">家申报的</span><span style="font-family: Calibri; font-size: 18px;">8</span><span style="font-family: 宋体; font-size: 18px;">项药品均为重灾区的仿制药。</span></span></p><p style="margin: 0px 0px 16px; line-height: 2em; text-indent: 2em;"><span style="font-size: 18px;"><span style="font-family: 宋体; font-size: 18px;">仿制药良莠不齐，甚至出现很多造假等，</span><span style="font-family: Calibri; font-size: 18px;">CFDA</span><span style="font-family: 宋体; font-size: 18px;">也早已意识到问题的严重性，在逐步的进行调整中，并出台一系列相关意见。</span></span></p><p style="margin: 0px 0px 16px; line-height: 2em; text-indent: 2em;"><span style="font-size: 18px;"><span style="font-family: 宋体; font-size: 18px;">早在</span><span style="font-family: Calibri; font-size: 18px;">7</span><span style="font-family: 宋体; font-size: 18px;">月</span><span style="font-family: Calibri; font-size: 18px;">22</span><span style="font-family: 宋体; font-size: 18px;">日发布《关于开展药物临床试验数据自查核查工作的公告》</span><span style="font-family: Calibri; font-size: 18px;">(</span><span style="font-family: 宋体; font-size: 18px;">下称“公告”</span><span style="font-family: Calibri; font-size: 18px;">)</span><span style="font-family: 宋体; font-size: 18px;">时，</span><span style="font-family: Calibri; font-size: 18px;">CFDA</span><span style="font-family: 宋体; font-size: 18px;">曾指出：“对核查中发现临床试验数据真实性存在问题的</span> <span style="font-family: 宋体; font-size: 18px;">相关申请人，</span><span style="font-family: Calibri; font-size: 18px;">3</span><span style="font-family: 宋体; font-size: 18px;">年内不受理其申请。药物临床试验机构存在弄虚作假的，吊销药物临床试验机构的资格</span><span style="font-family: Calibri; font-size: 18px;">;</span><span style="font-family: 宋体; font-size: 18px;">对临床试验中存在违规行为的人员通报相关部门依法查处。</span> <span style="font-family: 宋体; font-size: 18px;">将弄虚作假的申请人、临床试验机构、合同研究组织以及相关责任人员等列入黑名单”。</span></span></p><p style="margin: 0px 0px 16px; line-height: 2em; text-indent: 2em;"><span style="font-size: 18px;"><span style="font-family: 宋体; font-size: 18px;">上述公告中，列入药物临床试验数据自查核查品种清单的共有</span><span style="font-family: Calibri; font-size: 18px;">1622</span><span style="font-family: 宋体; font-size: 18px;">个受理号，其中</span><span style="font-family: Calibri; font-size: 18px;">309</span><span style="font-family: 宋体; font-size: 18px;">个受理号分别属于国内</span><span style="font-family: Calibri; font-size: 18px;">103</span><span style="font-family: 宋体; font-size: 18px;">家上市公司。业内人士称，这场自查的影响力，堪比证监会查配资引致</span><span style="font-family: Calibri; font-size: 18px;">A</span><span style="font-family: 宋体; font-size: 18px;">股股灾，将引发医药行业的“地震”。</span></span></p><p style="margin: 0px 0px 16px; line-height: 2em; text-indent: 2em;"><span style="font-size: 18px;"><span style="font-family: Calibri; font-size: 18px;">10</span><span style="font-family: 宋体; font-size: 18px;">月底的药品注册现场核查抽查即是被业内人士认为是上述公告的延续。而在</span><span style="font-family: Calibri; font-size: 18px;">11</span><span style="font-family: 宋体; font-size: 18px;">月</span><span style="font-family: Calibri; font-size: 18px;">18</span><span style="font-family: 宋体; font-size: 18px;">日晚，</span><span style="font-family: Calibri; font-size: 18px;">CFDA</span><span style="font-family: 宋体; font-size: 18px;">又连夜发布了《关于开展仿制药质量和疗效一致性评价的意见</span><span style="font-family: Calibri; font-size: 18px;">(</span><span style="font-family: 宋体; font-size: 18px;">征求意见稿</span><span style="font-family: Calibri; font-size: 18px;">)</span><span style="font-family: 宋体; font-size: 18px;">》。意见稿措辞严厉，重申了完成时限。</span></span></p><p style="margin: 0px 0px 16px; line-height: 2em; text-indent: 2em;"><span style="font-size: 18px;"><span style="font-family: 宋体; font-size: 18px;">上述征求意见稿规定</span><span style="font-family: Calibri; font-size: 18px;">2007</span><span style="font-family: 宋体; font-size: 18px;">年</span><span style="font-family: Calibri; font-size: 18px;">10</span><span style="font-family: 宋体; font-size: 18px;">月</span><span style="font-family: Calibri; font-size: 18px;">1</span><span style="font-family: 宋体; font-size: 18px;">日之前批准的基药口服固体制剂，需在</span><span style="font-family: Calibri; font-size: 18px;">2018</span><span style="font-family: 宋体; font-size: 18px;">年之前完成一致性评价，届时没有通过评价的，注销药品批准文号。对</span><span style="font-family: Calibri; font-size: 18px;"> 2007</span><span style="font-family: 宋体; font-size: 18px;">年以前批准上市的其他仿制药品和</span><span style="font-family: Calibri; font-size: 18px;">2007</span><span style="font-family: 宋体; font-size: 18px;">年以后批准上市的仿制药品，自首家品种通过一致性评价后，其他生产企业的相同品种在</span><span style="font-family: Calibri; font-size: 18px;">3</span><span style="font-family: 宋体; font-size: 18px;">年内仍未通过评价</span> <span style="font-family: 宋体; font-size: 18px;">的，注销药品批准文号。</span></span></p><p style="margin: 0px 0px 16px; line-height: 2em; text-indent: 2em;"><span style="font-size: 18px;"><span style="font-family: 宋体; font-size: 18px;">“之所以以</span><span style="font-family: Calibri; font-size: 18px;">2007</span><span style="font-family: 宋体; font-size: 18px;">年为分水岭有其历史原因。”上述不愿透露姓名的业内人士向</span><span style="font-family: Calibri; font-size: 18px;">21</span><span style="font-family: 宋体; font-size: 18px;">世纪经济报道记者解释。</span></span></p><p style="margin: 0px 0px 16px; line-height: 2em; text-indent: 2em;"><span style="font-size: 18px;"><span style="font-family: 宋体; font-size: 18px;">仿制药是世界医药界特有的药品研发与生产制度，起源于</span><span style="font-family: Calibri; font-size: 18px;">1984</span><span style="font-family: 宋体; font-size: 18px;">年美国食品药品监督局，后被欧洲、日本等发达国家采用。中国从</span><span style="font-family: Calibri; font-size: 18px;">2007</span><span style="font-family: 宋体; font-size: 18px;">年</span><span style="font-family: Calibri; font-size: 18px;">7</span><span style="font-family: 宋体; font-size: 18px;">月</span><span style="font-family: Calibri; font-size: 18px;">10</span><span style="font-family: 宋体; font-size: 18px;">日</span><span style="font-family: Calibri; font-size: 18px;"> CFDA</span><span style="font-family: 宋体; font-size: 18px;">颁布《药品注册管理办法》后，仿制药的质量才开始与国际接轨。而那时，</span><span style="font-family: Calibri; font-size: 18px;">12.2</span><span style="font-family: 宋体; font-size: 18px;">万个化学仿制药已按</span><span style="font-family: Calibri; font-size: 18px;">2005</span><span style="font-family: 宋体; font-size: 18px;">年</span><span style="font-family: Calibri; font-size: 18px;">5</span><span style="font-family: 宋体; font-size: 18px;">月</span><span style="font-family: Calibri; font-size: 18px;">1</span><span style="font-family: 宋体; font-size: 18px;">日实施的《药品注册管理办法》</span> <span style="font-family: 宋体; font-size: 18px;">完成注册审批，就此埋下了中国仿制药疗效问题的祸根。</span></span></p><p style="margin: 0px 0px 16px; line-height: 2em; text-indent: 2em;"><span style="font-size: 18px;"><span style="font-family: 宋体; font-size: 18px;">“</span><span style="font-family: Calibri; font-size: 18px;">CFDA</span><span style="font-family: 宋体; font-size: 18px;">的意见征求稿要求全国所有仿制药在</span><span style="font-family: Calibri; font-size: 18px;">2018</span><span style="font-family: 宋体; font-size: 18px;">年前开始补充做原研药等效性试验，这对很多药企来说是件比较困难的事情，需要防止这些药企再铤而走</span> <span style="font-family: 宋体; font-size: 18px;">险进行造假，但如果真正实现了仿制药与原研药等效性试验，这对药品的质量将有很大的提高。”一位三甲医院副主任向</span><span style="font-family: Calibri; font-size: 18px;">21</span><span style="font-family: 宋体; font-size: 18px;">世纪经济报道记者表示。</span></span></p><p style="margin: 0px 0px 16px; text-align: right; line-height: 2em; text-indent: 2em;"><span style="font-size: 18px;"><span style="font-family: 宋体; font-size: 18px;">新闻来源：</span><span style="font-family: Calibri; font-size: 18px;">21</span><span style="font-family: 宋体; font-size: 18px;">世纪经济报道</span></span></p></div></p>
+            </div>
+        </div>
+    </div>
+    <!--center over-->
+        
+    <!--footer begin-->
+    <div class="wrap mt10">
+        <div class="link">
+            <h1>友情链接</h1>
+            <ul class="l_list">
+                <li><a href="http://www.creditchina.gov.cn/" target="_blank">信用中国</a></li>
+                <li><a href="http://www.js.gov.cn/jsxy/index.htm" target="_blank">诚信江苏</a></li>
+                <li><a href="http://www.njcredit.gov.cn/" target="_blank">诚信南京</a></li>
+                <li><a href="http://www.szcredit.gov.cn/" target="_blank">诚信苏州</a></li>
+                <li><a href="http://credit.zjg.gov.cn/toIndex.action" target="_blank">诚信张家港</a></li>
+            </ul>
+        </div>
+        
+         <div class="foot">
+            <p><span>主办单位：苏州工业园区信用办 </span><span>技术支持：江苏中集科技有限公司</span><span><script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1256639142'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1256639142' type='text/javascript'%3E%3C/script%3E"));</script></span></p>
+        </div>
+        
+    </div>
+    <!--footer over-->
+</div>
+<!--content over-->
+    
+</body>
+</html>

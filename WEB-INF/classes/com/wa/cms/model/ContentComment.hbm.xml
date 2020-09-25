@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2014-5-5 16:40:13 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.wa.cms.model.ContentComment" table="CONTENT_COMMENT" >
+        <id name="contentCommentId" type="long">
+            <column name="CONTENT_COMMENT_ID" precision="10" scale="0" />
+        </id>
+        <many-to-one name="content" class="com.wa.cms.model.Content" fetch="select">
+            <column name="CONTENT_ID" precision="10" scale="0" not-null="true" />
+        </many-to-one>
+        <many-to-one name="contentComment" class="com.wa.cms.model.ContentComment" fetch="select">
+            <column name="PARENT_ID" precision="10" scale="0" />
+        </many-to-one>
+        <property name="memberId" type="java.lang.Long">
+            <column name="MEMBER_ID" precision="10" scale="0" />
+        </property>
+        <property name="username" type="string">
+            <column name="USERNAME" length="100">
+                <comment>&#199;&#176;&#204;&#168;&#211;&#195;&#187;&#167;&#195;&#251;</comment>
+            </column>
+        </property>
+        <property name="ip" type="string">
+            <column name="IP" length="100">
+                <comment>ip&#181;&#216;&#214;&#183;</comment>
+            </column>
+        </property>
+        <property name="contentComment_1" type="string">
+            <column name="CONTENT_COMMENT" length="1024">
+                <comment>&#198;&#192;&#194;&#219;&#196;&#218;&#200;&#221;</comment>
+            </column>
+        </property>
+        <property name="createTime" type="timestamp">
+            <column name="CREATE_TIME" length="7">
+                <comment>&#198;&#192;&#194;&#219;&#202;&#177;&#188;&#228;</comment>
+            </column>
+        </property>
+        <property name="isDisplay" type="java.lang.Byte">
+            <column name="IS_DISPLAY" precision="2" scale="0"/>
+        </property>
+        <set name="contentComments" table="CONTENT_COMMENT" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="PARENT_ID" precision="10" scale="0" />
+            </key>
+            <one-to-many class="com.wa.cms.model.ContentComment" />
+        </set>
+    </class>
+</hibernate-mapping>

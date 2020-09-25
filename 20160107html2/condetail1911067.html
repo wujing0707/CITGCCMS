@@ -1,0 +1,391 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
+<meta name="description" content=""/>
+<meta name="keyWords" content=""/>
+<title>诚信园区</title>
+<link type="text/css" href="css/common.css" rel="stylesheet" />
+<link href="js/artDialog2.0.6/skin/chrome/chrome.css" rel="stylesheet" />
+<script type="text/javascript" src="js/jquery-1.7.2.js"></script>
+<script type="text/javascript" src="js/artDialog2.0.6/artDialog.min.js"></script>
+
+<style type="text/css">  
+        .code{   
+            background-image:url("../html/images/QQ.jpg");   
+            margin-left: 10px !important;
+            font-family:Arial;   
+            font-style:italic;   
+            color:Red;   
+            padding:2px 3px;   
+            letter-spacing:3px;   
+            font-weight:bolder;     
+        }   
+</style> 
+<script type="text/javascript">
+$(function () {
+	createCode(0);
+	createCode(3);
+});
+ var code ; //在全局 定义验证码   
+ function createCode(no){    
+   code = "";   
+   var codeLength = 4;//验证码的长度   
+   var checkCode = document.getElementById("checkCodeID"+no);   
+   var selectChar = new Array(0,1,2,3,4,5,6,7,8,9);//所有候选组成验证码的字符，当然也可以用中文的      
+   for(var i=0;i<codeLength;i++){   
+    var charIndex = Math.floor(Math.random()*10);   
+    code +=selectChar[charIndex];   
+   }    
+   if(checkCode){   
+     checkCode.className="code";   
+     checkCode.value = code;
+     checkCode.blur();   
+   }        
+ }
+  function validate (i,t){  
+    //   var checkCode = document.getElementById("checkCodeID"+i).value;  
+       var inputCode = document.getElementById("validCode"+i).value;
+       var zzjgdm=$('#zzjgdm').val();   
+       var gszch=$('#gszch').val();   
+       var companyname=$('#companyname').val();   
+       if(inputCode.length <=0){   
+           alert("请输入验证码！");   
+       }   
+    //   else if(inputCode.toUpperCase()!=checkCode){   
+      //    alert("验证码输入错误！");   
+       //}
+       else if(zzjgdm==""&&gszch==""&&companyname==""){
+       		alert("请至少输入一个查询条件!");
+       }
+       else{   
+          //window.location.href="../seach/seachdetail.action?zzjgdm="+zzjgdm+"&gszch="+gszch+"&companyname="+companyname+"&template="+2; 
+            $.post('../seach/checkSeachdetail.action',
+            {zzjgdm: zzjgdm, gszch:gszch, companyname:companyname,vcode:inputCode, template:2 },
+            function(data){
+                 if (data == '1') {
+                     $('#seaForm').submit(); 
+                 }else if(data=='2'){
+                 	alert("验证码输入错误！");
+                 } else {
+                    alert("暂无相关数据");
+                 }
+               }, "json");   
+       }    
+ }
+ function seachList(i){
+ 	//   var checkCode = document.getElementById("checkCodeID0").value;  
+       var inputCode = document.getElementById("validCode0").value;
+       var name=$('#name').val();   
+       var sfzhm=$('#sfzhm').val();   
+       var zyzhm=$('#zyzhm').val(); 
+       if(inputCode.length <=0){   
+           alert("请输入验证码！");   
+   //    }else if(inputCode.toUpperCase()!=checkCode){   
+   //       alert("验证码输入错误！");   
+       }else if(name==""&&sfzhm==""&&zyzhm==""){
+       		alert("请至少输入一个查询条件!");
+       }else{   
+         //window.location.href="../seach/personalSeachList.action?zyzhm="+zyzhm+"&sfzhm="+sfzhm+"&name="+name+"&template=2";
+                     $.post('../seach/checkPersonalSeachList.action',
+            {zyzhm: zyzhm, sfzhm:sfzhm, name:name,vcode:inputCode,template:2 },
+            function(data){
+                 if (data == 1) {
+                     $('#personForm').submit(); 
+                 }else if(data=='2'){
+                 	alert("验证码输入错误！");
+                 } else {
+                    alert("暂无相关数据");
+                 }
+               }, "json"); 
+       }  
+ }
+ function reset(){
+  	$('#zzjgdm').val('');   
+    $('#gszch').val('');   
+    $('#companyname').val('');  
+    $('#validCode0').val('');  
+ }  
+ function personalReset(){
+ 	$('#name').val('');  
+ 	$('#sfzhm').val('');  
+ 	$('#zyzhm').val('');  
+ 	$('#validCode0').val(''); 
+ }   
+function show(str){
+		var id=document.getElementById(str+"_0").value;
+		window.location.href='content'+id+"_1.html"; 
+}
+function reload(i){
+	if(i==1)
+ 	 window.location.href="qycheck.html";
+ 	 if(i==2)
+ 	 window.location.href="mycheck.html";
+ 	 if(i==3)
+ 	 window.location.href="qyyyshensu.html";
+}
+function goto(staus,name,index,size){
+	if(staus=='up'&&index!=1){
+		window.location.href=name+"_"+(index-1)+".html"; 
+	}else if(staus=='first'){
+		window.location.href=name+"_"+"1.html"; 
+	}else if(staus=='down'){
+		if(index!=size){
+			window.location.href=name+"_"+(index+1)+".html"; 
+		}
+	}else if(staus=='last'){
+		window.location.href=name+"_"+size+".html"; 
+	}
+}
+ function seachContent(){
+ 	//var channelid=document.getElementById("channelid").value;
+ 	//var title=document.getElementById("title").value;
+ 	//if(title==""){
+ 		//return;
+ 	//}else{
+ 		//window.location.href="../content/listContentByChannelId.action?channelid="+channelid+"&title="+title;   
+ 	//	window.location.href="../content/listContentByTitle.action?title="+title;   
+ 	//}
+ 	var title=document.getElementById("title").value;
+ 	if (title == '' || title == '请输入关键字') {
+ 	   alert('请输入关键字');
+ 	   return;
+ 	}
+ 	title = encodeURIComponent(title);
+ 	window.location.href="../content/listContentByTitle.action?title="+title; 
+ }
+ function query(){
+ 	 var checknumber=document.getElementById("checkNumber").value;
+ 	  var reg = new RegExp("^[0-9]*$");  
+    if(!reg.test(checknumber)){  
+        alert("请输入数字!");  
+        return;
+    }  
+ 	 if (checknumber == "") {
+ 	    alert("信用核查码不能为空！");
+ 	 } else {
+ 	        $.post('../seach/approveContent.action',
+            {checknumber: checknumber},
+            function(data){
+                 if (data == 1) {
+                      window.open("http://172.25.119.13/creditVerification/getDetailVerificationInfo.action?checkcode=" + checknumber,
+	               'newwindow','height=900,width=1000,top='+(window.screen.availHeight-30-900)/2+
+	                   ',left='+(window.screen.availWidth-10-1000)/2+
+	                 ',toolbar=no,menubar=no,scrollbars=yes,resizable=yes,location=no,status=no');
+               } else if (data == 2) {
+                     window.open("http://172.25.119.13/creditVerification/getgroupsDetailVerificationInfo.action?checkcode=" + checknumber,
+	                  'newwindow','height=900,width=1000,top='+(window.screen.availHeight-30-900)/2+
+	                   ',left='+(window.screen.availWidth-10-1000)/2+
+	                 ',toolbar=no,menubar=no,scrollbars=yes,resizable=yes,location=no,status=no');
+               }else {
+                   if (data == '-1') {
+                     alert("信用查询码不存在！");
+                   } else if (data == '-2') {
+                     alert("信用查询码已过期！");
+                   } else if (data == '-3') {
+                     alert("信用查询码已重新生成,请输入最新核查码!");
+                   }
+                }
+            },'json');
+ 	 }
+ }
+function SetWinHeight(obj)
+{
+
+} 
+
+function gotoPage(total,cid){
+	var p=$("#textFooter").val();
+	var i = parseInt(total);
+	if(p!=""){
+		var a=parseInt(p);
+		if(a>0&&a<=i)
+		window.location.href="../content"+cid+"_"+p+".html";
+		if(a>i)
+		window.location.href="../content"+cid+"_"+1+".html";
+	}
+}
+$(document).ready(function() {
+ 	$.ajax({
+        type: "post",//使用post方法访问后台
+        dataType: "json",//返回json格式的数据
+        url: "../getCCS.action",//要访问的后台地址
+        data:{},//要发送的数据
+        complete :function(){$("#load").hide();},//AJAX请求完成时隐藏loading提示
+        success: function(msg){//msg为返回的数据，在这里做数据绑定
+				$("#thrNum").html(msg);
+        }
+    });
+    $.ajax({
+        type: "post",//使用post方法访问后台
+        dataType: "json",//返回json格式的数据
+        url: "../content/findHOTKeyword.action",//要访问的后台地址
+        data:{},//要发送的数据
+        complete :function(){$("#load").hide();},//AJAX请求完成时隐藏loading提示
+        success: function(msg){//msg为返回的数据，在这里做数据绑定
+        	var b='关键字:&nbsp;';
+        	$.each(msg.rows, function(i, n){
+        	var a = '<a href="javascript:void(0)" onclick="byHotKwSeachContent(\''+msg.rows[i]+'\')" >'+msg.rows[i]+'</a>&nbsp;&nbsp;';
+        	b+=a;
+           });
+           $("#hotkw").html(b);
+        }
+    });
+});
+	function byHotKwSeachContent(str) {
+		var title = encodeURIComponent(str);
+		window.location.href = "../content/listContentByTitle.action?title="
+				+ title;
+	}	
+	function queryOfPreview(contentId, category){
+   		 window.location.href="../content/queryOfPreview.action?contentId="+contentId+"&date="+new Date();
+	}
+</script>
+</head>
+
+<body>
+<!--header begin-->
+<div class="header">
+	<div class="wrap">
+    	<div class="logo f_l"><a href="http://www.sipac.gov.cn/" target="_blank"><img src="images/logo.png" /></a></div>
+    	<div class="number f_r" id="thrNum">
+        </div>
+    </div>
+</div>
+<!--header over-->
+
+<!--nav begin-->
+<div class="nav">
+    <ul class="wrap tabs">
+        <li><a href="../goToIndex.action">首页</a></li>
+        	<li><a href="javascript:void(0)" id="22" onclick='show("22")'>信用动态</a></li>
+		        	<input type="hidden" id="22_0" value="365">
+		        	<input type="hidden" id="22_1" value="364">
+		        	<input type="hidden" id="22_2" value="335">
+        	<li><a href="javascript:void(0)" id="420" onclick='show("420")'>信用公示</a></li>
+		        	<input type="hidden" id="420_0" value="318">
+		        	<input type="hidden" id="420_1" value="60">
+		        	<input type="hidden" id="420_2" value="61">
+        	<li><a href="javascript:void(0)" id="26" onclick='show("26")'>重点领域</a></li>
+		        	<input type="hidden" id="26_0" value="486">
+		        	<input type="hidden" id="26_1" value="487">
+		        	<input type="hidden" id="26_2" value="488">
+		        	<input type="hidden" id="26_3" value="489">
+		        	<input type="hidden" id="26_4" value="490">
+		        	<input type="hidden" id="26_5" value="491">
+		        	<input type="hidden" id="26_6" value="492">
+		        	<input type="hidden" id="26_7" value="493">
+        	<li><a href="javascript:void(0)" id="423" onclick='show("423")'>专项资金</a></li>
+		        	<input type="hidden" id="423_0" value="469">
+        	<li><a href="javascript:void(0)" id="416" onclick='show("416")'>政策法规</a></li>
+		        	<input type="hidden" id="416_0" value="306">
+		        	<input type="hidden" id="416_1" value="334">
+		        	<input type="hidden" id="416_2" value="309">
+        <li><a href="http://gzjd.sipac.gov.cn/Web/BBS/MainList.aspx"  target="_blank">在线交流</a></li>
+    </ul>
+</div>
+<!--nav over-->
+
+<!--content begin-->
+<div class="cloud">
+    <!--notice begin-->
+    <div class="wrap">
+    	<div class="notice f_l"> 
+            <div class="notice_tit f_l f_b">通知公告</div>
+            <div class="f_l notice_list"  id="mq" onmouseover=iScrollAmount=0 style="overflow:hidden; width:500px; height:30px;color:#000" onmouseout=iScrollAmount=1 >
+                <ul>
+		                    <li><a href="javascript:queryOfPreview('1911122')">苏州出台省内首部《住房公积金个人失信惩戒实施细则》</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911059')">关于印发江苏省推行食品生产企业 “黑名单”制度指导意见(试行)的通知(苏食药监规</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911231')">家庭成员不履行抚养义务记入个人信用档案</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911061')">2015年我市电梯维保单位星级评定结果公示</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910971')">2015年度“诚信宣传周”活动开始啦</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910519')">2015年12月苏州工业园区公积金（社会保险）公示欠费单位名单</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910520')">苏州工业园区从业建筑业企业不良信用处罚公示汇总</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910381')">2015年11月苏州工业园区社会保险基金（公积金）公示欠费单位名单</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910282')">园区信用体系建设项目接受市领导专项督查并开展座谈会</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911034')">苏州积分落户制度2016年1月15日起实施 失信行为将扣减分</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910988')">关于做好2015年园区建筑业企业信用综合评价良好行为信息录入工作的通知</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910976')">诚信记录纳入流动人口积分管理</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910972')">江苏省研究生考试26日开考 省考试院提醒考生诚信参考</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910518')">2015年中国十佳诚信政府排行榜发布</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910467')">老忘交电费 当心成老赖失信</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910361')">首个国际征信论坛即将在沪登陆</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910338')">居民身份证将可异地换领补领 有不良信用记录的不予受理</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910329')">双十一”消费信用大数据监测评价启动</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910328')">发改委：年底前全面实施统一社会信用代码制度</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910310')">信用社会临近 央行征信系统已收录8.7亿人数据</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910307')">市食药监公布19批次质量不合格食品（附名单）</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910302')">园区地税提交457户企业列入园区失信法人库</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910177')">关于联合发布2014年长三角地区备案信用服务机构名单的通知</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910179')">2014年度“苏州市级信用管理示范企业”认定公示</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="search f_r">
+            <form id="searchform" action="../content/listContentByTitle.action" method="post">
+                <fieldset>
+                <table>
+                 	<tr>
+				      <td width="70%">
+				      	 <input type="text" onfocus="if(this.value =='请输入关键字') {this.value=''; }" onblur="if(this.value==''){this.value='请输入关键字';}" class="text_input" style="width:200px" value="请输入关键字" name="title" id="title">
+				         <input type="button" onclick="seachContent()" name="button"> 
+				      </td>
+				   	</tr>
+				   	<tr>
+				   		 <td id="hotkw"></td>
+				   	</tr>
+				  </table> 
+                </fieldset>
+            </form>
+        </div>
+    </div>
+    <script type="text/javascript" src="js/muqruujs.js"></script>
+    <!--notice over-->
+    <!--center begin-->
+    <div class="wrap mt5 content">
+        <div class="breadcrumbs">
+            <ul>
+                <li>当前位置：</li>
+          		<li><a href="content365_1.html">信用动态</a> > </li>
+            <li><a href="content335_1.html">国内动态</a> > </li>
+                <li><em>详细</em></li>
+            </ul>
+        </div>
+        
+        <div class="pad50">
+            <div class="art_head">
+                <h1>全国法院创新制度医治执行难顽疾 黑名单困住失信者手脚</h1>
+                <div class="tc art_date"> 【发布日期： 】【<a href="javascript:void(0)" onclick="window.print();">打印</a>】 </div>
+            </div>
+            <div class="artnr">
+                <p><div style='font-size: 18px;'><p style="line-height: 1.75em; text-indent: 2em;"><span style="font-family: 宋体,SimSun; font-size: 18px;">内蒙古一名老赖纠集一伙人持刀围攻法院执行人员，打伤7名法警；湖南一名债务人让年迈的母亲躺在豪宅门口阻止法院执行人员查封财产，劝走老人后，执行人员从其豪宅内查出大量奢侈用品……老赖欠债不还、规避执行成为社会顽疾，老百姓深恶痛绝。</span></p><p style="line-height: 1.75em; text-indent: 2em;"><span style="font-family: 宋体,SimSun; font-size: 18px;">党的十八届五中全会强调，要加强思想道德建设和社会诚信建设，而打击老赖就是推进社会诚信体系建设的重要一环。2013年，最高人民法院推出失信被执行人名单制度，加强执行联动，推动全社会进行联合信用惩戒，极大打压了失信被执行人的生存空间。据初步统计，已有34%失信被执行人慑于这项制度的威力自动履行义务，有力推动了守信光荣、失信可耻社会风尚的形成。</span></p><p style="line-height: 1.75em; text-indent: 2em;"><span style="font-family: 宋体,SimSun; font-size: 18px;"></span>&nbsp;</p><p style="line-height: 1.75em; text-indent: 2em;"><strong><span style="font-family: 宋体,SimSun; font-size: 18px;">建立平台实时发布</span></strong></p><p style="line-height: 1.75em; text-indent: 2em;"><span style="font-family: 宋体,SimSun; font-size: 18px;">最高法调研发现，近几年，全国法院每年新收执行案件240万件左右，2014年达到282万件，其中70%以上有财产但债务人不主动履行，恶意逃避执行或者暴力对抗执行等现象大量存在。社会信用体系不健全，公众诚信守法意识不强成为执行难不可忽视的深层原因。</span></p><p style="line-height: 1.75em; text-indent: 2em;"><span style="font-family: 宋体,SimSun; font-size: 18px;">针对这种情况，一些地方法院试水将失信被执行人列入“黑名单”在媒体上曝光。2006年3月，重庆市高级人民法院公布第一批50个失信被执行人名单；2009年3月开始，浙江省高级人民法院将全省超过6个月未结的执行案件信息在信用浙江网上公开；2011年，北京法院网开通不履行义务信息专栏，公布不履行义务的被执行人名单；2012年，河南省各级法院集中开展曝光赖账户活动，共公布4638名失信被执行人……</span></p><p style="line-height: 1.75em; text-indent: 2em;"><span style="font-family: 宋体,SimSun; font-size: 18px;">最高法执行局副局长张根大说，这些做法一定程度上起到惩戒被执行人、督促其履行法定义务的效果。但由于缺乏全国统一规定，难以充分彰显信用惩戒被执行人的效果。因此，迫切需要统一法律适用标准，规范操作程序，在全国范围内发挥信用惩戒失信被执行人功能。</span></p><p style="line-height: 1.75em; text-indent: 2em;"><span style="font-family: 宋体,SimSun; font-size: 18px;">2013年7月1日，最高法审判委员会通过《关于公布失信被执行人名单信息的若干规定》，并于同年10月1日起施行。通过这一司法解释及其相关配套措施，失信被执行人名单制度在全国范围内正式建立。</span></p><p style="line-height: 1.75em; text-indent: 2em;"><span style="font-family: 宋体,SimSun; font-size: 18px;">张根大介绍说，失信被执行人名单制度俗称“执行黑名单”制度，是指各级人民法院将情节严重的失信被执行人统一纳入到最高法失信被执行人名单库向社会公布，并向政府相关部门和金融机构等通报，供其在政府采购、招标投标、行政审批、政府扶持、融资信贷、市场准入、资质认定等方面，对失信被执行人予以失信惩戒。</span></p><p style="line-height: 1.75em; text-indent: 2em;"><span style="font-family: 宋体,SimSun; font-size: 18px;">2013年10月，最高法官网开通全国法院失信被执行人公布与查询平台，将失信被执行人名单向社会公开，公众只要输入失信被执行人姓名或名称即可以查询。地方各级法院将符合条件的失信被执行人录入到最高法失信被执行人名单库中，实时录入、实时发布。</span></p><p style="line-height: 1.75em; text-indent: 2em;"><span style="font-family: 宋体,SimSun; font-size: 18px;">张根大说，最高法失信被执行人名单信息是社会信用信息的重要组成部分，也是当前我国率先提供的全国性、公开性、免费使用的信用信息。</span></p><p style="line-height: 1.75em; text-indent: 2em;"><span style="font-family: 宋体,SimSun; font-size: 18px;"></span>&nbsp;</p><p style="line-height: 1.75em; text-indent: 2em;"><strong><span style="font-family: 宋体,SimSun; font-size: 18px;">舆论攻势广而告之</span></strong></p><p style="line-height: 1.75em; text-indent: 2em;"><span style="font-family: 宋体,SimSun; font-size: 18px;">被执行人姓名：黄彩平，生效法律文书确定的义务：支付人民币20万元及利息，履行情况：全部未履行……这是最高法官方微信失信被执行人曝光台近日晒出的老赖名单。</span></p><p style="line-height: 1.75em; text-indent: 2em;"><span style="font-family: 宋体,SimSun; font-size: 18px;">2014年9月1日起，最高法官方微博、微信开通失信被执行人曝光台，对老赖排行榜上的失信被执行人，按照排名先后每天曝光自然人和法人各一名，并定期曝光典型失信惩戒案例；最高法官网也滚动发布失信被执行人信息，截至今年11月底，已向社会公众发布失信被执行人名单信息285万余例。</span></p><p style="line-height: 1.75em; text-indent: 2em;"><span style="font-family: 宋体,SimSun; font-size: 18px;">除了通过各种媒体手段进行曝光，不少地方法院还进行了创造性探索，在市民广场、车站码头、金融机构网点等公共场所电子屏播放信息，甚至通过张贴布告、发放传单、制作动漫等方式广而告之。10月8日，重庆市北碚区人民法院首次利用广场和步行街LED大屏公开失信被执行人信息，吸引不少行人驻足。</span></p><p style="line-height: 1.75em; text-indent: 2em;"><span style="font-family: 宋体,SimSun; font-size: 18px;">通过多种方式曝光老赖信息，将其失信行为公之于众，很多转移、隐匿财产甚至“玩失踪”的被执行人，法院就是通过这种方式找到其行踪去向及隐性财产的。</span></p><p style="line-height: 1.75em; text-indent: 2em;"><span style="font-family: 宋体,SimSun; font-size: 18px;">河南省鹤壁市山城区人民法院执行的一起案件，执行人员虽经多方查找财产仍一无所获。将其纳入失信被执行人名单后，执行法院在被执行人住所附近张贴公告。很快便有群众向法院举报被执行人在多地未登记的房产及信用社存款，十多年未能执行的案件顺利执结。</span></p><p style="line-height: 1.75em; text-indent: 2em;"><span style="font-family: 宋体,SimSun; font-size: 18px;"></span>&nbsp;</p><p style="line-height: 1.75em; text-indent: 2em;"><strong><span style="font-family: 宋体,SimSun; font-size: 18px;">执行联动形成合力</span></strong></p><p style="line-height: 1.75em; text-indent: 2em;"><span style="font-family: 宋体,SimSun; font-size: 18px;">不得乘坐飞机、不得购买房屋、不得旅游度假……法院与中国铁路总公司、中国民用航空局等多部门开展联动惩戒，让老赖在生活中处处受限，是督促其尽快履行义务的另一法宝。</span></p><p style="line-height: 1.75em; text-indent: 2em;"><span style="font-family: 宋体,SimSun; font-size: 18px;">2010年10月，最高法发布文件，明确规定法院可以对被执行人发出限制高消费令，禁止其乘坐飞机、列车软卧出行等9种类型高消费行为。截至今年11月底，共拦截23万余失信被执行人乘坐列车软卧、高铁49万余人次；拦截19万余失信被执行人乘坐飞机337万余人次。7月21日，最高法发布司法解释，增加对失信被执行人采取限制消费措施的内容与力度，明确限制失信被执行人乘坐G字头动车组列车全部座位、其他动车组列车一等以上座位。</span></p><p style="line-height: 1.75em; text-indent: 2em;"><span style="font-family: 宋体,SimSun; font-size: 18px;">最高法还与国家工商总局、中国银监会、中国证监会、21家全国性银行业金融机构等合作，联合信用惩戒失信被执行人。目前，众多金融机构审核信贷时，都会查询失信被执行人名单信息，拒绝为失信者办理贷款及其他融资业务。许多被执行人因被纳入失信被执行人名单无法从银行得到贷款，迫于压力，主动到法院将所欠款项履行完毕。</span></p><p style="line-height: 1.75em; text-indent: 2em;"><span style="font-family: 宋体,SimSun; font-size: 18px;">张根大介绍说，最高法正在加强与中央各机关协调沟通，不断扩大名单库适用范围，加强联合惩戒力度。比如与公安部、国家旅游局、住房和城乡建设部等部门联合，限制失信被执行人住宿星级以上宾馆，在高档娱乐场所消费，购买豪华车辆、豪宅，出国旅游等，让老赖寸步难行，将我国社会信用体系建设进一步向前推进。</span></p><p style="text-align: right; line-height: 1.75em;"><span style="font-family: 宋体,SimSun; font-size: 18px;">新闻来源：法制网</span></p><p style="line-height: 1.75em;"><span style="font-family: 宋体,SimSun; font-size: 18px;">&nbsp;</span></p><p style="line-height: 1.75em;"><span style="font-family: 宋体,SimSun; font-size: 18px;">&nbsp;</span></p><p style="line-height: 1.75em;"><span style="font-family: 宋体,SimSun; font-size: 18px;">&nbsp;</span></p><p></p></div></p>
+            </div>
+        </div>
+    </div>
+    <!--center over-->
+        
+    <!--footer begin-->
+    <div class="wrap mt10">
+        <div class="link">
+            <h1>友情链接</h1>
+            <ul class="l_list">
+                <li><a href="http://www.creditchina.gov.cn/" target="_blank">信用中国</a></li>
+                <li><a href="http://www.js.gov.cn/jsxy/index.htm" target="_blank">诚信江苏</a></li>
+                <li><a href="http://www.njcredit.gov.cn/" target="_blank">诚信南京</a></li>
+                <li><a href="http://www.szcredit.gov.cn/" target="_blank">诚信苏州</a></li>
+                <li><a href="http://credit.zjg.gov.cn/toIndex.action" target="_blank">诚信张家港</a></li>
+            </ul>
+        </div>
+        
+         <div class="foot">
+            <p><span>主办单位：苏州工业园区信用办 </span><span>技术支持：江苏中集科技有限公司</span><span><script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1256639142'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1256639142' type='text/javascript'%3E%3C/script%3E"));</script></span></p>
+        </div>
+        
+    </div>
+    <!--footer over-->
+</div>
+<!--content over-->
+    
+</body>
+</html>

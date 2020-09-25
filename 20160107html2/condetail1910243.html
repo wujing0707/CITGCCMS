@@ -1,0 +1,437 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
+<meta name="description" content=""/>
+<meta name="keyWords" content=""/>
+<title>诚信园区</title>
+<link type="text/css" href="css/common.css" rel="stylesheet" />
+<link href="js/artDialog2.0.6/skin/chrome/chrome.css" rel="stylesheet" />
+<script type="text/javascript" src="js/jquery-1.7.2.js"></script>
+<script type="text/javascript" src="js/artDialog2.0.6/artDialog.min.js"></script>
+
+<style type="text/css">  
+        .code{   
+            background-image:url("../html/images/QQ.jpg");   
+            margin-left: 10px !important;
+            font-family:Arial;   
+            font-style:italic;   
+            color:Red;   
+            padding:2px 3px;   
+            letter-spacing:3px;   
+            font-weight:bolder;     
+        }   
+</style> 
+<script type="text/javascript">
+$(function () {
+	createCode(0);
+	createCode(3);
+});
+ var code ; //在全局 定义验证码   
+ function createCode(no){    
+   code = "";   
+   var codeLength = 4;//验证码的长度   
+   var checkCode = document.getElementById("checkCodeID"+no);   
+   var selectChar = new Array(0,1,2,3,4,5,6,7,8,9);//所有候选组成验证码的字符，当然也可以用中文的      
+   for(var i=0;i<codeLength;i++){   
+    var charIndex = Math.floor(Math.random()*10);   
+    code +=selectChar[charIndex];   
+   }    
+   if(checkCode){   
+     checkCode.className="code";   
+     checkCode.value = code;
+     checkCode.blur();   
+   }        
+ }
+  function validate (i,t){  
+    //   var checkCode = document.getElementById("checkCodeID"+i).value;  
+       var inputCode = document.getElementById("validCode"+i).value;
+       var zzjgdm=$('#zzjgdm').val();   
+       var gszch=$('#gszch').val();   
+       var companyname=$('#companyname').val();   
+       if(inputCode.length <=0){   
+           alert("请输入验证码！");   
+       }   
+    //   else if(inputCode.toUpperCase()!=checkCode){   
+      //    alert("验证码输入错误！");   
+       //}
+       else if(zzjgdm==""&&gszch==""&&companyname==""){
+       		alert("请至少输入一个查询条件!");
+       }
+       else{   
+          //window.location.href="../seach/seachdetail.action?zzjgdm="+zzjgdm+"&gszch="+gszch+"&companyname="+companyname+"&template="+2; 
+            $.post('../seach/checkSeachdetail.action',
+            {zzjgdm: zzjgdm, gszch:gszch, companyname:companyname,vcode:inputCode, template:2 },
+            function(data){
+                 if (data == '1') {
+                     $('#seaForm').submit(); 
+                 }else if(data=='2'){
+                 	alert("验证码输入错误！");
+                 } else {
+                    alert("暂无相关数据");
+                 }
+               }, "json");   
+       }    
+ }
+ function seachList(i){
+ 	//   var checkCode = document.getElementById("checkCodeID0").value;  
+       var inputCode = document.getElementById("validCode0").value;
+       var name=$('#name').val();   
+       var sfzhm=$('#sfzhm').val();   
+       var zyzhm=$('#zyzhm').val(); 
+       if(inputCode.length <=0){   
+           alert("请输入验证码！");   
+   //    }else if(inputCode.toUpperCase()!=checkCode){   
+   //       alert("验证码输入错误！");   
+       }else if(name==""&&sfzhm==""&&zyzhm==""){
+       		alert("请至少输入一个查询条件!");
+       }else{   
+         //window.location.href="../seach/personalSeachList.action?zyzhm="+zyzhm+"&sfzhm="+sfzhm+"&name="+name+"&template=2";
+                     $.post('../seach/checkPersonalSeachList.action',
+            {zyzhm: zyzhm, sfzhm:sfzhm, name:name,vcode:inputCode,template:2 },
+            function(data){
+                 if (data == 1) {
+                     $('#personForm').submit(); 
+                 }else if(data=='2'){
+                 	alert("验证码输入错误！");
+                 } else {
+                    alert("暂无相关数据");
+                 }
+               }, "json"); 
+       }  
+ }
+ function reset(){
+  	$('#zzjgdm').val('');   
+    $('#gszch').val('');   
+    $('#companyname').val('');  
+    $('#validCode0').val('');  
+ }  
+ function personalReset(){
+ 	$('#name').val('');  
+ 	$('#sfzhm').val('');  
+ 	$('#zyzhm').val('');  
+ 	$('#validCode0').val(''); 
+ }   
+function show(str){
+		var id=document.getElementById(str+"_0").value;
+		window.location.href='content'+id+"_1.html"; 
+}
+function reload(i){
+	if(i==1)
+ 	 window.location.href="qycheck.html";
+ 	 if(i==2)
+ 	 window.location.href="mycheck.html";
+ 	 if(i==3)
+ 	 window.location.href="qyyyshensu.html";
+}
+function goto(staus,name,index,size){
+	if(staus=='up'&&index!=1){
+		window.location.href=name+"_"+(index-1)+".html"; 
+	}else if(staus=='first'){
+		window.location.href=name+"_"+"1.html"; 
+	}else if(staus=='down'){
+		if(index!=size){
+			window.location.href=name+"_"+(index+1)+".html"; 
+		}
+	}else if(staus=='last'){
+		window.location.href=name+"_"+size+".html"; 
+	}
+}
+ function seachContent(){
+ 	//var channelid=document.getElementById("channelid").value;
+ 	//var title=document.getElementById("title").value;
+ 	//if(title==""){
+ 		//return;
+ 	//}else{
+ 		//window.location.href="../content/listContentByChannelId.action?channelid="+channelid+"&title="+title;   
+ 	//	window.location.href="../content/listContentByTitle.action?title="+title;   
+ 	//}
+ 	var title=document.getElementById("title").value;
+ 	if (title == '' || title == '请输入关键字') {
+ 	   alert('请输入关键字');
+ 	   return;
+ 	}
+ 	title = encodeURIComponent(title);
+ 	window.location.href="../content/listContentByTitle.action?title="+title; 
+ }
+ function query(){
+ 	 var checknumber=document.getElementById("checkNumber").value;
+ 	  var reg = new RegExp("^[0-9]*$");  
+    if(!reg.test(checknumber)){  
+        alert("请输入数字!");  
+        return;
+    }  
+ 	 if (checknumber == "") {
+ 	    alert("信用核查码不能为空！");
+ 	 } else {
+ 	        $.post('../seach/approveContent.action',
+            {checknumber: checknumber},
+            function(data){
+                 if (data == 1) {
+                      window.open("http://172.25.119.13/creditVerification/getDetailVerificationInfo.action?checkcode=" + checknumber,
+	               'newwindow','height=900,width=1000,top='+(window.screen.availHeight-30-900)/2+
+	                   ',left='+(window.screen.availWidth-10-1000)/2+
+	                 ',toolbar=no,menubar=no,scrollbars=yes,resizable=yes,location=no,status=no');
+               } else if (data == 2) {
+                     window.open("http://172.25.119.13/creditVerification/getgroupsDetailVerificationInfo.action?checkcode=" + checknumber,
+	                  'newwindow','height=900,width=1000,top='+(window.screen.availHeight-30-900)/2+
+	                   ',left='+(window.screen.availWidth-10-1000)/2+
+	                 ',toolbar=no,menubar=no,scrollbars=yes,resizable=yes,location=no,status=no');
+               }else {
+                   if (data == '-1') {
+                     alert("信用查询码不存在！");
+                   } else if (data == '-2') {
+                     alert("信用查询码已过期！");
+                   } else if (data == '-3') {
+                     alert("信用查询码已重新生成,请输入最新核查码!");
+                   }
+                }
+            },'json');
+ 	 }
+ }
+function SetWinHeight(obj)
+{
+
+} 
+
+function gotoPage(total,cid){
+	var p=$("#textFooter").val();
+	var i = parseInt(total);
+	if(p!=""){
+		var a=parseInt(p);
+		if(a>0&&a<=i)
+		window.location.href="../content"+cid+"_"+p+".html";
+		if(a>i)
+		window.location.href="../content"+cid+"_"+1+".html";
+	}
+}
+$(document).ready(function() {
+ 	$.ajax({
+        type: "post",//使用post方法访问后台
+        dataType: "json",//返回json格式的数据
+        url: "../getCCS.action",//要访问的后台地址
+        data:{},//要发送的数据
+        complete :function(){$("#load").hide();},//AJAX请求完成时隐藏loading提示
+        success: function(msg){//msg为返回的数据，在这里做数据绑定
+				$("#thrNum").html(msg);
+        }
+    });
+    $.ajax({
+        type: "post",//使用post方法访问后台
+        dataType: "json",//返回json格式的数据
+        url: "../content/findHOTKeyword.action",//要访问的后台地址
+        data:{},//要发送的数据
+        complete :function(){$("#load").hide();},//AJAX请求完成时隐藏loading提示
+        success: function(msg){//msg为返回的数据，在这里做数据绑定
+        	var b='关键字:&nbsp;';
+        	$.each(msg.rows, function(i, n){
+        	var a = '<a href="javascript:void(0)" onclick="byHotKwSeachContent(\''+msg.rows[i]+'\')" >'+msg.rows[i]+'</a>&nbsp;&nbsp;';
+        	b+=a;
+           });
+           $("#hotkw").html(b);
+        }
+    });
+});
+	function byHotKwSeachContent(str) {
+		var title = encodeURIComponent(str);
+		window.location.href = "../content/listContentByTitle.action?title="
+				+ title;
+	}	
+	function queryOfPreview(contentId, category){
+   		 window.location.href="../content/queryOfPreview.action?contentId="+contentId+"&date="+new Date();
+	}
+</script>
+</head>
+
+<body>
+<!--header begin-->
+<div class="header">
+	<div class="wrap">
+    	<div class="logo f_l"><a href="http://www.sipac.gov.cn/" target="_blank"><img src="images/logo.png" /></a></div>
+    	<div class="number f_r" id="thrNum">
+        </div>
+    </div>
+</div>
+<!--header over-->
+
+<!--nav begin-->
+<div class="nav">
+    <ul class="wrap tabs">
+        <li><a href="../goToIndex.action">首页</a></li>
+        	<li><a href="javascript:void(0)" id="22" onclick='show("22")'>信用动态</a></li>
+		        	<input type="hidden" id="22_0" value="365">
+		        	<input type="hidden" id="22_1" value="364">
+		        	<input type="hidden" id="22_2" value="335">
+        	<li><a href="javascript:void(0)" id="420" onclick='show("420")'>信用公示</a></li>
+		        	<input type="hidden" id="420_0" value="318">
+		        	<input type="hidden" id="420_1" value="60">
+		        	<input type="hidden" id="420_2" value="61">
+        	<li><a href="javascript:void(0)" id="26" onclick='show("26")'>重点领域</a></li>
+		        	<input type="hidden" id="26_0" value="486">
+		        	<input type="hidden" id="26_1" value="487">
+		        	<input type="hidden" id="26_2" value="488">
+		        	<input type="hidden" id="26_3" value="489">
+		        	<input type="hidden" id="26_4" value="490">
+		        	<input type="hidden" id="26_5" value="491">
+		        	<input type="hidden" id="26_6" value="492">
+		        	<input type="hidden" id="26_7" value="493">
+        	<li><a href="javascript:void(0)" id="423" onclick='show("423")'>专项资金</a></li>
+		        	<input type="hidden" id="423_0" value="469">
+        	<li><a href="javascript:void(0)" id="416" onclick='show("416")'>政策法规</a></li>
+		        	<input type="hidden" id="416_0" value="306">
+		        	<input type="hidden" id="416_1" value="334">
+		        	<input type="hidden" id="416_2" value="309">
+        <li><a href="http://gzjd.sipac.gov.cn/Web/BBS/MainList.aspx"  target="_blank">在线交流</a></li>
+    </ul>
+</div>
+<!--nav over-->
+
+<!--content begin-->
+<div class="cloud">
+    <!--notice begin-->
+    <div class="wrap">
+    	<div class="notice f_l"> 
+            <div class="notice_tit f_l f_b">通知公告</div>
+            <div class="f_l notice_list"  id="mq" onmouseover=iScrollAmount=0 style="overflow:hidden; width:500px; height:30px;color:#000" onmouseout=iScrollAmount=1 >
+                <ul>
+		                    <li><a href="javascript:queryOfPreview('1911122')">苏州出台省内首部《住房公积金个人失信惩戒实施细则》</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911059')">关于印发江苏省推行食品生产企业 “黑名单”制度指导意见(试行)的通知(苏食药监规</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911231')">家庭成员不履行抚养义务记入个人信用档案</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911061')">2015年我市电梯维保单位星级评定结果公示</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910971')">2015年度“诚信宣传周”活动开始啦</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910519')">2015年12月苏州工业园区公积金（社会保险）公示欠费单位名单</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910520')">苏州工业园区从业建筑业企业不良信用处罚公示汇总</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910381')">2015年11月苏州工业园区社会保险基金（公积金）公示欠费单位名单</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910282')">园区信用体系建设项目接受市领导专项督查并开展座谈会</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911034')">苏州积分落户制度2016年1月15日起实施 失信行为将扣减分</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910988')">关于做好2015年园区建筑业企业信用综合评价良好行为信息录入工作的通知</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910976')">诚信记录纳入流动人口积分管理</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910972')">江苏省研究生考试26日开考 省考试院提醒考生诚信参考</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910518')">2015年中国十佳诚信政府排行榜发布</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910467')">老忘交电费 当心成老赖失信</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910361')">首个国际征信论坛即将在沪登陆</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910338')">居民身份证将可异地换领补领 有不良信用记录的不予受理</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910329')">双十一”消费信用大数据监测评价启动</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910328')">发改委：年底前全面实施统一社会信用代码制度</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910310')">信用社会临近 央行征信系统已收录8.7亿人数据</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910307')">市食药监公布19批次质量不合格食品（附名单）</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910302')">园区地税提交457户企业列入园区失信法人库</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910177')">关于联合发布2014年长三角地区备案信用服务机构名单的通知</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910179')">2014年度“苏州市级信用管理示范企业”认定公示</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="search f_r">
+            <form id="searchform" action="../content/listContentByTitle.action" method="post">
+                <fieldset>
+                <table>
+                 	<tr>
+				      <td width="70%">
+				      	 <input type="text" onfocus="if(this.value =='请输入关键字') {this.value=''; }" onblur="if(this.value==''){this.value='请输入关键字';}" class="text_input" style="width:200px" value="请输入关键字" name="title" id="title">
+				         <input type="button" onclick="seachContent()" name="button"> 
+				      </td>
+				   	</tr>
+				   	<tr>
+				   		 <td id="hotkw"></td>
+				   	</tr>
+				  </table> 
+                </fieldset>
+            </form>
+        </div>
+    </div>
+    <script type="text/javascript" src="js/muqruujs.js"></script>
+    <!--notice over-->
+    <!--center begin-->
+    <div class="wrap mt5 content">
+        <div class="breadcrumbs">
+            <ul>
+                <li>当前位置：</li>
+          		<li><a href="content306_1.html">政策法规</a> > </li>
+            <li><a href="content309_1.html">本地法规</a> > </li>
+                <li><em>详细</em></li>
+            </ul>
+        </div>
+        
+        <div class="pad50">
+            <div class="art_head">
+                <h1>园区工委 管委会关于深入推进苏州工业园区“金鸡湖双百人才计划”的意见</h1>
+                <div class="tc art_date"> 【发布日期： 】【<a href="javascript:void(0)" onclick="window.print();">打印</a>】 </div>
+            </div>
+            <div class="artnr">
+                <p><div style='font-size: 18px;'><p style="line-height: 1.5em;"><span style="font-family: arial, helvetica,sans-serif; font-size: 18px;">各局办、各功能区、各大公司、各派驻机构、各直属单位、各街道、各社工委：</span></p><p style="line-height: 1.5em; text-indent: 2em;"><span style="font-family: arial, helvetica,sans-serif; font-size: 18px;">为认真贯彻党的十八大和
+习近平总书记系列重要讲话精神，积极落实《国家中长期人才发展规划纲要（2010-2020）》，牢固树立“人才第一资源、创新第一动力、新兴产业第一方
+略”的工作理念，抢抓苏南国家自主创新示范区建设契机，根据苏州工业园区《关于进一步推进人才强区和人才优先发展战略的若干意见》（苏园工〔2014〕
+163号），现就深入推进苏州工业园区“金鸡湖双百人才计划”，提出如下意见：</span></p><p style="line-height: 1.5em;"><span style="font-family: arial, helvetica,sans-serif;"></span></p><p style="line-height: 1.5em;"><span style="font-family: arial, helvetica,sans-serif; font-size: 18px;">一、总体目标</span></p><p style="line-height: 1.5em; text-indent: 2em;"><span style="font-family: arial, helvetica,sans-serif; font-size: 18px;">围绕国家创新驱动发展战
+略，深刻把握“创新驱动实质上是人才驱动”的重要论述，紧扣园区建设开放创新改革试验区的目标任务，积极深化中新人才合作，突出纳米技术、生物医药、云计
+算三大新兴产业，实施更加积极的创新人才政策，优化各类人才在园区发展的环境，深入推进苏州工业园区“金鸡湖双百人才计划”，从2015年开始，用三年时
+间，每年重点引进和培养“千人计划”人才、“万人计划”人才、中科院“百人计划”人才、江苏省高层次创新创业人才、姑苏领军人才、苏州工业园区科技领军人
+才、国际型学科领军人才、高端服务业领军人才等各级创新创业领军人才200名，高技能领军人才200名（每年增加20%人数）。在“金鸡湖双百人才计划”
+引领下，将园区打造成高层次人才的聚集地，力争三年内硕士和高级职称以上高层次人才达到4万人，高层次人才占人才总量比例超过13％，各项人才指标在国家
+级经济技术开发区和高新技术开发区中继续名列前茅。通过推进人才优先发展确立人才战略布局，以政策突破带动体制机制创新，以实施重大人才工程引领高层次人
+才队伍建设，以强化人才服务优化人才发展环境，把园区建设成全国最具活力的创新创业人才高地。</span></p><p><br/></p><p style="line-height: 1.5em;"><span style="font-family: arial, helvetica,sans-serif; font-size: 18px;">二、重点工程</span></p><p style="line-height: 1.5em; text-indent: 2em;"><span style="font-family: arial, helvetica,sans-serif; font-size: 18px;">深入推进苏州工业园区“金鸡湖双百人才计划”，主要包括深化科技领军人才创新创业工程、鼓励高层次领军人才创新创业工程、鼓励科教领军人才创新工程、鼓励高端服务业领军人才创新创业工程和加强高技能领军人才队伍建设工程。</span></p><p style="line-height: 1.5em; text-indent: 2em;"><span style="font-family: arial, helvetica,sans-serif; font-size: 18px;">重点加强纳米技术领域高端人才的引进和培养，每年引进纳米技术相关人才3000人以上，每年确保落实纳米技术人才扶持经费 5000万元以上。</span></p><p style="line-height: 1.5em; text-indent: 2em;"><span style="font-family: arial, helvetica,sans-serif; font-size: 18px;">对入选国家和省市各级人才资助计划的人才，园区将按照上级文件要求加大扶持力度，进行政策和经费配套。</span></p><p><br/></p><p style="line-height: 1.5em;"><span style="font-family: arial, helvetica,sans-serif; font-size: 18px;">1．科技领军人才创新创业工程</span></p><p style="line-height: 1.5em; text-indent: 2em;"><span style="font-family: arial, helvetica,sans-serif; font-size: 18px;">深化完善苏州工业园区科技领军人才创新创业工程，围绕园区主导产业和新兴产业，三年内每年评选和引进苏州工业园区科技领军人才（含成长型项目、孵化项目和创新项目）100名以上，其中纳米领军人才不少于40名。</span></p><p style="line-height: 1.5em; text-indent: 2em;"><span style="font-family: arial, helvetica,sans-serif; font-size: 18px;">对入选的苏州工业园区科
+技领军人才领军型项目、成长型项目、孵化项目和创新项目，按照四个层次给予项目启动资金、风险创业投资、跟进风险投资统贷平台支持和项目贷款担保等专项资
+金资助，以及项目资助配套、租用办公用房、租用住宅、购买住房补贴和按园区居民待遇安置家属等重点支持，具体措施按照《园区工委关于苏州工业园区推进科技
+领军人才创新创业工程的实施意见》（苏园工[2015]28号）的有关规定实施。</span></p><p><br/></p><p style="line-height: 1.5em;"><span style="font-family: arial, helvetica,sans-serif; font-size: 18px;">2．高层次领军人才创新创业工程</span></p><p style="line-height: 1.5em; text-indent: 2em;"><span style="font-family: arial, helvetica,sans-serif; font-size: 18px;">根据苏州工业园区人才优
+先发展和人才强区战略的要求，进一步推进高层次领军人才创新创业人才工程，大力引进和培养各类高层次人才，三年内每年引进领军人才30名，每年引进各类海
+外归国人才600名，加快园区高层次创新创业人才的集聚。对经认定的高层次领军人才及其创办的企业，给予安家补贴、租房补贴、子女教育补贴、培训发展和出
+入境便利、来华工作进出境物品通关便利、“千人计划”配套补贴等人才激励和扶持措施，以及办公用房和贷款优惠、紧缺高层次人才薪酬补贴、上级科技项目配
+套、 “千人计划”项目扶持等创业激励及优惠措施，具体措施按照《苏州工业园区鼓励高层次领军人才创新创业工程实施意见》（见附件1）的有关规定实施。</span></p><p><br/></p><p style="line-height: 1.5em;"><span style="font-family: arial, helvetica,sans-serif; font-size: 18px;">3. 科教领军人才创新工程</span></p><p style="line-height: 1.5em; text-indent: 2em;"><span style="font-family: arial, helvetica,sans-serif; font-size: 18px;">为充分发挥科教创新区在
+园区创新体系中的骨干和引领作用，鼓励一批重点学科领军人才到科教创新区实施教学科研工作，加强企业与院校、科研院所的交流与合作，不断提升教育、科研、
+学术领域的竞争实力，进一步推进科教领军人才创新工程，即在三年内，科教创新区内高校、科研院所每年引进20名国际型学科领军人才，选聘20名园区企业家
+担任兼职教授进行学科教学和科研活动。</span></p><p style="line-height: 1.5em; text-indent: 2em;"><span style="font-family: arial, helvetica,sans-serif; font-size: 18px;">对经认定的国际型学科领军人才和企业家兼职教授给予经费支持，具体措施按照《苏州工业园区鼓励科教领军人才创新工程实施意见》（见附件2）的有关规定实施。</span></p><p><br/></p><p style="line-height: 1.5em;"><span style="font-family: arial, helvetica,sans-serif; font-size: 18px;">4. 高端服务业领军人才创新创业工程</span></p><p style="line-height: 1.5em; text-indent: 2em;"><span style="font-family: arial, helvetica,sans-serif; font-size: 18px;">为大力推动苏州工业园区服务型经济的发展，聚焦总部经济、金融、现代物流、服务外包、文化创意、科技人才服务等高端服务业的发展，鼓励各类高端服务业人才到园区工作，决定继续实施高端服务业领军人才创新创业工程，即在三年内每年引进高端服务业领军人才30名。</span></p><p style="line-height: 1.5em; text-indent: 2em;"><span style="font-family: arial, helvetica,sans-serif; font-size: 18px;">对经认定的高端服务业领
+军人才给予经费支持，对在高端服务业企业工作的其他高层次和紧缺人才在薪酬补贴、培训补贴和人才优租房等方面给予优先重点扶持，鼓励园区高端服务业企业在
+苏州独墅湖科教创新区内高校设立奖学金，具体措施按照《苏州工业园区吸引高层次和紧缺人才优惠政策意见》和《苏州工业园区鼓励高端服务业领军人才创新创业
+工程实施意见》（见附件3）的有关规定实施。</span></p><p><br/></p><p style="line-height: 1.5em;"><span style="font-family: arial, helvetica,sans-serif; font-size: 18px;">5. 高技能领军人才队伍建设工程</span></p><p style="line-height: 1.5em; text-indent: 2em;"><span style="font-family: arial, helvetica,sans-serif; font-size: 18px;">实施高技能领军人才队伍
+建设工程，三年内再建成一批国际水准的公共实训基地，引进一批国际职业资格认证体系，每年重点培养200名高技能领军人才，培训认证3000名高级技工，
+争取到2017年末实现高级技工水平及以上的高技能人才占技能劳动者的比例达到35%以上，使园区技能人才比例达到或超过中等发达国家水平，推动产业升级
+转型。</span></p><p style="line-height: 1.5em; text-indent: 2em;"><span style="font-family: arial, helvetica,sans-serif; font-size: 18px;">对经认定的紧缺高技能人
+才提供培训补贴和认证补贴，对职业技能竞赛优胜者授予“苏州工业园区技术能手”等荣誉称号，给予一定的薪酬补贴，并按照紧缺高层次人才标准落实户口迁入、
+子女入学等政策，具体措施按照《苏州工业园区吸引高层次和紧缺人才优惠政策意见》和《苏州工业园区加强高技能领军人才队伍建设工程实施意见》（见附件4）
+的有关规定实施。</span></p><p style="line-height: 1.5em; text-indent: 2em;"><span style="font-family: arial, helvetica,sans-serif; font-size: 18px;">以上五类“金鸡湖双百人才”的申报原则上需符合下列基本条件：申报前三年内（高技能类可适当放宽）到园区创新创业；创业人才一般应具有硕士及以上学位，创新人才一般应具有博士学位（高技能类、文化创意类可适当放宽）；年龄一般不超过55周岁；在园区缴纳社保或个税。</span></p><p><br/></p><p style="line-height: 1.5em;"><span style="font-family: arial, helvetica,sans-serif; font-size: 18px;">三、保障措施</span></p><p style="line-height: 1.5em; text-indent: 2em;"><span style="font-family: arial, helvetica,sans-serif; font-size: 18px;">1．科学规划，加强人才
+工作宏观指导。编制《苏州工业园区“十三五”人力资源发展规划》，科学谋划未来，确保人才资源开发与经济社会发展相协调，以“金鸡湖双百人才计划”为人才
+开发的重要支撑点，围绕重点发展的战略新兴产业，协同创新，上下联动，加大人才引进和培养力度，力促园区在激烈的区域竞争中赢得主动的重大战略选择。</span></p><p style="line-height: 1.5em; text-indent: 2em;"><span style="font-family: arial, helvetica,sans-serif; font-size: 18px;">2．调整优化，加大人才
+政策的吸引力度。进一步深化落实《苏州工业园区吸引高层次和紧缺人才的优惠政策意见》（苏园工 
+[2013]83号），对引进的高层次人才和紧缺人才在购房补贴、优惠租房、薪酬补贴、培训补贴、博士后补贴、专项补贴、落户入学、出入境便利、人民币汇
+兑、后勤服务等十个方面给予重点政策支持，全方位保障“金鸡湖双百人才计划”的顺利实施。</span></p><p style="line-height: 1.5em; text-indent: 2em;"><span style="font-family: arial, helvetica,sans-serif; font-size: 18px;">3．整合资源，提升人才
+服务的整体水平。进一步整合组织人事局、科技局、中小企业服务中心、人力资源管理服务中心、一站式服务中心等机构的人才服务职能，整合区内领军人才的政策
+资源、服务资源和信息资源，发放智慧人才服务卡，形成“信息系统+人才专员”线上线下相结合、点面兼顾的立体服务模式，为领军人才提供全方位、一体化和个
+性化的服务，不断提升“金鸡湖双百人才计划”的服务品牌。</span></p><p style="line-height: 1.5em; text-indent: 2em;"><span style="font-family: arial, helvetica,sans-serif; font-size: 18px;">4．创新理念，优化人才
+发展环境。进一步集聚国际名校资源，全力提升中外合作办学水平，构建具有国际视野的中青年人才为中坚、拔尖领军人才为引领的高效团队；持续推进“海归子女
+学校”建设，积极保障高层次人才子女入学需求；优化优租房供应方案，逐步形成政府主导下的社会资源充分参与的灵活、科学的优租房社会资源体系；充分发挥人
+才组织的纽带作用，通过政府引导、购买服务，撬动社会组织行为来优化人才发展环境。</span></p><p style="line-height: 1.5em; text-indent: 2em;"><span style="font-family: arial, helvetica,sans-serif; font-size: 18px;">5．统筹兼顾，注重各类
+人才发展。围绕园区产业发展情况，有针对性的重点抓好创业领军人才、科教研究人才、企业创新人才、高技能人才等四支具有园区特色的人才队伍建设；继续高水
+平对接苏州国际精英周和千人计划创业大赛，重点吸引各类高层次人才的快速聚集；尝试引进国内外高端人力资源服务机构，改进招聘模式，提升海外招聘、异地招
+聘、校园招聘、市场招聘四大招聘品牌的内涵，进一步拓宽国内外人才引进渠道。</span></p><p style="line-height: 1.5em; text-indent: 2em;"><span style="font-family: arial, helvetica,sans-serif; font-size: 18px;">6．深化改革，加强人才
+工作体制机制创新。坚持改革创新，积极参与苏南人才管理改革试验区建设工作，科学分解人才管理改革主要任务，走出一条符合园区实际、体现园区特色的人才发
+展之路；推进人才评价制度改革，加快形成激发人才创造活力、具有国际竞争力的人才制度新优势；探索政策性投资新模式，推进引导基金、领军基金制度改革，加
+大支持园区领军人才创新创业。</span></p><p><br/></p><p style="line-height: 1.5em;"><span style="font-family: arial, helvetica,sans-serif; font-size: 18px;">四、其它</span></p><p style="line-height: 1.5em; text-indent: 2em;"><span style="font-family: arial, helvetica,sans-serif; font-size: 18px;">本意见自发布之日起试行3年，效力不溯及既往，已纳入《关于实施苏州工业园区“金鸡湖双百人才计划”的若干意见》（苏园工〔2010〕107号）适用范围的人员和单位，继续按照原政策规定执行。苏州工业园区各有关部门根据本意见制定相应的实施细则。</span></p><p style="line-height: 1.5em;"><span style="font-family: arial, helvetica,sans-serif; font-size: 18px;">&nbsp;</span></p><p><br/></p><p style="text-align: right; line-height: 1.5em;"><span style="font-family: arial, helvetica,sans-serif; font-size: 18px;">中共苏州工业园区工作委员会</span></p><p style="text-align: right; line-height: 1.5em;"><span style="font-family: arial, helvetica,sans-serif; font-size: 18px;">苏州工业园区管理委员会</span></p><p style="text-align: right; line-height: 1.5em;"><span style="font-family: arial, helvetica,sans-serif; font-size: 18px;">2015年8月27日</span></p><p><br/></p></div></p>
+            </div>
+        </div>
+    </div>
+    <!--center over-->
+        
+    <!--footer begin-->
+    <div class="wrap mt10">
+        <div class="link">
+            <h1>友情链接</h1>
+            <ul class="l_list">
+                <li><a href="http://www.creditchina.gov.cn/" target="_blank">信用中国</a></li>
+                <li><a href="http://www.js.gov.cn/jsxy/index.htm" target="_blank">诚信江苏</a></li>
+                <li><a href="http://www.njcredit.gov.cn/" target="_blank">诚信南京</a></li>
+                <li><a href="http://www.szcredit.gov.cn/" target="_blank">诚信苏州</a></li>
+                <li><a href="http://credit.zjg.gov.cn/toIndex.action" target="_blank">诚信张家港</a></li>
+            </ul>
+        </div>
+        
+         <div class="foot">
+            <p><span>主办单位：苏州工业园区信用办 </span><span>技术支持：江苏中集科技有限公司</span><span><script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1256639142'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1256639142' type='text/javascript'%3E%3C/script%3E"));</script></span></p>
+        </div>
+        
+    </div>
+    <!--footer over-->
+</div>
+<!--content over-->
+    
+</body>
+</html>

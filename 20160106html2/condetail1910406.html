@@ -1,0 +1,391 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
+<meta name="description" content=""/>
+<meta name="keyWords" content=""/>
+<title>诚信园区</title>
+<link type="text/css" href="css/common.css" rel="stylesheet" />
+<link href="js/artDialog2.0.6/skin/chrome/chrome.css" rel="stylesheet" />
+<script type="text/javascript" src="js/jquery-1.7.2.js"></script>
+<script type="text/javascript" src="js/artDialog2.0.6/artDialog.min.js"></script>
+
+<style type="text/css">  
+        .code{   
+            background-image:url("../html/images/QQ.jpg");   
+            margin-left: 10px !important;
+            font-family:Arial;   
+            font-style:italic;   
+            color:Red;   
+            padding:2px 3px;   
+            letter-spacing:3px;   
+            font-weight:bolder;     
+        }   
+</style> 
+<script type="text/javascript">
+$(function () {
+	createCode(0);
+	createCode(3);
+});
+ var code ; //在全局 定义验证码   
+ function createCode(no){    
+   code = "";   
+   var codeLength = 4;//验证码的长度   
+   var checkCode = document.getElementById("checkCodeID"+no);   
+   var selectChar = new Array(0,1,2,3,4,5,6,7,8,9);//所有候选组成验证码的字符，当然也可以用中文的      
+   for(var i=0;i<codeLength;i++){   
+    var charIndex = Math.floor(Math.random()*10);   
+    code +=selectChar[charIndex];   
+   }    
+   if(checkCode){   
+     checkCode.className="code";   
+     checkCode.value = code;
+     checkCode.blur();   
+   }        
+ }
+  function validate (i,t){  
+    //   var checkCode = document.getElementById("checkCodeID"+i).value;  
+       var inputCode = document.getElementById("validCode"+i).value;
+       var zzjgdm=$('#zzjgdm').val();   
+       var gszch=$('#gszch').val();   
+       var companyname=$('#companyname').val();   
+       if(inputCode.length <=0){   
+           alert("请输入验证码！");   
+       }   
+    //   else if(inputCode.toUpperCase()!=checkCode){   
+      //    alert("验证码输入错误！");   
+       //}
+       else if(zzjgdm==""&&gszch==""&&companyname==""){
+       		alert("请至少输入一个查询条件!");
+       }
+       else{   
+          //window.location.href="../seach/seachdetail.action?zzjgdm="+zzjgdm+"&gszch="+gszch+"&companyname="+companyname+"&template="+2; 
+            $.post('../seach/checkSeachdetail.action',
+            {zzjgdm: zzjgdm, gszch:gszch, companyname:companyname,vcode:inputCode, template:2 },
+            function(data){
+                 if (data == '1') {
+                     $('#seaForm').submit(); 
+                 }else if(data=='2'){
+                 	alert("验证码输入错误！");
+                 } else {
+                    alert("暂无相关数据");
+                 }
+               }, "json");   
+       }    
+ }
+ function seachList(i){
+ 	//   var checkCode = document.getElementById("checkCodeID0").value;  
+       var inputCode = document.getElementById("validCode0").value;
+       var name=$('#name').val();   
+       var sfzhm=$('#sfzhm').val();   
+       var zyzhm=$('#zyzhm').val(); 
+       if(inputCode.length <=0){   
+           alert("请输入验证码！");   
+   //    }else if(inputCode.toUpperCase()!=checkCode){   
+   //       alert("验证码输入错误！");   
+       }else if(name==""&&sfzhm==""&&zyzhm==""){
+       		alert("请至少输入一个查询条件!");
+       }else{   
+         //window.location.href="../seach/personalSeachList.action?zyzhm="+zyzhm+"&sfzhm="+sfzhm+"&name="+name+"&template=2";
+                     $.post('../seach/checkPersonalSeachList.action',
+            {zyzhm: zyzhm, sfzhm:sfzhm, name:name,vcode:inputCode,template:2 },
+            function(data){
+                 if (data == 1) {
+                     $('#personForm').submit(); 
+                 }else if(data=='2'){
+                 	alert("验证码输入错误！");
+                 } else {
+                    alert("暂无相关数据");
+                 }
+               }, "json"); 
+       }  
+ }
+ function reset(){
+  	$('#zzjgdm').val('');   
+    $('#gszch').val('');   
+    $('#companyname').val('');  
+    $('#validCode0').val('');  
+ }  
+ function personalReset(){
+ 	$('#name').val('');  
+ 	$('#sfzhm').val('');  
+ 	$('#zyzhm').val('');  
+ 	$('#validCode0').val(''); 
+ }   
+function show(str){
+		var id=document.getElementById(str+"_0").value;
+		window.location.href='content'+id+"_1.html"; 
+}
+function reload(i){
+	if(i==1)
+ 	 window.location.href="qycheck.html";
+ 	 if(i==2)
+ 	 window.location.href="mycheck.html";
+ 	 if(i==3)
+ 	 window.location.href="qyyyshensu.html";
+}
+function goto(staus,name,index,size){
+	if(staus=='up'&&index!=1){
+		window.location.href=name+"_"+(index-1)+".html"; 
+	}else if(staus=='first'){
+		window.location.href=name+"_"+"1.html"; 
+	}else if(staus=='down'){
+		if(index!=size){
+			window.location.href=name+"_"+(index+1)+".html"; 
+		}
+	}else if(staus=='last'){
+		window.location.href=name+"_"+size+".html"; 
+	}
+}
+ function seachContent(){
+ 	//var channelid=document.getElementById("channelid").value;
+ 	//var title=document.getElementById("title").value;
+ 	//if(title==""){
+ 		//return;
+ 	//}else{
+ 		//window.location.href="../content/listContentByChannelId.action?channelid="+channelid+"&title="+title;   
+ 	//	window.location.href="../content/listContentByTitle.action?title="+title;   
+ 	//}
+ 	var title=document.getElementById("title").value;
+ 	if (title == '' || title == '请输入关键字') {
+ 	   alert('请输入关键字');
+ 	   return;
+ 	}
+ 	title = encodeURIComponent(title);
+ 	window.location.href="../content/listContentByTitle.action?title="+title; 
+ }
+ function query(){
+ 	 var checknumber=document.getElementById("checkNumber").value;
+ 	  var reg = new RegExp("^[0-9]*$");  
+    if(!reg.test(checknumber)){  
+        alert("请输入数字!");  
+        return;
+    }  
+ 	 if (checknumber == "") {
+ 	    alert("信用核查码不能为空！");
+ 	 } else {
+ 	        $.post('../seach/approveContent.action',
+            {checknumber: checknumber},
+            function(data){
+                 if (data == 1) {
+                      window.open("http://172.25.119.13/creditVerification/getDetailVerificationInfo.action?checkcode=" + checknumber,
+	               'newwindow','height=900,width=1000,top='+(window.screen.availHeight-30-900)/2+
+	                   ',left='+(window.screen.availWidth-10-1000)/2+
+	                 ',toolbar=no,menubar=no,scrollbars=yes,resizable=yes,location=no,status=no');
+               } else if (data == 2) {
+                     window.open("http://172.25.119.13/creditVerification/getgroupsDetailVerificationInfo.action?checkcode=" + checknumber,
+	                  'newwindow','height=900,width=1000,top='+(window.screen.availHeight-30-900)/2+
+	                   ',left='+(window.screen.availWidth-10-1000)/2+
+	                 ',toolbar=no,menubar=no,scrollbars=yes,resizable=yes,location=no,status=no');
+               }else {
+                   if (data == '-1') {
+                     alert("信用查询码不存在！");
+                   } else if (data == '-2') {
+                     alert("信用查询码已过期！");
+                   } else if (data == '-3') {
+                     alert("信用查询码已重新生成,请输入最新核查码!");
+                   }
+                }
+            },'json');
+ 	 }
+ }
+function SetWinHeight(obj)
+{
+
+} 
+
+function gotoPage(total,cid){
+	var p=$("#textFooter").val();
+	var i = parseInt(total);
+	if(p!=""){
+		var a=parseInt(p);
+		if(a>0&&a<=i)
+		window.location.href="../content"+cid+"_"+p+".html";
+		if(a>i)
+		window.location.href="../content"+cid+"_"+1+".html";
+	}
+}
+$(document).ready(function() {
+ 	$.ajax({
+        type: "post",//使用post方法访问后台
+        dataType: "json",//返回json格式的数据
+        url: "../getCCS.action",//要访问的后台地址
+        data:{},//要发送的数据
+        complete :function(){$("#load").hide();},//AJAX请求完成时隐藏loading提示
+        success: function(msg){//msg为返回的数据，在这里做数据绑定
+				$("#thrNum").html(msg);
+        }
+    });
+    $.ajax({
+        type: "post",//使用post方法访问后台
+        dataType: "json",//返回json格式的数据
+        url: "../content/findHOTKeyword.action",//要访问的后台地址
+        data:{},//要发送的数据
+        complete :function(){$("#load").hide();},//AJAX请求完成时隐藏loading提示
+        success: function(msg){//msg为返回的数据，在这里做数据绑定
+        	var b='关键字:&nbsp;';
+        	$.each(msg.rows, function(i, n){
+        	var a = '<a href="javascript:void(0)" onclick="byHotKwSeachContent(\''+msg.rows[i]+'\')" >'+msg.rows[i]+'</a>&nbsp;&nbsp;';
+        	b+=a;
+           });
+           $("#hotkw").html(b);
+        }
+    });
+});
+	function byHotKwSeachContent(str) {
+		var title = encodeURIComponent(str);
+		window.location.href = "../content/listContentByTitle.action?title="
+				+ title;
+	}	
+	function queryOfPreview(contentId, category){
+   		 window.location.href="../content/queryOfPreview.action?contentId="+contentId+"&date="+new Date();
+	}
+</script>
+</head>
+
+<body>
+<!--header begin-->
+<div class="header">
+	<div class="wrap">
+    	<div class="logo f_l"><a href="http://www.sipac.gov.cn/" target="_blank"><img src="images/logo.png" /></a></div>
+    	<div class="number f_r" id="thrNum">
+        </div>
+    </div>
+</div>
+<!--header over-->
+
+<!--nav begin-->
+<div class="nav">
+    <ul class="wrap tabs">
+        <li><a href="../goToIndex.action">首页</a></li>
+        	<li><a href="javascript:void(0)" id="22" onclick='show("22")'>信用动态</a></li>
+		        	<input type="hidden" id="22_0" value="365">
+		        	<input type="hidden" id="22_1" value="364">
+		        	<input type="hidden" id="22_2" value="335">
+        	<li><a href="javascript:void(0)" id="420" onclick='show("420")'>信用公示</a></li>
+		        	<input type="hidden" id="420_0" value="318">
+		        	<input type="hidden" id="420_1" value="60">
+		        	<input type="hidden" id="420_2" value="61">
+        	<li><a href="javascript:void(0)" id="26" onclick='show("26")'>重点领域</a></li>
+		        	<input type="hidden" id="26_0" value="486">
+		        	<input type="hidden" id="26_1" value="487">
+		        	<input type="hidden" id="26_2" value="488">
+		        	<input type="hidden" id="26_3" value="489">
+		        	<input type="hidden" id="26_4" value="490">
+		        	<input type="hidden" id="26_5" value="491">
+		        	<input type="hidden" id="26_6" value="492">
+		        	<input type="hidden" id="26_7" value="493">
+        	<li><a href="javascript:void(0)" id="423" onclick='show("423")'>专项资金</a></li>
+		        	<input type="hidden" id="423_0" value="469">
+        	<li><a href="javascript:void(0)" id="416" onclick='show("416")'>政策法规</a></li>
+		        	<input type="hidden" id="416_0" value="306">
+		        	<input type="hidden" id="416_1" value="334">
+		        	<input type="hidden" id="416_2" value="309">
+        <li><a href="http://gzjd.sipac.gov.cn/Web/BBS/MainList.aspx"  target="_blank">在线交流</a></li>
+    </ul>
+</div>
+<!--nav over-->
+
+<!--content begin-->
+<div class="cloud">
+    <!--notice begin-->
+    <div class="wrap">
+    	<div class="notice f_l"> 
+            <div class="notice_tit f_l f_b">通知公告</div>
+            <div class="f_l notice_list"  id="mq" onmouseover=iScrollAmount=0 style="overflow:hidden; width:500px; height:30px;color:#000" onmouseout=iScrollAmount=1 >
+                <ul>
+		                    <li><a href="javascript:queryOfPreview('1911122')">苏州出台省内首部《住房公积金个人失信惩戒实施细则》</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911059')">关于印发江苏省推行食品生产企业 “黑名单”制度指导意见(试行)的通知(苏食药监规</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911231')">家庭成员不履行抚养义务记入个人信用档案</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911061')">2015年我市电梯维保单位星级评定结果公示</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910971')">2015年度“诚信宣传周”活动开始啦</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910519')">2015年12月苏州工业园区公积金（社会保险）公示欠费单位名单</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910520')">苏州工业园区从业建筑业企业不良信用处罚公示汇总</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910381')">2015年11月苏州工业园区社会保险基金（公积金）公示欠费单位名单</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910282')">园区信用体系建设项目接受市领导专项督查并开展座谈会</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911034')">苏州积分落户制度2016年1月15日起实施 失信行为将扣减分</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910988')">关于做好2015年园区建筑业企业信用综合评价良好行为信息录入工作的通知</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910976')">诚信记录纳入流动人口积分管理</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910972')">江苏省研究生考试26日开考 省考试院提醒考生诚信参考</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910518')">2015年中国十佳诚信政府排行榜发布</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910467')">老忘交电费 当心成老赖失信</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910361')">首个国际征信论坛即将在沪登陆</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910338')">居民身份证将可异地换领补领 有不良信用记录的不予受理</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910329')">双十一”消费信用大数据监测评价启动</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910328')">发改委：年底前全面实施统一社会信用代码制度</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910310')">信用社会临近 央行征信系统已收录8.7亿人数据</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910307')">市食药监公布19批次质量不合格食品（附名单）</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910302')">园区地税提交457户企业列入园区失信法人库</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910177')">关于联合发布2014年长三角地区备案信用服务机构名单的通知</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910179')">2014年度“苏州市级信用管理示范企业”认定公示</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="search f_r">
+            <form id="searchform" action="../content/listContentByTitle.action" method="post">
+                <fieldset>
+                <table>
+                 	<tr>
+				      <td width="70%">
+				      	 <input type="text" onfocus="if(this.value =='请输入关键字') {this.value=''; }" onblur="if(this.value==''){this.value='请输入关键字';}" class="text_input" style="width:200px" value="请输入关键字" name="title" id="title">
+				         <input type="button" onclick="seachContent()" name="button"> 
+				      </td>
+				   	</tr>
+				   	<tr>
+				   		 <td id="hotkw"></td>
+				   	</tr>
+				  </table> 
+                </fieldset>
+            </form>
+        </div>
+    </div>
+    <script type="text/javascript" src="js/muqruujs.js"></script>
+    <!--notice over-->
+    <!--center begin-->
+    <div class="wrap mt5 content">
+        <div class="breadcrumbs">
+            <ul>
+                <li>当前位置：</li>
+          		<li><a href="content365_1.html">信用动态</a> > </li>
+            <li><a href="content335_1.html">国内动态</a> > </li>
+                <li><em>详细</em></li>
+            </ul>
+        </div>
+        
+        <div class="pad50">
+            <div class="art_head">
+                <h1>陕西信用体系持续完善 机制短板仍需弥补</h1>
+                <div class="tc art_date"> 【发布日期： 】【<a href="javascript:void(0)" onclick="window.print();">打印</a>】 </div>
+            </div>
+            <div class="artnr">
+                <p><div style='font-size: 18px;'><p style="LINE-HEIGHT: 2em; TEXT-INDENT: 28px; MARGIN: 0px 0px 16px"><span style="FONT-FAMILY: 宋体; FONT-SIZE: 18px">借助企业信用体系建设的不断加速与完善，陕西社会信用体系目前已初步建立，有效促进了市场服务和企业信用管理水平的提升。相关专家表示，陕西信用信息共享和监管仍存在诸多限制因素，需要通过机制和法律配套加以完善。</span></p><p style="LINE-HEIGHT: 2em; TEXT-INDENT: 28px; MARGIN: 0px 0px 16px"><strong><span style="FONT-FAMILY: 宋体; FONT-SIZE: 18px">信用体系助推社会管理</span></strong></p><p style="LINE-HEIGHT: 2em; TEXT-INDENT: 28px; MARGIN: 0px 0px 16px"><span style="FONT-SIZE: 18px"><span style="FONT-FAMILY: 宋体; FONT-SIZE: 18px">从</span><span style="FONT-FAMILY: Calibri; FONT-SIZE: 18px"> 2007</span><span style="FONT-FAMILY: 宋体; FONT-SIZE: 18px">年开始，陕西省以建设“诚信陕西”为目标，在全国率先启动社会信用体系建设工作。陕西省决策咨询委社会组组长冯家臻表示，在金融系统方面，陕西的</span> <span style="FONT-FAMILY: 宋体; FONT-SIZE: 18px">企业征信系统采集了全省</span><span style="FONT-FAMILY: Calibri; FONT-SIZE: 18px">21.4</span><span style="FONT-FAMILY: 宋体; FONT-SIZE: 18px">万户相关企业的信用信息，包括企业基本信息、财务信息、信贷信息以及其它有助于判断企业信用状况的信息。征信系统向金融机</span> <span style="FONT-FAMILY: 宋体; FONT-SIZE: 18px">构提供查询的同时，也向政府、司法机关和金融监管部门提供信息支持，在防范信用风险、维护金融稳定、改善融资环境、增强企业信用意识等方面起到积极作用。</span></span></p><p style="LINE-HEIGHT: 2em; TEXT-INDENT: 28px; MARGIN: 0px 0px 16px"><span style="FONT-SIZE: 18px"><span style="FONT-FAMILY: 宋体; FONT-SIZE: 18px">同</span><span style="FONT-FAMILY: 宋体; FONT-SIZE: 18px">时，陕西省针对企业信用体系所打造的失信管理工作也取得了实质性突破。陕西省质监局对全省所有纳入行政许可管理和强制性认证管理的重点产品生产企业建立了</span> <span style="FONT-FAMILY: 宋体; FONT-SIZE: 18px">质量信用档案，组织全省</span><span style="FONT-FAMILY: Calibri; FONT-SIZE: 18px">204</span><span style="FONT-FAMILY: 宋体; FONT-SIZE: 18px">家企业编印了各自的《企业质量信用报告》，并在全省汽车经营企业中开展了质量诚信公开承诺活动；陕西省环保厅在其门户网站开</span> <span style="FONT-FAMILY: 宋体; FONT-SIZE: 18px">设了“污染源环境监管信息公开”专栏，定期向社会公布“企业环境信用评价”和违规企业信息；陕西省农业厅在涉农企业开展“诚信农企”活动，对有违规行为的</span> <span style="FONT-FAMILY: 宋体; FONT-SIZE: 18px">市场主列入经营异常“黑名单”，实施重点监管、新闻曝光、社会公布等失信惩戒措施。</span></span></p><p style="LINE-HEIGHT: 2em; TEXT-INDENT: 28px; MARGIN: 0px 0px 16px"><span style="FONT-FAMILY: 宋体; FONT-SIZE: 18px">“从已有的效果看，企业信用体系的建立，一定程度上规范了市场，促进了企业诚信经营。许多企业开始自觉积累信用资本，提高信用能力和信用风险的管理水平，陕西企业的竞争力也因此得以增强。”陕西省工商局副局长田中智说。</span></p><p style="LINE-HEIGHT: 2em; TEXT-INDENT: 28px; MARGIN: 0px 0px 16px"><strong><span style="FONT-FAMILY: 宋体; FONT-SIZE: 18px">信用信息共享仍存瓶颈</span></strong></p><p style="LINE-HEIGHT: 2em; TEXT-INDENT: 28px; MARGIN: 0px 0px 16px"><span style="FONT-SIZE: 18px"><span style="FONT-FAMILY: 宋体; FONT-SIZE: 18px">虽</span> <span style="FONT-FAMILY: 宋体; FONT-SIZE: 18px">然陕西的企业信用体系已经初步成型，但企业信用信息互联共享目前依然存在瓶颈。据陕西省信息中心副主任张军介绍，陕西省公共信用信息交换平台整体规划为</span> <span style="FONT-FAMILY: 宋体; FONT-SIZE: 18px">省、市两级，其中省级信用信息平台和企业信用信息系统已于</span><span style="FONT-FAMILY: Calibri; FONT-SIZE: 18px">2012</span><span style="FONT-FAMILY: 宋体; FONT-SIZE: 18px">年建成运行。目前陕西工商注册的</span><span style="FONT-FAMILY: Calibri; FONT-SIZE: 18px">140</span><span style="FONT-FAMILY: 宋体; FONT-SIZE: 18px">万家企业，包含个体工商户在内的信息已采集入库，</span> <span style="FONT-FAMILY: 宋体; FONT-SIZE: 18px">收录企业信用记录</span><span style="FONT-FAMILY: Calibri; FONT-SIZE: 18px">800</span><span style="FONT-FAMILY: 宋体; FONT-SIZE: 18px">余万条。</span></span></p><p style="LINE-HEIGHT: 2em; TEXT-INDENT: 28px; MARGIN: 0px 0px 16px"><span style="FONT-FAMILY: 宋体; FONT-SIZE: 18px">田中智表示，由于目前许多部门内部的资源还没有进行充分整合，在工商登记制度改革之后，负责后置许可的各部门需要自行在信用平台上认领信息，在各部门将系统与平台充分对接之前，尚无法进行有效监管。</span></p><p style="LINE-HEIGHT: 2em; TEXT-INDENT: 28px; MARGIN: 0px 0px 16px"><span style="FONT-SIZE: 18px"><span style="FONT-FAMILY: 宋体; FONT-SIZE: 18px">冯</span><span style="FONT-FAMILY: 宋体; FONT-SIZE: 18px">家臻认为，过去条块分割的管理体制给职能部门间信息共享带来了一定的障碍。由于部分行业的企业信用信息由国家部委统一集中管理，地方各级部门将企业信用信</span> <span style="FONT-FAMILY: 宋体; FONT-SIZE: 18px">息通过内部业务系统直接上送，地方无权留底。“这就导致陕西的平台和系统在征集这些信息时需要征求国家部委的许可，导致一些关键和负面的信息不能及时采集</span> <span style="FONT-FAMILY: 宋体; FONT-SIZE: 18px">入库，整合难度较大。”</span></span></p><p style="LINE-HEIGHT: 2em; TEXT-INDENT: 28px; MARGIN: 0px 0px 16px"><span style="FONT-SIZE: 18px"><span style="FONT-FAMILY: 宋体; FONT-SIZE: 18px">陕</span><span style="FONT-FAMILY: 宋体; FONT-SIZE: 18px">西省社科院金融投资研究所助理研究员郭普松表示，由于部分市县尚未建立企业信用信息征集系统和信用监管工作机制，信用信息采集共享仍存在一定限制。“现阶</span> <span style="FONT-FAMILY: 宋体; FONT-SIZE: 18px">段企业信用信息主要向省级信用平台集中，应用服务向各市县延伸的工作仍处在起步阶段，市县和省级信用平台实现互联共享还需要时间。”</span></span></p><p style="LINE-HEIGHT: 2em; TEXT-INDENT: 28px; MARGIN: 0px 0px 16px"><strong><span style="FONT-FAMILY: 宋体; FONT-SIZE: 18px">多措并举推进信用体系建设</span></strong></p><p style="LINE-HEIGHT: 2em; TEXT-INDENT: 28px; MARGIN: 0px 0px 16px"><span style="FONT-SIZE: 18px"><span style="FONT-FAMILY: 宋体; FONT-SIZE: 18px">企</span><span style="FONT-FAMILY: 宋体; FONT-SIZE: 18px">业信用意识仍需提高。目前，陕西的多数企业还没有在企业内部建立起信用管理系统，客户信用档案管理、应收账款管理、生产安全信息、产品质量信息、薪酬与社</span> <span style="FONT-FAMILY: 宋体; FONT-SIZE: 18px">会保障信息等仅处在逐步单项实施的阶段。不少企业没有专门机构和专人负责信用管理，企业客户信用档案、授信和应收账款等方面的基本信用管理制度缺失。</span></span></p><p style="LINE-HEIGHT: 2em; TEXT-INDENT: 28px; MARGIN: 0px 0px 16px"><span style="FONT-FAMILY: 宋体; FONT-SIZE: 18px">“需要引导有条件的企业，建立健全以客户资信管理、内部授信管理和应收账款管理为核心的企业信用责任制度。把信用管理渗透到企业管理的每一个环节，与采购销售、财务管理、劳动保障、质量和安全管理等紧密结合起来。”郭普松表示。</span></p><p style="LINE-HEIGHT: 2em; TEXT-INDENT: 28px; MARGIN: 0px 0px 16px"><span style="FONT-SIZE: 18px"><span style="FONT-FAMILY: 宋体; FONT-SIZE: 18px">信</span><span style="FONT-FAMILY: 宋体; FONT-SIZE: 18px">用服务业有待发展。冯家臻认为，针对目前陕西的信用服务市场发育程度依旧较低，服务机构的公信力不足的问题，陕西需要尽快积极培育一批以企业征信、信用评</span> <span style="FONT-FAMILY: 宋体; FONT-SIZE: 18px">级、信用担保、信用管理咨询、信用培训为主要业务的中介服务机构，形成全方位、多层次的信用中介市场，促进信用服务业发展。“企业信用监督管理、企业信用</span> <span style="FONT-FAMILY: 宋体; FONT-SIZE: 18px">预警、企业信用修复等方面都需要进一步补强，这也将成为陕西企业信用体系建设发展的重要方向。”</span></span></p><p style="LINE-HEIGHT: 2em; TEXT-INDENT: 28px; MARGIN: 0px 0px 16px"><span style="FONT-SIZE: 18px"><span style="FONT-FAMILY: 宋体; FONT-SIZE: 18px">企</span><span style="FONT-FAMILY: 宋体; FONT-SIZE: 18px">业信用奖惩制度亟待完善。目前陕西全省还没有真正建立起“一处失信，处处受限”的建成联动机制，大多数部门的奖惩都仅限在部门系统的内部。对会计、审计、</span> <span style="FONT-FAMILY: 宋体; FONT-SIZE: 18px">法律服务和征信、资信评估等中介机构监管力度不足，对信用报告提供虚假信息的失信行为，没有进行及时有效的联动惩戒。工商、税务等部门对优秀的诚信企业尽</span> <span style="FONT-FAMILY: 宋体; FONT-SIZE: 18px">管采取了激励措施，但多数仍停留在开放绿色通道、提供服务管理便利等方面，还没有形成部门之间联动的激励机制。</span></span></p><p style="LINE-HEIGHT: 2em; TEXT-INDENT: 28px; MARGIN: 0px 0px 16px"><span style="FONT-FAMILY: 宋体; FONT-SIZE: 18px">田中智建议，陕西各有关部门在重大项目建设、政府采购、招标投标、国有土地出让、公共资源交易等重点领域，积极推行第三方企业综合信用等级评价和信用报告制度，尽快建立、严格落实企业信用联合奖惩机制。</span></p><p style="LINE-HEIGHT: 2em; TEXT-INDENT: 28px; MARGIN: 0px 0px 16px"><span style="FONT-SIZE: 18px"><span style="FONT-FAMILY: 宋体; FONT-SIZE: 18px">西</span><span style="FONT-FAMILY: 宋体; FONT-SIZE: 18px">北大学经管学院教授赵守国认为，对有不良信用记录的企业，除了加大日常监督力度，还要在行政许可方面采取一些制裁。如果涉及到诸如食品药品安全、工程建设</span> <span style="FONT-FAMILY: 宋体; FONT-SIZE: 18px">质量等群众关切、问题突出的重点领域，不但要及时对涉事企业依法予以查处，还要让这些失信企业从该行业和相关市场中退出。</span></span></p><p style="TEXT-ALIGN: right; LINE-HEIGHT: 2em; TEXT-INDENT: 28px; MARGIN: 0px 0px 16px"><span style="FONT-FAMILY: 宋体; FONT-SIZE: 18px">新闻来源：新华社</span></p><p>&nbsp;</p></div></p>
+            </div>
+        </div>
+    </div>
+    <!--center over-->
+        
+    <!--footer begin-->
+    <div class="wrap mt10">
+        <div class="link">
+            <h1>友情链接</h1>
+            <ul class="l_list">
+                <li><a href="http://www.creditchina.gov.cn/" target="_blank">信用中国</a></li>
+                <li><a href="http://www.js.gov.cn/jsxy/index.htm" target="_blank">诚信江苏</a></li>
+                <li><a href="http://www.njcredit.gov.cn/" target="_blank">诚信南京</a></li>
+                <li><a href="http://www.szcredit.gov.cn/" target="_blank">诚信苏州</a></li>
+                <li><a href="http://credit.zjg.gov.cn/toIndex.action" target="_blank">诚信张家港</a></li>
+            </ul>
+        </div>
+        
+         <div class="foot">
+            <p><span>主办单位：苏州工业园区信用办 </span><span>技术支持：江苏中集科技有限公司</span><span><script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1256639142'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1256639142' type='text/javascript'%3E%3C/script%3E"));</script></span></p>
+        </div>
+        
+    </div>
+    <!--footer over-->
+</div>
+<!--content over-->
+    
+</body>
+</html>

@@ -1,0 +1,391 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
+<meta name="description" content=""/>
+<meta name="keyWords" content=""/>
+<title>诚信园区</title>
+<link type="text/css" href="css/common.css" rel="stylesheet" />
+<link href="js/artDialog2.0.6/skin/chrome/chrome.css" rel="stylesheet" />
+<script type="text/javascript" src="js/jquery-1.7.2.js"></script>
+<script type="text/javascript" src="js/artDialog2.0.6/artDialog.min.js"></script>
+
+<style type="text/css">  
+        .code{   
+            background-image:url("../html/images/QQ.jpg");   
+            margin-left: 10px !important;
+            font-family:Arial;   
+            font-style:italic;   
+            color:Red;   
+            padding:2px 3px;   
+            letter-spacing:3px;   
+            font-weight:bolder;     
+        }   
+</style> 
+<script type="text/javascript">
+$(function () {
+	createCode(0);
+	createCode(3);
+});
+ var code ; //在全局 定义验证码   
+ function createCode(no){    
+   code = "";   
+   var codeLength = 4;//验证码的长度   
+   var checkCode = document.getElementById("checkCodeID"+no);   
+   var selectChar = new Array(0,1,2,3,4,5,6,7,8,9);//所有候选组成验证码的字符，当然也可以用中文的      
+   for(var i=0;i<codeLength;i++){   
+    var charIndex = Math.floor(Math.random()*10);   
+    code +=selectChar[charIndex];   
+   }    
+   if(checkCode){   
+     checkCode.className="code";   
+     checkCode.value = code;
+     checkCode.blur();   
+   }        
+ }
+  function validate (i,t){  
+    //   var checkCode = document.getElementById("checkCodeID"+i).value;  
+       var inputCode = document.getElementById("validCode"+i).value;
+       var zzjgdm=$('#zzjgdm').val();   
+       var gszch=$('#gszch').val();   
+       var companyname=$('#companyname').val();   
+       if(inputCode.length <=0){   
+           alert("请输入验证码！");   
+       }   
+    //   else if(inputCode.toUpperCase()!=checkCode){   
+      //    alert("验证码输入错误！");   
+       //}
+       else if(zzjgdm==""&&gszch==""&&companyname==""){
+       		alert("请至少输入一个查询条件!");
+       }
+       else{   
+          //window.location.href="../seach/seachdetail.action?zzjgdm="+zzjgdm+"&gszch="+gszch+"&companyname="+companyname+"&template="+2; 
+            $.post('../seach/checkSeachdetail.action',
+            {zzjgdm: zzjgdm, gszch:gszch, companyname:companyname,vcode:inputCode, template:2 },
+            function(data){
+                 if (data == '1') {
+                     $('#seaForm').submit(); 
+                 }else if(data=='2'){
+                 	alert("验证码输入错误！");
+                 } else {
+                    alert("暂无相关数据");
+                 }
+               }, "json");   
+       }    
+ }
+ function seachList(i){
+ 	//   var checkCode = document.getElementById("checkCodeID0").value;  
+       var inputCode = document.getElementById("validCode0").value;
+       var name=$('#name').val();   
+       var sfzhm=$('#sfzhm').val();   
+       var zyzhm=$('#zyzhm').val(); 
+       if(inputCode.length <=0){   
+           alert("请输入验证码！");   
+   //    }else if(inputCode.toUpperCase()!=checkCode){   
+   //       alert("验证码输入错误！");   
+       }else if(name==""&&sfzhm==""&&zyzhm==""){
+       		alert("请至少输入一个查询条件!");
+       }else{   
+         //window.location.href="../seach/personalSeachList.action?zyzhm="+zyzhm+"&sfzhm="+sfzhm+"&name="+name+"&template=2";
+                     $.post('../seach/checkPersonalSeachList.action',
+            {zyzhm: zyzhm, sfzhm:sfzhm, name:name,vcode:inputCode,template:2 },
+            function(data){
+                 if (data == 1) {
+                     $('#personForm').submit(); 
+                 }else if(data=='2'){
+                 	alert("验证码输入错误！");
+                 } else {
+                    alert("暂无相关数据");
+                 }
+               }, "json"); 
+       }  
+ }
+ function reset(){
+  	$('#zzjgdm').val('');   
+    $('#gszch').val('');   
+    $('#companyname').val('');  
+    $('#validCode0').val('');  
+ }  
+ function personalReset(){
+ 	$('#name').val('');  
+ 	$('#sfzhm').val('');  
+ 	$('#zyzhm').val('');  
+ 	$('#validCode0').val(''); 
+ }   
+function show(str){
+		var id=document.getElementById(str+"_0").value;
+		window.location.href='content'+id+"_1.html"; 
+}
+function reload(i){
+	if(i==1)
+ 	 window.location.href="qycheck.html";
+ 	 if(i==2)
+ 	 window.location.href="mycheck.html";
+ 	 if(i==3)
+ 	 window.location.href="qyyyshensu.html";
+}
+function goto(staus,name,index,size){
+	if(staus=='up'&&index!=1){
+		window.location.href=name+"_"+(index-1)+".html"; 
+	}else if(staus=='first'){
+		window.location.href=name+"_"+"1.html"; 
+	}else if(staus=='down'){
+		if(index!=size){
+			window.location.href=name+"_"+(index+1)+".html"; 
+		}
+	}else if(staus=='last'){
+		window.location.href=name+"_"+size+".html"; 
+	}
+}
+ function seachContent(){
+ 	//var channelid=document.getElementById("channelid").value;
+ 	//var title=document.getElementById("title").value;
+ 	//if(title==""){
+ 		//return;
+ 	//}else{
+ 		//window.location.href="../content/listContentByChannelId.action?channelid="+channelid+"&title="+title;   
+ 	//	window.location.href="../content/listContentByTitle.action?title="+title;   
+ 	//}
+ 	var title=document.getElementById("title").value;
+ 	if (title == '' || title == '请输入关键字') {
+ 	   alert('请输入关键字');
+ 	   return;
+ 	}
+ 	title = encodeURIComponent(title);
+ 	window.location.href="../content/listContentByTitle.action?title="+title; 
+ }
+ function query(){
+ 	 var checknumber=document.getElementById("checkNumber").value;
+ 	  var reg = new RegExp("^[0-9]*$");  
+    if(!reg.test(checknumber)){  
+        alert("请输入数字!");  
+        return;
+    }  
+ 	 if (checknumber == "") {
+ 	    alert("信用核查码不能为空！");
+ 	 } else {
+ 	        $.post('../seach/approveContent.action',
+            {checknumber: checknumber},
+            function(data){
+                 if (data == 1) {
+                      window.open("http://172.25.119.13/creditVerification/getDetailVerificationInfo.action?checkcode=" + checknumber,
+	               'newwindow','height=900,width=1000,top='+(window.screen.availHeight-30-900)/2+
+	                   ',left='+(window.screen.availWidth-10-1000)/2+
+	                 ',toolbar=no,menubar=no,scrollbars=yes,resizable=yes,location=no,status=no');
+               } else if (data == 2) {
+                     window.open("http://172.25.119.13/creditVerification/getgroupsDetailVerificationInfo.action?checkcode=" + checknumber,
+	                  'newwindow','height=900,width=1000,top='+(window.screen.availHeight-30-900)/2+
+	                   ',left='+(window.screen.availWidth-10-1000)/2+
+	                 ',toolbar=no,menubar=no,scrollbars=yes,resizable=yes,location=no,status=no');
+               }else {
+                   if (data == '-1') {
+                     alert("信用查询码不存在！");
+                   } else if (data == '-2') {
+                     alert("信用查询码已过期！");
+                   } else if (data == '-3') {
+                     alert("信用查询码已重新生成,请输入最新核查码!");
+                   }
+                }
+            },'json');
+ 	 }
+ }
+function SetWinHeight(obj)
+{
+
+} 
+
+function gotoPage(total,cid){
+	var p=$("#textFooter").val();
+	var i = parseInt(total);
+	if(p!=""){
+		var a=parseInt(p);
+		if(a>0&&a<=i)
+		window.location.href="../content"+cid+"_"+p+".html";
+		if(a>i)
+		window.location.href="../content"+cid+"_"+1+".html";
+	}
+}
+$(document).ready(function() {
+ 	$.ajax({
+        type: "post",//使用post方法访问后台
+        dataType: "json",//返回json格式的数据
+        url: "../getCCS.action",//要访问的后台地址
+        data:{},//要发送的数据
+        complete :function(){$("#load").hide();},//AJAX请求完成时隐藏loading提示
+        success: function(msg){//msg为返回的数据，在这里做数据绑定
+				$("#thrNum").html(msg);
+        }
+    });
+    $.ajax({
+        type: "post",//使用post方法访问后台
+        dataType: "json",//返回json格式的数据
+        url: "../content/findHOTKeyword.action",//要访问的后台地址
+        data:{},//要发送的数据
+        complete :function(){$("#load").hide();},//AJAX请求完成时隐藏loading提示
+        success: function(msg){//msg为返回的数据，在这里做数据绑定
+        	var b='关键字:&nbsp;';
+        	$.each(msg.rows, function(i, n){
+        	var a = '<a href="javascript:void(0)" onclick="byHotKwSeachContent(\''+msg.rows[i]+'\')" >'+msg.rows[i]+'</a>&nbsp;&nbsp;';
+        	b+=a;
+           });
+           $("#hotkw").html(b);
+        }
+    });
+});
+	function byHotKwSeachContent(str) {
+		var title = encodeURIComponent(str);
+		window.location.href = "../content/listContentByTitle.action?title="
+				+ title;
+	}	
+	function queryOfPreview(contentId, category){
+   		 window.location.href="../content/queryOfPreview.action?contentId="+contentId+"&date="+new Date();
+	}
+</script>
+</head>
+
+<body>
+<!--header begin-->
+<div class="header">
+	<div class="wrap">
+    	<div class="logo f_l"><a href="http://www.sipac.gov.cn/" target="_blank"><img src="images/logo.png" /></a></div>
+    	<div class="number f_r" id="thrNum">
+        </div>
+    </div>
+</div>
+<!--header over-->
+
+<!--nav begin-->
+<div class="nav">
+    <ul class="wrap tabs">
+        <li><a href="../goToIndex.action">首页</a></li>
+        	<li><a href="javascript:void(0)" id="22" onclick='show("22")'>信用动态</a></li>
+		        	<input type="hidden" id="22_0" value="365">
+		        	<input type="hidden" id="22_1" value="364">
+		        	<input type="hidden" id="22_2" value="335">
+        	<li><a href="javascript:void(0)" id="420" onclick='show("420")'>信用公示</a></li>
+		        	<input type="hidden" id="420_0" value="318">
+		        	<input type="hidden" id="420_1" value="60">
+		        	<input type="hidden" id="420_2" value="61">
+        	<li><a href="javascript:void(0)" id="26" onclick='show("26")'>重点领域</a></li>
+		        	<input type="hidden" id="26_0" value="486">
+		        	<input type="hidden" id="26_1" value="487">
+		        	<input type="hidden" id="26_2" value="488">
+		        	<input type="hidden" id="26_3" value="489">
+		        	<input type="hidden" id="26_4" value="490">
+		        	<input type="hidden" id="26_5" value="491">
+		        	<input type="hidden" id="26_6" value="492">
+		        	<input type="hidden" id="26_7" value="493">
+        	<li><a href="javascript:void(0)" id="423" onclick='show("423")'>专项资金</a></li>
+		        	<input type="hidden" id="423_0" value="469">
+        	<li><a href="javascript:void(0)" id="416" onclick='show("416")'>政策法规</a></li>
+		        	<input type="hidden" id="416_0" value="306">
+		        	<input type="hidden" id="416_1" value="334">
+		        	<input type="hidden" id="416_2" value="309">
+        <li><a href="http://gzjd.sipac.gov.cn/Web/BBS/MainList.aspx"  target="_blank">在线交流</a></li>
+    </ul>
+</div>
+<!--nav over-->
+
+<!--content begin-->
+<div class="cloud">
+    <!--notice begin-->
+    <div class="wrap">
+    	<div class="notice f_l"> 
+            <div class="notice_tit f_l f_b">通知公告</div>
+            <div class="f_l notice_list"  id="mq" onmouseover=iScrollAmount=0 style="overflow:hidden; width:500px; height:30px;color:#000" onmouseout=iScrollAmount=1 >
+                <ul>
+		                    <li><a href="javascript:queryOfPreview('1911122')">苏州出台省内首部《住房公积金个人失信惩戒实施细则》</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911059')">关于印发江苏省推行食品生产企业 “黑名单”制度指导意见(试行)的通知(苏食药监规</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911231')">家庭成员不履行抚养义务记入个人信用档案</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911061')">2015年我市电梯维保单位星级评定结果公示</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910971')">2015年度“诚信宣传周”活动开始啦</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910519')">2015年12月苏州工业园区公积金（社会保险）公示欠费单位名单</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910520')">苏州工业园区从业建筑业企业不良信用处罚公示汇总</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910381')">2015年11月苏州工业园区社会保险基金（公积金）公示欠费单位名单</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910282')">园区信用体系建设项目接受市领导专项督查并开展座谈会</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911034')">苏州积分落户制度2016年1月15日起实施 失信行为将扣减分</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910988')">关于做好2015年园区建筑业企业信用综合评价良好行为信息录入工作的通知</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910976')">诚信记录纳入流动人口积分管理</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910972')">江苏省研究生考试26日开考 省考试院提醒考生诚信参考</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910518')">2015年中国十佳诚信政府排行榜发布</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910467')">老忘交电费 当心成老赖失信</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910361')">首个国际征信论坛即将在沪登陆</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910338')">居民身份证将可异地换领补领 有不良信用记录的不予受理</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910329')">双十一”消费信用大数据监测评价启动</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910328')">发改委：年底前全面实施统一社会信用代码制度</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910310')">信用社会临近 央行征信系统已收录8.7亿人数据</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910307')">市食药监公布19批次质量不合格食品（附名单）</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910302')">园区地税提交457户企业列入园区失信法人库</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910177')">关于联合发布2014年长三角地区备案信用服务机构名单的通知</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910179')">2014年度“苏州市级信用管理示范企业”认定公示</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="search f_r">
+            <form id="searchform" action="../content/listContentByTitle.action" method="post">
+                <fieldset>
+                <table>
+                 	<tr>
+				      <td width="70%">
+				      	 <input type="text" onfocus="if(this.value =='请输入关键字') {this.value=''; }" onblur="if(this.value==''){this.value='请输入关键字';}" class="text_input" style="width:200px" value="请输入关键字" name="title" id="title">
+				         <input type="button" onclick="seachContent()" name="button"> 
+				      </td>
+				   	</tr>
+				   	<tr>
+				   		 <td id="hotkw"></td>
+				   	</tr>
+				  </table> 
+                </fieldset>
+            </form>
+        </div>
+    </div>
+    <script type="text/javascript" src="js/muqruujs.js"></script>
+    <!--notice over-->
+    <!--center begin-->
+    <div class="wrap mt5 content">
+        <div class="breadcrumbs">
+            <ul>
+                <li>当前位置：</li>
+          		<li><a href="content318_1.html">信用公示</a> > </li>
+            <li><a href="content60_1.html">失信警示</a> > </li>
+                <li><em>详细</em></li>
+            </ul>
+        </div>
+        
+        <div class="pad50">
+            <div class="art_head">
+                <h1>江苏省2014年12月份违法药品医疗器械保健食品广告公告</h1>
+                <div class="tc art_date"> 【发布日期： 】【<a href="javascript:void(0)" onclick="window.print();">打印</a>】 </div>
+            </div>
+            <div class="artnr">
+                <p><table><tbody><tr class="firstRow"><td><p><strong>序号</strong></p></td><td><p><strong>广告类别</strong></p></td><td><p><strong>通用名称或产品名称</strong></p></td><td><p><strong>生产企业名称（证件持有者）</strong></p></td><td><p><strong>违法广告播出总次数</strong></p></td></tr><tr><td><p>1</p></td><td><p>药品</p></td><td><p>咳喘宁</p></td><td><p>辽宁海洲药业有限公司</p></td><td><p>40</p></td></tr><tr><td><p>2</p></td><td><p>药品</p></td><td><p>无敌止痛搽剂</p></td><td><p><a href="http://app1.sfda.gov.cn/datasearch/face3/javascript:commitForECMA%28callbackC,%27content.jsp?tableId=34&tableName=TABLE34&linkId=COLUMN322&linkValue=%E4%BA%91%E5%8D%97%E6%97%A0%E6%95%8C%E5%88%B6%E8%8D%AF%E6%9C%89%E9%99%90%E8%B4%A3%E4%BB%BB%E5%85%AC%E5%8F%B8%27,null%29;">云南无敌制药有限责任公司</a></p></td><td><p>41</p></td></tr><tr><td><p>3</p></td><td><p>药品</p></td><td><p>气血双补丸&nbsp;</p></td><td><p>北京同鹤药业有限公司</p></td><td><p>50</p></td></tr><tr><td><p>4</p></td><td><p>药品</p></td><td><p>通舒口爽胶囊</p></td><td><p>云南永孜堂制药有限公司</p></td><td><p>3</p></td></tr><tr><td><p>5</p></td><td><p>药品</p></td><td><p>蛤蚧定喘丸</p></td><td><p>吉林省华侨药业有限公司</p></td><td><p>3</p></td></tr><tr><td><p>6</p></td><td><p>药品</p></td><td><p>天麻头风灵胶囊</p></td><td><p>陕西白云制药有限公司</p></td><td><p>71</p></td></tr><tr><td><p>7</p></td><td><p>药品</p></td><td><p>心脑清软胶囊</p></td><td><p>吉林省华港制药有限公司</p></td><td><p>23</p></td></tr><tr><td><p>8</p></td><td><p>药品</p></td><td><p>调元大补二十五味汤散</p></td><td><p>内蒙古库伦蒙药厂</p></td><td><p>120</p></td></tr><tr><td><p>9</p></td><td><p>药品</p></td><td><p>清宫长春胶囊</p></td><td><p>颈复康药业集团有限公司</p></td><td><p>60</p></td></tr><tr><td><p>10</p></td><td><p>药品</p></td><td><p>五加参归芪精</p></td><td><p>通化白山药业股份有限公司</p></td><td><p>30</p></td></tr><tr><td><p>11</p></td><td><p>药品</p></td><td><p>消朦片</p></td><td><p>陕西健民制药有限公司</p></td><td><p>75</p></td></tr><tr><td><p>12</p></td><td><p>药品</p></td><td><p>洋参雪哈口服液</p></td><td><p>通化爱心药业有限责任公司</p></td><td><p>124</p></td></tr><tr><td><p>13</p></td><td><p>药品</p></td><td><p>常松八味沉香胶囊</p></td><td><p>西藏金哈达药业有限公司</p></td><td><p>1</p></td></tr><tr><td><p>14</p></td><td><p>药品</p></td><td><p>冠心保软胶囊</p></td><td><p>天年药业(哈尔滨)有限公司</p></td><td><p>62</p></td></tr><tr><td><p>15</p></td><td><p>药品</p></td><td><p>妙济丸</p></td><td><p>陕西利君现代中药有限公司</p></td><td><p>93</p></td></tr><tr><td><p>16</p></td><td><p>药品</p></td><td><p>石龙清血颗粒</p></td><td><p>吉林省健今药业股份有限公司</p></td><td><p>62</p></td></tr><tr><td><p>17</p></td><td><p>药品</p></td><td><p>百癣夏塔热片</p></td><td><p>西安圣威制药有限公司</p></td><td><p>67</p></td></tr><tr><td><p>18</p></td><td><p>药品</p></td><td><p>格列齐特片</p></td><td><p>山西兰花药业有限公司</p></td><td><p>62</p></td></tr><tr><td><p>19</p></td><td><p>药品</p></td><td><p>沉香十七味丸</p></td><td><p>阜新蒙药有限责任公司</p></td><td><p>62</p></td></tr><tr><td><p>20</p></td><td><p>药品</p></td><td><p>通络止痛药酒</p></td><td><p>吉林一晟达药业有限公司</p></td><td><p>93</p></td></tr><tr><td><p>21</p></td><td><p>药品</p></td><td><p>降糖胶囊</p></td><td><p>通化新东日药业股份有限公司</p></td><td><p>62</p></td></tr><tr><td><p>22</p></td><td><p>药品</p></td><td><p>藤黄健骨丸</p></td><td><p>吉林省鑫辉药业有限公司</p></td><td><p>62</p></td></tr><tr><td><p>23</p></td><td><p>药品</p></td><td><p>那如三味丸</p></td><td><p>内蒙古库伦蒙药厂</p></td><td><p>62</p></td></tr><tr><td><p>24</p></td><td><p>药品</p></td><td><p>苦丁降压胶囊</p></td><td><p>贵州特色制药有限责任公司</p></td><td><p>62</p></td></tr><tr><td><p>25</p></td><td><p>药品</p></td><td><p>哈敦海鲁木勒十三味丸</p></td><td><p>乌兰浩特中蒙制药有限公司</p></td><td><p>62</p></td></tr><tr><td><p>26</p></td><td><p>药品</p></td><td><p>妙济丸</p></td><td><p>包头中药有限责任公司</p></td><td><p>62</p></td></tr><tr><td><p>27</p></td><td><p>药品</p></td><td><p>龟蛇酒</p></td><td><p>湖南乐邦制药有限公司</p></td><td><p>72</p></td></tr><tr><td><p>28</p></td><td><p>药品</p></td><td><p>健胃十味丸</p></td><td><p>内蒙古库伦蒙药厂</p></td><td><p>31</p></td></tr><tr><td><p>29</p></td><td><p>药品</p></td><td><p>止咳定喘片</p></td><td><p>云南龙海天然植物药业有限公司</p></td><td><p>31</p></td></tr><tr><td><p>30</p></td><td><p>药品</p></td><td><p>三宝胶囊</p></td><td><p>伊春金北药制药有限公司</p></td><td><p>31</p></td></tr><tr><td><p>31</p></td><td><p>药品</p></td><td><p>十香丸</p></td><td><p>广东宏兴集团股份有限公司宏兴制药厂</p></td><td><p>2</p></td></tr><tr><td><p>32</p></td><td><p>药品</p></td><td><p>降糖舒丸</p></td><td><p>吉林吉尔吉药业有限公司</p></td><td><p>1</p></td></tr><tr><td><p>33</p></td><td><p>药品</p></td><td><p>男宝胶囊</p></td><td><p>长春新安药业有限公司</p></td><td><p>5</p></td></tr><tr><td><p>34</p></td><td><p>药品</p></td><td><p>降压片</p></td><td><p>贵州圣济堂制药有限公司</p></td><td><p>2</p></td></tr><tr><td><p>35</p></td><td><p>药品</p></td><td><p>冠脉通片</p></td><td><p>天津同仁堂集团股份有限公司</p></td><td><p>2</p></td></tr><tr><td><p>36</p></td><td><p>药品</p></td><td><p>拨云眼膏</p></td><td><p>楚雄老拨云堂药业有限公司</p></td><td><p>2</p></td></tr><tr><td><p>37</p></td><td><p>药品</p></td><td><p>参鹿扶正胶囊</p></td><td><p>青海鲁抗大地药业有限公司</p></td><td><p>3</p></td></tr><tr><td><p>38</p></td><td><p>药品</p></td><td><p>益气聪明丸</p></td><td><p>陕西华西制药股份有限公司</p></td><td><p>1</p></td></tr><tr><td><p>39</p></td><td><p>药品</p></td><td><p>华佗膏</p></td><td><p>成都明日制药有限公司</p></td><td><p>20</p></td></tr><tr><td><p>40</p></td><td><p>药品</p></td><td><p>耳聋通窍丸</p></td><td><p>长春新安药业有限公司</p></td><td><p>2</p></td></tr><tr><td><p>41</p></td><td><p>药品</p></td><td><p>消栓通络片</p></td><td><p>辽宁澎健药业有限公司</p></td><td><p>86</p></td></tr><tr><td><p>42</p></td><td><p>药品</p></td><td><p>那如三味丸</p></td><td><p>乌兰浩特中蒙制药有限公司</p></td><td><p>31</p></td></tr><tr><td><p>43</p></td><td><p>药品</p></td><td><p>雪莲虫草合剂</p></td><td><p>成都天银制药有限公司</p></td><td><p>31</p></td></tr><tr><td><p>44</p></td><td><p>药品</p></td><td><p>精制冠心软胶囊</p></td><td><p>吉林永利药业股份有限公司</p></td><td><p>74</p></td></tr><tr><td><p>45</p></td><td><p>药品</p></td><td><p>力补金秋胶囊</p></td><td><p>洛阳远洋生物制药有限公司</p></td><td><p>1</p></td></tr><tr><td><p>46</p></td><td><p>药品</p></td><td><p>强肾片</p></td><td><p>辽宁好护士药业(集团)有限责任公司</p></td><td><p>6</p></td></tr><tr><td><p>47</p></td><td><p>药品</p></td><td><p>沙苑子胶囊</p></td><td><p>河北医科大学制药厂</p></td><td><p>1</p></td></tr><tr><td><p>48</p></td><td><p>药品</p></td><td><p>舒冠片</p></td><td><p>吉林省辉南辉发制药股份有限公司</p></td><td><p>1</p></td></tr><tr><td><p>49</p></td><td><p>药品</p></td><td><p>糖尿乐胶囊</p></td><td><p>哈尔滨中药六厂有限公司</p></td><td><p>2</p></td></tr><tr><td><p>50</p></td><td><p>药品</p></td><td><p>仙骨参芪口服液</p></td><td><p>广西百琪药业有限公司</p></td><td><p>32</p></td></tr></tbody></table><p><br/></p></p>
+            </div>
+        </div>
+    </div>
+    <!--center over-->
+        
+    <!--footer begin-->
+    <div class="wrap mt10">
+        <div class="link">
+            <h1>友情链接</h1>
+            <ul class="l_list">
+                <li><a href="http://www.creditchina.gov.cn/" target="_blank">信用中国</a></li>
+                <li><a href="http://www.js.gov.cn/jsxy/index.htm" target="_blank">诚信江苏</a></li>
+                <li><a href="http://www.njcredit.gov.cn/" target="_blank">诚信南京</a></li>
+                <li><a href="http://www.szcredit.gov.cn/" target="_blank">诚信苏州</a></li>
+                <li><a href="http://credit.zjg.gov.cn/toIndex.action" target="_blank">诚信张家港</a></li>
+            </ul>
+        </div>
+        
+         <div class="foot">
+            <p><span>主办单位：苏州工业园区信用办 </span><span>技术支持：江苏中集科技有限公司</span><span><script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1256639142'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1256639142' type='text/javascript'%3E%3C/script%3E"));</script></span></p>
+        </div>
+        
+    </div>
+    <!--footer over-->
+</div>
+<!--content over-->
+    
+</body>
+</html>

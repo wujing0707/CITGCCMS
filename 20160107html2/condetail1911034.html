@@ -1,0 +1,391 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
+<meta name="description" content=""/>
+<meta name="keyWords" content=""/>
+<title>诚信园区</title>
+<link type="text/css" href="css/common.css" rel="stylesheet" />
+<link href="js/artDialog2.0.6/skin/chrome/chrome.css" rel="stylesheet" />
+<script type="text/javascript" src="js/jquery-1.7.2.js"></script>
+<script type="text/javascript" src="js/artDialog2.0.6/artDialog.min.js"></script>
+
+<style type="text/css">  
+        .code{   
+            background-image:url("../html/images/QQ.jpg");   
+            margin-left: 10px !important;
+            font-family:Arial;   
+            font-style:italic;   
+            color:Red;   
+            padding:2px 3px;   
+            letter-spacing:3px;   
+            font-weight:bolder;     
+        }   
+</style> 
+<script type="text/javascript">
+$(function () {
+	createCode(0);
+	createCode(3);
+});
+ var code ; //在全局 定义验证码   
+ function createCode(no){    
+   code = "";   
+   var codeLength = 4;//验证码的长度   
+   var checkCode = document.getElementById("checkCodeID"+no);   
+   var selectChar = new Array(0,1,2,3,4,5,6,7,8,9);//所有候选组成验证码的字符，当然也可以用中文的      
+   for(var i=0;i<codeLength;i++){   
+    var charIndex = Math.floor(Math.random()*10);   
+    code +=selectChar[charIndex];   
+   }    
+   if(checkCode){   
+     checkCode.className="code";   
+     checkCode.value = code;
+     checkCode.blur();   
+   }        
+ }
+  function validate (i,t){  
+    //   var checkCode = document.getElementById("checkCodeID"+i).value;  
+       var inputCode = document.getElementById("validCode"+i).value;
+       var zzjgdm=$('#zzjgdm').val();   
+       var gszch=$('#gszch').val();   
+       var companyname=$('#companyname').val();   
+       if(inputCode.length <=0){   
+           alert("请输入验证码！");   
+       }   
+    //   else if(inputCode.toUpperCase()!=checkCode){   
+      //    alert("验证码输入错误！");   
+       //}
+       else if(zzjgdm==""&&gszch==""&&companyname==""){
+       		alert("请至少输入一个查询条件!");
+       }
+       else{   
+          //window.location.href="../seach/seachdetail.action?zzjgdm="+zzjgdm+"&gszch="+gszch+"&companyname="+companyname+"&template="+2; 
+            $.post('../seach/checkSeachdetail.action',
+            {zzjgdm: zzjgdm, gszch:gszch, companyname:companyname,vcode:inputCode, template:2 },
+            function(data){
+                 if (data == '1') {
+                     $('#seaForm').submit(); 
+                 }else if(data=='2'){
+                 	alert("验证码输入错误！");
+                 } else {
+                    alert("暂无相关数据");
+                 }
+               }, "json");   
+       }    
+ }
+ function seachList(i){
+ 	//   var checkCode = document.getElementById("checkCodeID0").value;  
+       var inputCode = document.getElementById("validCode0").value;
+       var name=$('#name').val();   
+       var sfzhm=$('#sfzhm').val();   
+       var zyzhm=$('#zyzhm').val(); 
+       if(inputCode.length <=0){   
+           alert("请输入验证码！");   
+   //    }else if(inputCode.toUpperCase()!=checkCode){   
+   //       alert("验证码输入错误！");   
+       }else if(name==""&&sfzhm==""&&zyzhm==""){
+       		alert("请至少输入一个查询条件!");
+       }else{   
+         //window.location.href="../seach/personalSeachList.action?zyzhm="+zyzhm+"&sfzhm="+sfzhm+"&name="+name+"&template=2";
+                     $.post('../seach/checkPersonalSeachList.action',
+            {zyzhm: zyzhm, sfzhm:sfzhm, name:name,vcode:inputCode,template:2 },
+            function(data){
+                 if (data == 1) {
+                     $('#personForm').submit(); 
+                 }else if(data=='2'){
+                 	alert("验证码输入错误！");
+                 } else {
+                    alert("暂无相关数据");
+                 }
+               }, "json"); 
+       }  
+ }
+ function reset(){
+  	$('#zzjgdm').val('');   
+    $('#gszch').val('');   
+    $('#companyname').val('');  
+    $('#validCode0').val('');  
+ }  
+ function personalReset(){
+ 	$('#name').val('');  
+ 	$('#sfzhm').val('');  
+ 	$('#zyzhm').val('');  
+ 	$('#validCode0').val(''); 
+ }   
+function show(str){
+		var id=document.getElementById(str+"_0").value;
+		window.location.href='content'+id+"_1.html"; 
+}
+function reload(i){
+	if(i==1)
+ 	 window.location.href="qycheck.html";
+ 	 if(i==2)
+ 	 window.location.href="mycheck.html";
+ 	 if(i==3)
+ 	 window.location.href="qyyyshensu.html";
+}
+function goto(staus,name,index,size){
+	if(staus=='up'&&index!=1){
+		window.location.href=name+"_"+(index-1)+".html"; 
+	}else if(staus=='first'){
+		window.location.href=name+"_"+"1.html"; 
+	}else if(staus=='down'){
+		if(index!=size){
+			window.location.href=name+"_"+(index+1)+".html"; 
+		}
+	}else if(staus=='last'){
+		window.location.href=name+"_"+size+".html"; 
+	}
+}
+ function seachContent(){
+ 	//var channelid=document.getElementById("channelid").value;
+ 	//var title=document.getElementById("title").value;
+ 	//if(title==""){
+ 		//return;
+ 	//}else{
+ 		//window.location.href="../content/listContentByChannelId.action?channelid="+channelid+"&title="+title;   
+ 	//	window.location.href="../content/listContentByTitle.action?title="+title;   
+ 	//}
+ 	var title=document.getElementById("title").value;
+ 	if (title == '' || title == '请输入关键字') {
+ 	   alert('请输入关键字');
+ 	   return;
+ 	}
+ 	title = encodeURIComponent(title);
+ 	window.location.href="../content/listContentByTitle.action?title="+title; 
+ }
+ function query(){
+ 	 var checknumber=document.getElementById("checkNumber").value;
+ 	  var reg = new RegExp("^[0-9]*$");  
+    if(!reg.test(checknumber)){  
+        alert("请输入数字!");  
+        return;
+    }  
+ 	 if (checknumber == "") {
+ 	    alert("信用核查码不能为空！");
+ 	 } else {
+ 	        $.post('../seach/approveContent.action',
+            {checknumber: checknumber},
+            function(data){
+                 if (data == 1) {
+                      window.open("http://172.25.119.13/creditVerification/getDetailVerificationInfo.action?checkcode=" + checknumber,
+	               'newwindow','height=900,width=1000,top='+(window.screen.availHeight-30-900)/2+
+	                   ',left='+(window.screen.availWidth-10-1000)/2+
+	                 ',toolbar=no,menubar=no,scrollbars=yes,resizable=yes,location=no,status=no');
+               } else if (data == 2) {
+                     window.open("http://172.25.119.13/creditVerification/getgroupsDetailVerificationInfo.action?checkcode=" + checknumber,
+	                  'newwindow','height=900,width=1000,top='+(window.screen.availHeight-30-900)/2+
+	                   ',left='+(window.screen.availWidth-10-1000)/2+
+	                 ',toolbar=no,menubar=no,scrollbars=yes,resizable=yes,location=no,status=no');
+               }else {
+                   if (data == '-1') {
+                     alert("信用查询码不存在！");
+                   } else if (data == '-2') {
+                     alert("信用查询码已过期！");
+                   } else if (data == '-3') {
+                     alert("信用查询码已重新生成,请输入最新核查码!");
+                   }
+                }
+            },'json');
+ 	 }
+ }
+function SetWinHeight(obj)
+{
+
+} 
+
+function gotoPage(total,cid){
+	var p=$("#textFooter").val();
+	var i = parseInt(total);
+	if(p!=""){
+		var a=parseInt(p);
+		if(a>0&&a<=i)
+		window.location.href="../content"+cid+"_"+p+".html";
+		if(a>i)
+		window.location.href="../content"+cid+"_"+1+".html";
+	}
+}
+$(document).ready(function() {
+ 	$.ajax({
+        type: "post",//使用post方法访问后台
+        dataType: "json",//返回json格式的数据
+        url: "../getCCS.action",//要访问的后台地址
+        data:{},//要发送的数据
+        complete :function(){$("#load").hide();},//AJAX请求完成时隐藏loading提示
+        success: function(msg){//msg为返回的数据，在这里做数据绑定
+				$("#thrNum").html(msg);
+        }
+    });
+    $.ajax({
+        type: "post",//使用post方法访问后台
+        dataType: "json",//返回json格式的数据
+        url: "../content/findHOTKeyword.action",//要访问的后台地址
+        data:{},//要发送的数据
+        complete :function(){$("#load").hide();},//AJAX请求完成时隐藏loading提示
+        success: function(msg){//msg为返回的数据，在这里做数据绑定
+        	var b='关键字:&nbsp;';
+        	$.each(msg.rows, function(i, n){
+        	var a = '<a href="javascript:void(0)" onclick="byHotKwSeachContent(\''+msg.rows[i]+'\')" >'+msg.rows[i]+'</a>&nbsp;&nbsp;';
+        	b+=a;
+           });
+           $("#hotkw").html(b);
+        }
+    });
+});
+	function byHotKwSeachContent(str) {
+		var title = encodeURIComponent(str);
+		window.location.href = "../content/listContentByTitle.action?title="
+				+ title;
+	}	
+	function queryOfPreview(contentId, category){
+   		 window.location.href="../content/queryOfPreview.action?contentId="+contentId+"&date="+new Date();
+	}
+</script>
+</head>
+
+<body>
+<!--header begin-->
+<div class="header">
+	<div class="wrap">
+    	<div class="logo f_l"><a href="http://www.sipac.gov.cn/" target="_blank"><img src="images/logo.png" /></a></div>
+    	<div class="number f_r" id="thrNum">
+        </div>
+    </div>
+</div>
+<!--header over-->
+
+<!--nav begin-->
+<div class="nav">
+    <ul class="wrap tabs">
+        <li><a href="../goToIndex.action">首页</a></li>
+        	<li><a href="javascript:void(0)" id="22" onclick='show("22")'>信用动态</a></li>
+		        	<input type="hidden" id="22_0" value="365">
+		        	<input type="hidden" id="22_1" value="364">
+		        	<input type="hidden" id="22_2" value="335">
+        	<li><a href="javascript:void(0)" id="420" onclick='show("420")'>信用公示</a></li>
+		        	<input type="hidden" id="420_0" value="318">
+		        	<input type="hidden" id="420_1" value="60">
+		        	<input type="hidden" id="420_2" value="61">
+        	<li><a href="javascript:void(0)" id="26" onclick='show("26")'>重点领域</a></li>
+		        	<input type="hidden" id="26_0" value="486">
+		        	<input type="hidden" id="26_1" value="487">
+		        	<input type="hidden" id="26_2" value="488">
+		        	<input type="hidden" id="26_3" value="489">
+		        	<input type="hidden" id="26_4" value="490">
+		        	<input type="hidden" id="26_5" value="491">
+		        	<input type="hidden" id="26_6" value="492">
+		        	<input type="hidden" id="26_7" value="493">
+        	<li><a href="javascript:void(0)" id="423" onclick='show("423")'>专项资金</a></li>
+		        	<input type="hidden" id="423_0" value="469">
+        	<li><a href="javascript:void(0)" id="416" onclick='show("416")'>政策法规</a></li>
+		        	<input type="hidden" id="416_0" value="306">
+		        	<input type="hidden" id="416_1" value="334">
+		        	<input type="hidden" id="416_2" value="309">
+        <li><a href="http://gzjd.sipac.gov.cn/Web/BBS/MainList.aspx"  target="_blank">在线交流</a></li>
+    </ul>
+</div>
+<!--nav over-->
+
+<!--content begin-->
+<div class="cloud">
+    <!--notice begin-->
+    <div class="wrap">
+    	<div class="notice f_l"> 
+            <div class="notice_tit f_l f_b">通知公告</div>
+            <div class="f_l notice_list"  id="mq" onmouseover=iScrollAmount=0 style="overflow:hidden; width:500px; height:30px;color:#000" onmouseout=iScrollAmount=1 >
+                <ul>
+		                    <li><a href="javascript:queryOfPreview('1911122')">苏州出台省内首部《住房公积金个人失信惩戒实施细则》</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911059')">关于印发江苏省推行食品生产企业 “黑名单”制度指导意见(试行)的通知(苏食药监规</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911231')">家庭成员不履行抚养义务记入个人信用档案</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911061')">2015年我市电梯维保单位星级评定结果公示</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910971')">2015年度“诚信宣传周”活动开始啦</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910519')">2015年12月苏州工业园区公积金（社会保险）公示欠费单位名单</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910520')">苏州工业园区从业建筑业企业不良信用处罚公示汇总</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910381')">2015年11月苏州工业园区社会保险基金（公积金）公示欠费单位名单</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910282')">园区信用体系建设项目接受市领导专项督查并开展座谈会</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911034')">苏州积分落户制度2016年1月15日起实施 失信行为将扣减分</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910988')">关于做好2015年园区建筑业企业信用综合评价良好行为信息录入工作的通知</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910976')">诚信记录纳入流动人口积分管理</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910972')">江苏省研究生考试26日开考 省考试院提醒考生诚信参考</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910518')">2015年中国十佳诚信政府排行榜发布</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910467')">老忘交电费 当心成老赖失信</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910361')">首个国际征信论坛即将在沪登陆</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910338')">居民身份证将可异地换领补领 有不良信用记录的不予受理</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910329')">双十一”消费信用大数据监测评价启动</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910328')">发改委：年底前全面实施统一社会信用代码制度</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910310')">信用社会临近 央行征信系统已收录8.7亿人数据</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910307')">市食药监公布19批次质量不合格食品（附名单）</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910302')">园区地税提交457户企业列入园区失信法人库</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910177')">关于联合发布2014年长三角地区备案信用服务机构名单的通知</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910179')">2014年度“苏州市级信用管理示范企业”认定公示</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="search f_r">
+            <form id="searchform" action="../content/listContentByTitle.action" method="post">
+                <fieldset>
+                <table>
+                 	<tr>
+				      <td width="70%">
+				      	 <input type="text" onfocus="if(this.value =='请输入关键字') {this.value=''; }" onblur="if(this.value==''){this.value='请输入关键字';}" class="text_input" style="width:200px" value="请输入关键字" name="title" id="title">
+				         <input type="button" onclick="seachContent()" name="button"> 
+				      </td>
+				   	</tr>
+				   	<tr>
+				   		 <td id="hotkw"></td>
+				   	</tr>
+				  </table> 
+                </fieldset>
+            </form>
+        </div>
+    </div>
+    <script type="text/javascript" src="js/muqruujs.js"></script>
+    <!--notice over-->
+    <!--center begin-->
+    <div class="wrap mt5 content">
+        <div class="breadcrumbs">
+            <ul>
+                <li>当前位置：</li>
+          		<li><a href="content474_1.html">通知公告</a> > </li>
+            <li><a href="content474_1.html">通知公告</a> > </li>
+                <li><em>详细</em></li>
+            </ul>
+        </div>
+        
+        <div class="pad50">
+            <div class="art_head">
+                <h1>苏州积分落户制度2016年1月15日起实施 失信行为将扣减分</h1>
+                <div class="tc art_date"> 【发布日期： 】【<a href="javascript:void(0)" onclick="window.print();">打印</a>】 </div>
+            </div>
+            <div class="artnr">
+                <p><div style='font-size: 18px;'><p style="TEXT-ALIGN: center; LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">苏州市流动人口积分管理计分标准　</span></p><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">流动人口积分管理计分标准由三部分组成，即基础分、附加分、扣减分，其中基础分指标包括个人基本情况、参加社会保险情况和居住情况三项内容，附加分指标包括计划生育情况、发明创造、表彰奖励、社会贡献、投资纳税、公共卫生六项内容，扣减分指标包括违反计划生育政策、违法犯罪、失信行为三项内容。　　</span></p><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">积分管理总积分=<span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px"><span style="FONT-FAMILY: 宋体">基础分</span><span style="FONT-FAMILY: Calibri">+</span><span style="FONT-FAMILY: 宋体">附加分</span><span style="FONT-FAMILY: Calibri">+</span><span style="FONT-FAMILY: 宋体">扣减分</span></span><span style="FONT-FAMILY: 宋体; FONT-SIZE: 14px">。　　</span></span></p><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">具体如下：</span></p><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px"></span>&nbsp;</p><p style="LINE-HEIGHT: 1.75em"><strong><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">一<span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">、基础分</span></span></strong></p><p style="LINE-HEIGHT: 1.75em"><strong><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">(<span style="FONT-FAMILY: 宋体; FONT-SIZE: 14px">一</span>)个人基本情况积分=年龄+文化程度得分+职业技能等级或专业技术职称资格得分。</span></strong></p><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">1.<span style="FONT-SIZE: 18px">年龄。</span></span></p><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">得分标准：<span style="FONT-FAMILY: Calibri">18</span><span style="FONT-FAMILY: 宋体">周岁以上至</span><span style="FONT-FAMILY: Calibri">40</span><span style="FONT-FAMILY: 宋体">周岁以下人员为</span><span style="FONT-FAMILY: Calibri">10</span><span style="FONT-FAMILY: 宋体">分。</span></span></p><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">2.<span style="FONT-FAMILY: 宋体">文化程度得分。　　</span></span></p><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">得分标准：<span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">大专<span style="FONT-FAMILY: Calibri">(</span><span style="FONT-FAMILY: 宋体">高职</span><span style="FONT-FAMILY: Calibri">)</span><span style="FONT-FAMILY: 宋体">为</span><span style="FONT-FAMILY: Calibri">30</span><span style="FONT-FAMILY: 宋体">分</span><span style="FONT-FAMILY: Calibri">;</span><span style="FONT-FAMILY: 宋体">大学本科为</span><span style="FONT-FAMILY: Calibri">60</span><span style="FONT-FAMILY: 宋体">分</span><span style="FONT-FAMILY: Calibri">;</span><span style="FONT-FAMILY: 宋体">硕士研究生为</span><span style="FONT-FAMILY: Calibri">200</span><span style="FONT-FAMILY: 宋体">分</span><span style="FONT-FAMILY: Calibri">;</span><span style="FONT-FAMILY: 宋体">博士研究生为</span><span style="FONT-FAMILY: Calibri">400</span><span style="FONT-FAMILY: 宋体">分。按最高学历计分，不累加计分。　</span></span></span></p><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">3.<span style="FONT-SIZE: 18px">技能人才职业技能等级或专业技术人才职称资格得分。　</span>　</span></p><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">得分标准：职业技能等级五级(初级工)为10分;职业技能等级四级(中级工)、专业技术资格初级职称为30分;职业技能等级三级(高级工)、专业技术资格中级职称为50分;职业技能等级二级(技师)为100分;职业技能等级一级(高级技师)、专业技术资格副高及以上为300分。按最高职业技能等级或专业技术职称资格计分，不累加计分。　</span></p><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px"></span>&nbsp;</p><p style="LINE-HEIGHT: 1.75em"><strong><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">(<span style="FONT-FAMILY: 宋体">二</span><span style="FONT-FAMILY: Calibri">)</span><span style="FONT-FAMILY: 宋体">参加社会保障情况得分。</span></span></strong><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px"><span style="FONT-FAMILY: 宋体">　</span></span></p><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">得分标准：在苏州大市范围内参加城镇职工社会保险并缴纳社会保险费每满<span style="FONT-FAMILY: Calibri; FONT-SIZE: 14px">1</span><span style="FONT-FAMILY: 宋体; FONT-SIZE: 14px">个月，加</span><span style="FONT-FAMILY: Calibri; FONT-SIZE: 14px">5</span><span style="FONT-FAMILY: 宋体; FONT-SIZE: 14px">分</span><span style="FONT-FAMILY: Calibri; FONT-SIZE: 14px">;</span><span style="FONT-FAMILY: 宋体; FONT-SIZE: 14px">累计总分不超过</span><span style="FONT-FAMILY: Calibri; FONT-SIZE: 14px">500</span><span style="FONT-FAMILY: 宋体; FONT-SIZE: 14px">分。　　</span></span></p><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">缴纳住房公积金每满一年加<span style="FONT-FAMILY: Calibri; FONT-SIZE: 14px">5</span><span style="FONT-FAMILY: 宋体; FONT-SIZE: 14px">分，累计总分不超过</span><span style="FONT-FAMILY: Calibri; FONT-SIZE: 14px">50</span><span style="FONT-FAMILY: 宋体; FONT-SIZE: 14px">分。</span></span></p><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px"><span style="FONT-FAMILY: 宋体; FONT-SIZE: 14px"></span></span>&nbsp;</p><p style="LINE-HEIGHT: 1.75em"><strong><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">(<span style="FONT-FAMILY: 宋体">三</span><span style="FONT-FAMILY: Calibri">)</span><span style="FONT-FAMILY: 宋体">居住情况积分</span><span style="FONT-FAMILY: Calibri">=</span><span style="FONT-FAMILY: 宋体">房产情况得分</span><span style="FONT-FAMILY: Calibri">+</span><span style="FONT-FAMILY: 宋体">办理居住证年限得分。</span></span></strong></p><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">1.<span style="FONT-SIZE: 18px">房产情况。</span></span></p><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">得分标准：本人、配偶或未成年子女在苏州市区(以下市区均不包含吴江区)拥有自有产权房建筑面积超过(含75&nbsp;m2)且居住的为60分，75m2以上的每增加25&nbsp;m2加20分;多套房面积可累计计算，总分不超200分。</span></p><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">2<span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">.<span style="FONT-FAMILY: 宋体">办理居住证年限。　</span></span><span style="FONT-FAMILY: 宋体; FONT-SIZE: 14px">　</span></span></p><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">得分标准：在苏州市区连续居住时间每满1年加30分，最高分限300分。<span style="FONT-FAMILY: 宋体; FONT-SIZE: 14px">　</span></span></p><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px"><span style="FONT-FAMILY: 宋体; FONT-SIZE: 14px"></span></span>&nbsp;</p><p style="LINE-HEIGHT: 1.75em"><strong><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">二、附加分　</span></strong></p><p style="LINE-HEIGHT: 1.75em"><strong><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">(<span style="FONT-FAMILY: 宋体">一</span><span style="FONT-FAMILY: Calibri">)</span><span style="FONT-FAMILY: 宋体">计划生育情况。</span></span></strong><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px"><span style="FONT-FAMILY: 宋体">　　</span></span></p><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">得分标准：申请人符合计划生育政策并出具有效<span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">证明的，加<span style="FONT-FAMILY: Calibri">100</span><span style="FONT-FAMILY: 宋体">分。　</span></span></span></p><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px"><span style="FONT-FAMILY: 宋体"></span></span><span style="FONT-FAMILY: 宋体; FONT-SIZE: 14px">　</span></span></p><p style="LINE-HEIGHT: 1.75em"><strong><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">(<span style="FONT-FAMILY: 宋体">二</span><span style="FONT-FAMILY: Calibri">)</span><span style="FONT-FAMILY: 宋体">发明创造。</span></span></strong></p><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">得分标准：</span></p><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">1.<span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px"><span style="FONT-FAMILY: 宋体">发明专利获得授权并计入苏州市授权数据内的第一发明人加</span><span style="FONT-FAMILY: Calibri">30</span><span style="FONT-FAMILY: 宋体">分</span><span style="FONT-FAMILY: Calibri">/</span><span style="FONT-FAMILY: 宋体">件，多项发明创造可累计计分。</span></span></span></p><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">2.<span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px"><span style="FONT-FAMILY: 宋体">申请积分管理当年度获得授权并计入我市授权数据内的实用新型专利</span><span style="FONT-FAMILY: Calibri">(</span><span style="FONT-FAMILY: 宋体">以证书授权公告日为准</span><span style="FONT-FAMILY: Calibri">)</span><span style="FONT-FAMILY: 宋体">的第一发明人加</span><span style="FONT-FAMILY: Calibri">10</span><span style="FONT-FAMILY: 宋体">分</span><span style="FONT-FAMILY: Calibri">/</span><span style="FONT-FAMILY: 宋体">件，累计最高不超过</span><span style="FONT-FAMILY: Calibri">60</span><span style="FONT-FAMILY: 宋体">分。　</span></span></span></p><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px"><span style="FONT-FAMILY: 宋体"></span></span></span>&nbsp;</p><p style="LINE-HEIGHT: 1.75em"><strong><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">(<span style="FONT-FAMILY: 宋体">三</span><span style="FONT-FAMILY: Calibri">)</span><span style="FONT-FAMILY: 宋体">表彰奖励。</span></span></strong><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px"><span style="FONT-FAMILY: 宋体">　　</span></span></p><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">得分标准：在苏州市区工作生活期间，按以下标准计分：</span></p><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">1.<span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px"><span style="FONT-FAMILY: 宋体">获得区党委、政府及区部、委、办、局表彰奖励每次加</span><span style="FONT-FAMILY: Calibri">10</span><span style="FONT-FAMILY: 宋体">分，最高不超过</span><span style="FONT-FAMILY: Calibri">30</span><span style="FONT-FAMILY: 宋体">分。</span></span></span></p><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">2.<span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px"><span style="FONT-FAMILY: 宋体">获得市委、市政府及市部、委、办、局表彰嘉奖或授予荣誉称号的，每次加</span><span style="FONT-FAMILY: Calibri">20</span><span style="FONT-FAMILY: 宋体">分，最高不超过</span><span style="FONT-FAMILY: Calibri">60</span><span style="FONT-FAMILY: 宋体">分</span><span style="FONT-FAMILY: Calibri">;</span>　</span>　</span></p><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">3.<span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px"><span style="FONT-FAMILY: 宋体">获得地级以上党委、政府或厅级以上部门表彰嘉奖或授予荣誉称号的，每次加</span><span style="FONT-FAMILY: Calibri">40</span><span style="FONT-FAMILY: 宋体">分，最高不超过</span><span style="FONT-FAMILY: Calibri">120</span><span style="FONT-FAMILY: 宋体">分。　</span></span></span></p><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">4.<span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px"><span style="FONT-FAMILY: 宋体">体育比赛奖励：获得国家级比赛前</span><span style="FONT-FAMILY: Calibri">3</span><span style="FONT-FAMILY: 宋体">名奖励的，加</span><span style="FONT-FAMILY: Calibri">100</span><span style="FONT-FAMILY: 宋体">分</span><span style="FONT-FAMILY: Calibri">;</span><span style="FONT-FAMILY: 宋体">获得全国前</span><span style="FONT-FAMILY: Calibri">8</span><span style="FONT-FAMILY: 宋体">名、江苏省级比赛前</span><span style="FONT-FAMILY: Calibri">3</span><span style="FONT-FAMILY: 宋体">名奖励的，每次加</span><span style="FONT-FAMILY: Calibri">40</span><span style="FONT-FAMILY: 宋体">分，全国前</span><span style="FONT-FAMILY: Calibri">16</span><span style="FONT-FAMILY: 宋体">名和江苏省级前</span><span style="FONT-FAMILY: Calibri">8</span><span style="FONT-FAMILY: 宋体">名的每次加</span><span style="FONT-FAMILY: Calibri">30</span><span style="FONT-FAMILY: 宋体">分，最高不超过</span><span style="FONT-FAMILY: Calibri">100</span><span style="FONT-FAMILY: 宋体">分</span><span style="FONT-FAMILY: Calibri">;</span><span style="FONT-FAMILY: 宋体">获得苏州市级比赛前</span><span style="FONT-FAMILY: Calibri">3</span><span style="FONT-FAMILY: 宋体">名奖励的，加</span><span style="FONT-FAMILY: Calibri">20</span><span style="FONT-FAMILY: 宋体">分，最高不超过</span><span style="FONT-FAMILY: Calibri">60</span><span style="FONT-FAMILY: 宋体">分</span><span style="FONT-FAMILY: Calibri">;</span><span style="FONT-FAMILY: 宋体">获得苏州市区级比赛前</span><span style="FONT-FAMILY: Calibri">3</span><span style="FONT-FAMILY: 宋体">名奖励的，加</span><span style="FONT-FAMILY: Calibri">10</span><span style="FONT-FAMILY: 宋体">分，最高不超过</span><span style="FONT-FAMILY: Calibri">30</span><span style="FONT-FAMILY: 宋体">分。　</span></span><span style="FONT-FAMILY: 宋体; FONT-SIZE: 14px">　</span></span></p><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">参赛项目应为计划内比赛项目，集体项目参照个人项目计分<span style="FONT-FAMILY: Calibri; FONT-SIZE: 14px">;</span><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px"><span style="FONT-FAMILY: 宋体">优先统计分值高的奖励，个人所获各级各类比赛奖励得分累计最高不超过</span><span style="FONT-FAMILY: Calibri">100</span><span style="FONT-FAMILY: 宋体">分。　</span></span></span></p><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">5.<span style="FONT-FAMILY: 宋体; FONT-SIZE: 18px">在苏州市有见义勇为行为的，以市见义勇为基金会发布的决定为准，奖励每满</span><span style="FONT-FAMILY: Calibri; FONT-SIZE: 18px">200</span><span style="FONT-FAMILY: 宋体; FONT-SIZE: 18px">元，加</span><span style="FONT-FAMILY: Calibri; FONT-SIZE: 18px">5</span><span style="FONT-FAMILY: 宋体; FONT-SIZE: 18px">分。　</span></span></p><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px"><span style="FONT-FAMILY: 宋体; FONT-SIZE: 18px"></span></span>&nbsp;</p><p style="LINE-HEIGHT: 1.75em"><strong><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">(<span style="FONT-FAMILY: 宋体">四</span><span style="FONT-FAMILY: Calibri">)</span><span style="FONT-FAMILY: 宋体">社会贡献。　</span></span></strong><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px"><span style="FONT-FAMILY: 宋体">　</span></span></p><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">得分标准：近五年内从事社会服务的，按以下标准计分：</span></p><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">1<span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">.<span style="FONT-FAMILY: 宋体">在苏州市区参加志愿服务组织成为注册志愿者，且服务时间满</span><span style="FONT-FAMILY: Calibri">24</span><span style="FONT-FAMILY: 宋体">小时加</span><span style="FONT-FAMILY: Calibri">5</span><span style="FONT-FAMILY: 宋体">分，达到一星级志愿者</span><span style="FONT-FAMILY: Calibri">(</span><span style="FONT-FAMILY: 宋体">服务时间累积达到</span><span style="FONT-FAMILY: Calibri">100</span><span style="FONT-FAMILY: 宋体">小时</span><span style="FONT-FAMILY: Calibri">)</span><span style="FONT-FAMILY: 宋体">加</span><span style="FONT-FAMILY: Calibri">10</span><span style="FONT-FAMILY: 宋体">分，达到二星级志愿者</span><span style="FONT-FAMILY: Calibri">(</span><span style="FONT-FAMILY: 宋体">服务时间累积达到</span><span style="FONT-FAMILY: Calibri">300</span><span style="FONT-FAMILY: 宋体">小时</span><span style="FONT-FAMILY: Calibri">)</span><span style="FONT-FAMILY: 宋体">加</span><span style="FONT-FAMILY: Calibri">20</span><span style="FONT-FAMILY: 宋体">分，达到三星级志愿者</span><span style="FONT-FAMILY: Calibri">(</span><span style="FONT-FAMILY: 宋体">服务时间累积达到</span><span style="FONT-FAMILY: Calibri">600</span><span style="FONT-FAMILY: 宋体">小时</span><span style="FONT-FAMILY: Calibri">)</span><span style="FONT-FAMILY: 宋体">加</span><span style="FONT-FAMILY: Calibri">30</span><span style="FONT-FAMILY: 宋体">分，达到四星级志愿者</span><span style="FONT-FAMILY: Calibri">(</span><span style="FONT-FAMILY: 宋体">服务时间累积达到</span><span style="FONT-FAMILY: Calibri">1000</span><span style="FONT-FAMILY: 宋体">小时</span><span style="FONT-FAMILY: Calibri">)</span><span style="FONT-FAMILY: 宋体">加</span><span style="FONT-FAMILY: Calibri">40</span><span style="FONT-FAMILY: 宋体">分，达到五星级志愿者</span><span style="FONT-FAMILY: Calibri">(</span><span style="FONT-FAMILY: 宋体">服务时间累积达到</span><span style="FONT-FAMILY: Calibri">1500</span><span style="FONT-FAMILY: 宋体">小时</span><span style="FONT-FAMILY: Calibri">)</span><span style="FONT-FAMILY: 宋体">加</span><span style="FONT-FAMILY: Calibri">50</span><span style="FONT-FAMILY: 宋体">分，志愿服务以最高分计分，不累计计分。　　</span></span></span></p><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">2.<span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px"><span style="FONT-FAMILY: 宋体">个人在苏州市区捐赠每满</span><span style="FONT-FAMILY: Calibri">2000</span><span style="FONT-FAMILY: 宋体">元加</span><span style="FONT-FAMILY: Calibri">5</span><span style="FONT-FAMILY: 宋体">分，最高分限</span><span style="FONT-FAMILY: Calibri">30</span><span style="FONT-FAMILY: 宋体">分。接受捐赠的公益慈善组织</span><span style="FONT-FAMILY: Calibri">(</span><span style="FONT-FAMILY: 宋体">基金会</span><span style="FONT-FAMILY: Calibri">)</span><span style="FONT-FAMILY: 宋体">必须是具备公益性捐赠税前扣除资格、使用财政捐赠票据的公益组织。　　</span></span></span></p><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">3.<span style="FONT-FAMILY: 宋体,SimSun">在苏州市参加无偿献血，每捐献全血200毫升加5分，每捐献机采血小板1个治疗量加10分，在国内其他城市有献血记录的，加5分，累计最高不超过35分。互助献血不计分。　　</span></span></p><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">4<span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">.<span style="FONT-FAMILY: 宋体">在苏州市实现造血干细胞采样的加</span><span style="FONT-FAMILY: Calibri">10</span><span style="FONT-FAMILY: 宋体">分，成功捐献的加</span><span style="FONT-FAMILY: Calibri">80</span><span style="FONT-FAMILY: 宋体">分。</span></span><span style="FONT-FAMILY: 宋体; FONT-SIZE: 14px">　　</span></span></p><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">5.<span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px"><span style="FONT-FAMILY: 宋体">在苏州市实现捐献遗体</span><span style="FONT-FAMILY: Calibri">(</span><span style="FONT-FAMILY: 宋体">或器官、角膜</span><span style="FONT-FAMILY: Calibri">)</span><span style="FONT-FAMILY: 宋体">，由其直系亲属申请</span><span style="FONT-FAMILY: Calibri">(</span><span style="FONT-FAMILY: 宋体">仅限一人</span><span style="FONT-FAMILY: Calibri">)</span><span style="FONT-FAMILY: 宋体">加</span><span style="FONT-FAMILY: Calibri">80</span><span style="FONT-FAMILY: 宋体">分。　</span></span><span style="FONT-FAMILY: 宋体; FONT-SIZE: 14px">　</span></span></p><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">6.<span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px"><span style="FONT-FAMILY: 宋体">在苏州市区从事环境卫生等特殊公益性岗位的，加</span><span style="FONT-FAMILY: Calibri">30</span><span style="FONT-FAMILY: 宋体">分。</span></span></span></p><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">7<span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">.<span style="FONT-FAMILY: 宋体">在苏州市区参加义警的，加</span><span style="FONT-FAMILY: Calibri">10</span><span style="FONT-FAMILY: 宋体">分。　</span></span></span></p><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px"><span style="FONT-FAMILY: 宋体">　</span></span></span></p><p style="LINE-HEIGHT: 1.75em"><strong><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">(<span style="FONT-FAMILY: 宋体">五</span><span style="FONT-FAMILY: Calibri">)</span><span style="FONT-FAMILY: 宋体">投资纳税。　</span></span></strong><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px"><span style="FONT-FAMILY: 宋体">　</span></span></p><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">得分标准：</span></p><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">1.<span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px"><span style="FONT-FAMILY: 宋体">在苏州市区投资设立个体工商户的，加</span><span style="FONT-FAMILY: Calibri">20</span><span style="FONT-FAMILY: 宋体">分</span><span style="FONT-FAMILY: Calibri">;</span><span style="FONT-FAMILY: 宋体">投资设立个人独资、合伙企业、有限公司的，加</span><span style="FONT-FAMILY: Calibri">30</span><span style="FONT-FAMILY: 宋体">分。　　</span></span></span></p><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">2.<span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px"><span style="FONT-FAMILY: 宋体">个人在苏州市区累计缴纳工薪所得个人所得税款每满</span><span style="FONT-FAMILY: Calibri">1000</span><span style="FONT-FAMILY: 宋体">元加</span><span style="FONT-FAMILY: Calibri">5</span><span style="FONT-FAMILY: 宋体">分</span><span style="FONT-FAMILY: Calibri">;</span><span style="FONT-FAMILY: 宋体">个人在苏州市区设立的个体工商户，个人独资、合伙企业累计缴纳税款</span><span style="FONT-FAMILY: Calibri">(</span><span style="FONT-FAMILY: 宋体">合伙经营按其个人所占投资份额分割计算</span><span style="FONT-FAMILY: Calibri">)</span><span style="FONT-FAMILY: 宋体">每满</span><span style="FONT-FAMILY: Calibri">1</span><span style="FONT-FAMILY: 宋体">万元加</span><span style="FONT-FAMILY: Calibri">5</span><span style="FONT-FAMILY: 宋体">分</span><span style="FONT-FAMILY: Calibri">;</span><span style="FONT-FAMILY: 宋体">以上累计最高不超过</span><span style="FONT-FAMILY: Calibri">100</span><span style="FONT-FAMILY: 宋体">分。　　</span></span></span></p><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">3.<span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px"><span style="FONT-FAMILY: 宋体">在苏州市区承租合法出租房屋的租赁户，按年提供承租房承租合同和全年发票的，每年度加</span><span style="FONT-FAMILY: Calibri">10</span><span style="FONT-FAMILY: 宋体">分</span><span style="FONT-FAMILY: Calibri">;</span><span style="FONT-FAMILY: 宋体">按年提供房屋租赁登记备案证明的，每年度加</span><span style="FONT-FAMILY: Calibri">5</span><span style="FONT-FAMILY: 宋体">分。累计最高不超过</span><span style="FONT-FAMILY: Calibri">50</span><span style="FONT-FAMILY: 宋体">分。　</span></span></span></p><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px"><span style="FONT-FAMILY: 宋体">　</span></span></span></p><p style="LINE-HEIGHT: 1.75em"><strong><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">(<span style="FONT-FAMILY: 宋体">六</span><span style="FONT-FAMILY: Calibri">)</span><span style="FONT-FAMILY: Calibri"></span><span style="FONT-FAMILY: 宋体">公共卫生。　</span></span></strong><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px"><span style="FONT-FAMILY: 宋体">　</span></span></p><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">得分标准：</span></p><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">1.<span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px"><span style="FONT-FAMILY: 宋体">学龄前随迁子女持有儿童预防接种证，并纳入苏州市区所在社区卫生服务机构儿童预防接种管理的，加</span><span style="FONT-FAMILY: Calibri">10</span><span style="FONT-FAMILY: 宋体">分。同时完成相应年龄国家扩大免疫规划程序规定的疫苗接种</span><span style="FONT-FAMILY: Calibri">(</span><span style="FONT-FAMILY: 宋体">预防接种禁忌症除外</span><span style="FONT-FAMILY: Calibri">)</span><span style="FONT-FAMILY: 宋体">，再加</span><span style="FONT-FAMILY: Calibri">10</span><span style="FONT-FAMILY: 宋体">分。</span></span></span></p><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">2.<span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">0<span style="FONT-FAMILY: 宋体">～</span><span style="FONT-FAMILY: Calibri">6</span><span style="FONT-FAMILY: 宋体">岁儿童及其母亲在苏州市区接受孕产妇和儿童健康管理保健服务，并持有苏州市母婴保健卡，加</span><span style="FONT-FAMILY: Calibri">10</span><span style="FONT-FAMILY: 宋体">分</span><span style="FONT-FAMILY: Calibri">;</span><span style="FONT-FAMILY: 宋体">如按《国家基本公共卫生服务规范》要求接受孕产妇健康管理服务和</span><span style="FONT-FAMILY: Calibri">0</span><span style="FONT-FAMILY: 宋体">～</span><span style="FONT-FAMILY: Calibri">6</span><span style="FONT-FAMILY: 宋体">岁儿童健康管理服务的，再加</span><span style="FONT-FAMILY: Calibri">10</span><span style="FONT-FAMILY: 宋体">分　</span></span></span></p><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">3.<span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px"><span style="FONT-FAMILY: 宋体">在苏州市区建立居民健康档案，加</span><span style="FONT-FAMILY: Calibri">5</span><span style="FONT-FAMILY: 宋体">分。　</span></span></span></p><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">4.<span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px"><span style="FONT-FAMILY: 宋体">按申请积分管理时岗位要求办理从业健康证的，加</span><span style="FONT-FAMILY: Calibri">5</span><span style="FONT-FAMILY: 宋体">分。　</span></span></span></p><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px"><span style="FONT-FAMILY: 宋体"></span></span></span>&nbsp;</p><p style="LINE-HEIGHT: 1.75em"><strong><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">三、扣减分</span></strong><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">　　</span></p><p style="LINE-HEIGHT: 1.75em"><strong><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">(<span style="FONT-FAMILY: 宋体; FONT-SIZE: 14px">一</span><span style="FONT-FAMILY: Calibri; FONT-SIZE: 14px">)</span><span style="FONT-FAMILY: 宋体; FONT-SIZE: 18px">违反计划生育政策。　</span></span></strong><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px"><span style="FONT-FAMILY: 宋体; FONT-SIZE: 18px"></span><span style="FONT-FAMILY: 宋体; FONT-SIZE: 14px">　</span></span></p><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">减分标准：本人或配偶从事非法为他人施行计划生育手术、利用超声技术和其他技术手段为他人进行非医学需要的胎儿性别鉴定或选择性别的人工终止妊娠的，扣<span style="FONT-FAMILY: Calibri; FONT-SIZE: 14px">50</span><span style="FONT-FAMILY: 宋体; FONT-SIZE: 14px">分。　　</span></span></p><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px"><span style="FONT-FAMILY: 宋体; FONT-SIZE: 14px"></span></span>&nbsp;</p><p style="LINE-HEIGHT: 1.75em"><strong><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">(<span style="FONT-FAMILY: 宋体">二</span><span style="FONT-FAMILY: Calibri">)</span><span style="FONT-FAMILY: 宋体">违法犯罪。</span></span></strong></p><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">减分标准：</span></p><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">1.<span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px"><span style="FONT-FAMILY: 宋体">近五年内受过刑事处罚的、参加国家禁止的组织或活动的，每次扣</span><span style="FONT-FAMILY: Calibri">200</span><span style="FONT-FAMILY: 宋体">分。</span></span><span style="FONT-FAMILY: 宋体; FONT-SIZE: 14px">　　</span></span></p><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">2.<span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px"><span style="FONT-FAMILY: 宋体">近五年内受过限制人身自由行政处罚的，每次扣</span><span style="FONT-FAMILY: Calibri">100</span><span style="FONT-FAMILY: 宋体">分。</span></span><span style="FONT-FAMILY: 宋体; FONT-SIZE: 14px">　　</span></span></p><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">3.<span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px"><span style="FONT-FAMILY: 宋体">一年内在苏州市因违反城市管理、非法行医、违反食品药品安全法、劳动保障、文化、卫生、工商、税收、住房公积金等法律法规受到行政处罚的行为人或个体户、企业的投资人及法定代表人，每次扣</span><span style="FONT-FAMILY: Calibri">50</span><span style="FONT-FAMILY: 宋体">分。</span></span><span style="FONT-FAMILY: 宋体; FONT-SIZE: 14px">　　</span></span></p><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px"><span style="FONT-FAMILY: 宋体; FONT-SIZE: 14px"></span></span>&nbsp;</p><p style="LINE-HEIGHT: 1.75em"><strong><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px"><span style="FONT-FAMILY: Calibri; FONT-SIZE: 14px">(<span style="FONT-FAMILY: 宋体; FONT-SIZE: 18px">三</span><span style="FONT-FAMILY: Calibri; FONT-SIZE: 18px">)</span><span style="FONT-FAMILY: 宋体; FONT-SIZE: 18px">失信行为。</span></span>　　</span></strong></p><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">减分标准：未受到刑事或行政处罚，但存在失信行为的，按以下标准扣分。</span></p><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">1.<span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px"><span style="FONT-FAMILY: 宋体">有拒不履行人民法院生效裁判的失信行为，每次扣</span><span style="FONT-FAMILY: Calibri">50</span><span style="FONT-FAMILY: 宋体">分。　</span></span><span style="FONT-FAMILY: 宋体; FONT-SIZE: 14px">　</span></span></p><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">2.<span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px"><span style="FONT-FAMILY: 宋体">一年内在苏州市区因税收违法违规行为，经责令限期整改仍未改正的，每起扣</span><span style="FONT-FAMILY: Calibri">30</span><span style="FONT-FAMILY: 宋体">分。　　</span></span></span></p><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">3.<span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px"><span style="FONT-FAMILY: 宋体">在本市存在医保费用违规行为，纳入医保失信人员名单的，每次违规扣</span><span style="FONT-FAMILY: Calibri">30</span><span style="FONT-FAMILY: 宋体">分</span><span style="FONT-FAMILY: Calibri">;</span><span style="FONT-FAMILY: 宋体">因违反规定被取消医疗保险定点资格的，法人代表扣</span><span style="FONT-FAMILY: Calibri">50</span><span style="FONT-FAMILY: 宋体">分</span><span style="FONT-FAMILY: Calibri">;</span><span style="FONT-FAMILY: 宋体">用人单位欠缴职工社会保险费的，法人代表扣</span><span style="FONT-FAMILY: Calibri">50</span><span style="FONT-FAMILY: 宋体">分。　　</span></span></span></p><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">4.<span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px"><span style="FONT-FAMILY: 宋体">在本市存在住房公积金违规提取、违规贷款、恶意拖欠贷款等行为，纳入住房公积金失信人员名单的，每次违规扣</span><span style="FONT-FAMILY: Calibri">30</span><span style="FONT-FAMILY: 宋体">分。单位欠缴、少缴职工住房公积金的，法人代表扣</span><span style="FONT-FAMILY: Calibri">30</span><span style="FONT-FAMILY: 宋体">分</span><span style="FONT-FAMILY: Calibri">;</span><span style="FONT-FAMILY: 宋体">单位不缴职工住房公积金的，法人代表扣</span><span style="FONT-FAMILY: Calibri">30</span><span style="FONT-FAMILY: 宋体">分</span><span style="FONT-FAMILY: Calibri">;</span><span style="FONT-FAMILY: 宋体">单位一年内因住房公积金违法违规行为，经责令限期整改仍未改正的，法人代表扣</span><span style="FONT-FAMILY: Calibri">50</span><span style="FONT-FAMILY: 宋体">分。</span></span></span></p><p style="TEXT-ALIGN: right; LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">来源：名城苏州网</span></p><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">&nbsp;</span></p><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">&nbsp;</span></p><p><span style="FONT-FAMILY: Calibri; FONT-SIZE: 14px">&nbsp;</span></p><p>&nbsp;</p></div></p>
+            </div>
+        </div>
+    </div>
+    <!--center over-->
+        
+    <!--footer begin-->
+    <div class="wrap mt10">
+        <div class="link">
+            <h1>友情链接</h1>
+            <ul class="l_list">
+                <li><a href="http://www.creditchina.gov.cn/" target="_blank">信用中国</a></li>
+                <li><a href="http://www.js.gov.cn/jsxy/index.htm" target="_blank">诚信江苏</a></li>
+                <li><a href="http://www.njcredit.gov.cn/" target="_blank">诚信南京</a></li>
+                <li><a href="http://www.szcredit.gov.cn/" target="_blank">诚信苏州</a></li>
+                <li><a href="http://credit.zjg.gov.cn/toIndex.action" target="_blank">诚信张家港</a></li>
+            </ul>
+        </div>
+        
+         <div class="foot">
+            <p><span>主办单位：苏州工业园区信用办 </span><span>技术支持：江苏中集科技有限公司</span><span><script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1256639142'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1256639142' type='text/javascript'%3E%3C/script%3E"));</script></span></p>
+        </div>
+        
+    </div>
+    <!--footer over-->
+</div>
+<!--content over-->
+    
+</body>
+</html>

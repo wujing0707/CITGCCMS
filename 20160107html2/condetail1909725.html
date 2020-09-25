@@ -1,0 +1,400 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
+<meta name="description" content=""/>
+<meta name="keyWords" content=""/>
+<title>诚信园区</title>
+<link type="text/css" href="css/common.css" rel="stylesheet" />
+<link href="js/artDialog2.0.6/skin/chrome/chrome.css" rel="stylesheet" />
+<script type="text/javascript" src="js/jquery-1.7.2.js"></script>
+<script type="text/javascript" src="js/artDialog2.0.6/artDialog.min.js"></script>
+
+<style type="text/css">  
+        .code{   
+            background-image:url("../html/images/QQ.jpg");   
+            margin-left: 10px !important;
+            font-family:Arial;   
+            font-style:italic;   
+            color:Red;   
+            padding:2px 3px;   
+            letter-spacing:3px;   
+            font-weight:bolder;     
+        }   
+</style> 
+<script type="text/javascript">
+$(function () {
+	createCode(0);
+	createCode(3);
+});
+ var code ; //在全局 定义验证码   
+ function createCode(no){    
+   code = "";   
+   var codeLength = 4;//验证码的长度   
+   var checkCode = document.getElementById("checkCodeID"+no);   
+   var selectChar = new Array(0,1,2,3,4,5,6,7,8,9);//所有候选组成验证码的字符，当然也可以用中文的      
+   for(var i=0;i<codeLength;i++){   
+    var charIndex = Math.floor(Math.random()*10);   
+    code +=selectChar[charIndex];   
+   }    
+   if(checkCode){   
+     checkCode.className="code";   
+     checkCode.value = code;
+     checkCode.blur();   
+   }        
+ }
+  function validate (i,t){  
+    //   var checkCode = document.getElementById("checkCodeID"+i).value;  
+       var inputCode = document.getElementById("validCode"+i).value;
+       var zzjgdm=$('#zzjgdm').val();   
+       var gszch=$('#gszch').val();   
+       var companyname=$('#companyname').val();   
+       if(inputCode.length <=0){   
+           alert("请输入验证码！");   
+       }   
+    //   else if(inputCode.toUpperCase()!=checkCode){   
+      //    alert("验证码输入错误！");   
+       //}
+       else if(zzjgdm==""&&gszch==""&&companyname==""){
+       		alert("请至少输入一个查询条件!");
+       }
+       else{   
+          //window.location.href="../seach/seachdetail.action?zzjgdm="+zzjgdm+"&gszch="+gszch+"&companyname="+companyname+"&template="+2; 
+            $.post('../seach/checkSeachdetail.action',
+            {zzjgdm: zzjgdm, gszch:gszch, companyname:companyname,vcode:inputCode, template:2 },
+            function(data){
+                 if (data == '1') {
+                     $('#seaForm').submit(); 
+                 }else if(data=='2'){
+                 	alert("验证码输入错误！");
+                 } else {
+                    alert("暂无相关数据");
+                 }
+               }, "json");   
+       }    
+ }
+ function seachList(i){
+ 	//   var checkCode = document.getElementById("checkCodeID0").value;  
+       var inputCode = document.getElementById("validCode0").value;
+       var name=$('#name').val();   
+       var sfzhm=$('#sfzhm').val();   
+       var zyzhm=$('#zyzhm').val(); 
+       if(inputCode.length <=0){   
+           alert("请输入验证码！");   
+   //    }else if(inputCode.toUpperCase()!=checkCode){   
+   //       alert("验证码输入错误！");   
+       }else if(name==""&&sfzhm==""&&zyzhm==""){
+       		alert("请至少输入一个查询条件!");
+       }else{   
+         //window.location.href="../seach/personalSeachList.action?zyzhm="+zyzhm+"&sfzhm="+sfzhm+"&name="+name+"&template=2";
+                     $.post('../seach/checkPersonalSeachList.action',
+            {zyzhm: zyzhm, sfzhm:sfzhm, name:name,vcode:inputCode,template:2 },
+            function(data){
+                 if (data == 1) {
+                     $('#personForm').submit(); 
+                 }else if(data=='2'){
+                 	alert("验证码输入错误！");
+                 } else {
+                    alert("暂无相关数据");
+                 }
+               }, "json"); 
+       }  
+ }
+ function reset(){
+  	$('#zzjgdm').val('');   
+    $('#gszch').val('');   
+    $('#companyname').val('');  
+    $('#validCode0').val('');  
+ }  
+ function personalReset(){
+ 	$('#name').val('');  
+ 	$('#sfzhm').val('');  
+ 	$('#zyzhm').val('');  
+ 	$('#validCode0').val(''); 
+ }   
+function show(str){
+		var id=document.getElementById(str+"_0").value;
+		window.location.href='content'+id+"_1.html"; 
+}
+function reload(i){
+	if(i==1)
+ 	 window.location.href="qycheck.html";
+ 	 if(i==2)
+ 	 window.location.href="mycheck.html";
+ 	 if(i==3)
+ 	 window.location.href="qyyyshensu.html";
+}
+function goto(staus,name,index,size){
+	if(staus=='up'&&index!=1){
+		window.location.href=name+"_"+(index-1)+".html"; 
+	}else if(staus=='first'){
+		window.location.href=name+"_"+"1.html"; 
+	}else if(staus=='down'){
+		if(index!=size){
+			window.location.href=name+"_"+(index+1)+".html"; 
+		}
+	}else if(staus=='last'){
+		window.location.href=name+"_"+size+".html"; 
+	}
+}
+ function seachContent(){
+ 	//var channelid=document.getElementById("channelid").value;
+ 	//var title=document.getElementById("title").value;
+ 	//if(title==""){
+ 		//return;
+ 	//}else{
+ 		//window.location.href="../content/listContentByChannelId.action?channelid="+channelid+"&title="+title;   
+ 	//	window.location.href="../content/listContentByTitle.action?title="+title;   
+ 	//}
+ 	var title=document.getElementById("title").value;
+ 	if (title == '' || title == '请输入关键字') {
+ 	   alert('请输入关键字');
+ 	   return;
+ 	}
+ 	title = encodeURIComponent(title);
+ 	window.location.href="../content/listContentByTitle.action?title="+title; 
+ }
+ function query(){
+ 	 var checknumber=document.getElementById("checkNumber").value;
+ 	  var reg = new RegExp("^[0-9]*$");  
+    if(!reg.test(checknumber)){  
+        alert("请输入数字!");  
+        return;
+    }  
+ 	 if (checknumber == "") {
+ 	    alert("信用核查码不能为空！");
+ 	 } else {
+ 	        $.post('../seach/approveContent.action',
+            {checknumber: checknumber},
+            function(data){
+                 if (data == 1) {
+                      window.open("http://172.25.119.13/creditVerification/getDetailVerificationInfo.action?checkcode=" + checknumber,
+	               'newwindow','height=900,width=1000,top='+(window.screen.availHeight-30-900)/2+
+	                   ',left='+(window.screen.availWidth-10-1000)/2+
+	                 ',toolbar=no,menubar=no,scrollbars=yes,resizable=yes,location=no,status=no');
+               } else if (data == 2) {
+                     window.open("http://172.25.119.13/creditVerification/getgroupsDetailVerificationInfo.action?checkcode=" + checknumber,
+	                  'newwindow','height=900,width=1000,top='+(window.screen.availHeight-30-900)/2+
+	                   ',left='+(window.screen.availWidth-10-1000)/2+
+	                 ',toolbar=no,menubar=no,scrollbars=yes,resizable=yes,location=no,status=no');
+               }else {
+                   if (data == '-1') {
+                     alert("信用查询码不存在！");
+                   } else if (data == '-2') {
+                     alert("信用查询码已过期！");
+                   } else if (data == '-3') {
+                     alert("信用查询码已重新生成,请输入最新核查码!");
+                   }
+                }
+            },'json');
+ 	 }
+ }
+function SetWinHeight(obj)
+{
+
+} 
+
+function gotoPage(total,cid){
+	var p=$("#textFooter").val();
+	var i = parseInt(total);
+	if(p!=""){
+		var a=parseInt(p);
+		if(a>0&&a<=i)
+		window.location.href="../content"+cid+"_"+p+".html";
+		if(a>i)
+		window.location.href="../content"+cid+"_"+1+".html";
+	}
+}
+$(document).ready(function() {
+ 	$.ajax({
+        type: "post",//使用post方法访问后台
+        dataType: "json",//返回json格式的数据
+        url: "../getCCS.action",//要访问的后台地址
+        data:{},//要发送的数据
+        complete :function(){$("#load").hide();},//AJAX请求完成时隐藏loading提示
+        success: function(msg){//msg为返回的数据，在这里做数据绑定
+				$("#thrNum").html(msg);
+        }
+    });
+    $.ajax({
+        type: "post",//使用post方法访问后台
+        dataType: "json",//返回json格式的数据
+        url: "../content/findHOTKeyword.action",//要访问的后台地址
+        data:{},//要发送的数据
+        complete :function(){$("#load").hide();},//AJAX请求完成时隐藏loading提示
+        success: function(msg){//msg为返回的数据，在这里做数据绑定
+        	var b='关键字:&nbsp;';
+        	$.each(msg.rows, function(i, n){
+        	var a = '<a href="javascript:void(0)" onclick="byHotKwSeachContent(\''+msg.rows[i]+'\')" >'+msg.rows[i]+'</a>&nbsp;&nbsp;';
+        	b+=a;
+           });
+           $("#hotkw").html(b);
+        }
+    });
+});
+	function byHotKwSeachContent(str) {
+		var title = encodeURIComponent(str);
+		window.location.href = "../content/listContentByTitle.action?title="
+				+ title;
+	}	
+	function queryOfPreview(contentId, category){
+   		 window.location.href="../content/queryOfPreview.action?contentId="+contentId+"&date="+new Date();
+	}
+</script>
+</head>
+
+<body>
+<!--header begin-->
+<div class="header">
+	<div class="wrap">
+    	<div class="logo f_l"><a href="http://www.sipac.gov.cn/" target="_blank"><img src="images/logo.png" /></a></div>
+    	<div class="number f_r" id="thrNum">
+        </div>
+    </div>
+</div>
+<!--header over-->
+
+<!--nav begin-->
+<div class="nav">
+    <ul class="wrap tabs">
+        <li><a href="../goToIndex.action">首页</a></li>
+        	<li><a href="javascript:void(0)" id="22" onclick='show("22")'>信用动态</a></li>
+		        	<input type="hidden" id="22_0" value="365">
+		        	<input type="hidden" id="22_1" value="364">
+		        	<input type="hidden" id="22_2" value="335">
+        	<li><a href="javascript:void(0)" id="420" onclick='show("420")'>信用公示</a></li>
+		        	<input type="hidden" id="420_0" value="318">
+		        	<input type="hidden" id="420_1" value="60">
+		        	<input type="hidden" id="420_2" value="61">
+        	<li><a href="javascript:void(0)" id="26" onclick='show("26")'>重点领域</a></li>
+		        	<input type="hidden" id="26_0" value="486">
+		        	<input type="hidden" id="26_1" value="487">
+		        	<input type="hidden" id="26_2" value="488">
+		        	<input type="hidden" id="26_3" value="489">
+		        	<input type="hidden" id="26_4" value="490">
+		        	<input type="hidden" id="26_5" value="491">
+		        	<input type="hidden" id="26_6" value="492">
+		        	<input type="hidden" id="26_7" value="493">
+        	<li><a href="javascript:void(0)" id="423" onclick='show("423")'>专项资金</a></li>
+		        	<input type="hidden" id="423_0" value="469">
+        	<li><a href="javascript:void(0)" id="416" onclick='show("416")'>政策法规</a></li>
+		        	<input type="hidden" id="416_0" value="306">
+		        	<input type="hidden" id="416_1" value="334">
+		        	<input type="hidden" id="416_2" value="309">
+        <li><a href="http://gzjd.sipac.gov.cn/Web/BBS/MainList.aspx"  target="_blank">在线交流</a></li>
+    </ul>
+</div>
+<!--nav over-->
+
+<!--content begin-->
+<div class="cloud">
+    <!--notice begin-->
+    <div class="wrap">
+    	<div class="notice f_l"> 
+            <div class="notice_tit f_l f_b">通知公告</div>
+            <div class="f_l notice_list"  id="mq" onmouseover=iScrollAmount=0 style="overflow:hidden; width:500px; height:30px;color:#000" onmouseout=iScrollAmount=1 >
+                <ul>
+		                    <li><a href="javascript:queryOfPreview('1911122')">苏州出台省内首部《住房公积金个人失信惩戒实施细则》</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911059')">关于印发江苏省推行食品生产企业 “黑名单”制度指导意见(试行)的通知(苏食药监规</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911231')">家庭成员不履行抚养义务记入个人信用档案</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911061')">2015年我市电梯维保单位星级评定结果公示</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910971')">2015年度“诚信宣传周”活动开始啦</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910519')">2015年12月苏州工业园区公积金（社会保险）公示欠费单位名单</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910520')">苏州工业园区从业建筑业企业不良信用处罚公示汇总</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910381')">2015年11月苏州工业园区社会保险基金（公积金）公示欠费单位名单</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910282')">园区信用体系建设项目接受市领导专项督查并开展座谈会</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911034')">苏州积分落户制度2016年1月15日起实施 失信行为将扣减分</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910988')">关于做好2015年园区建筑业企业信用综合评价良好行为信息录入工作的通知</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910976')">诚信记录纳入流动人口积分管理</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910972')">江苏省研究生考试26日开考 省考试院提醒考生诚信参考</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910518')">2015年中国十佳诚信政府排行榜发布</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910467')">老忘交电费 当心成老赖失信</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910361')">首个国际征信论坛即将在沪登陆</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910338')">居民身份证将可异地换领补领 有不良信用记录的不予受理</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910329')">双十一”消费信用大数据监测评价启动</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910328')">发改委：年底前全面实施统一社会信用代码制度</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910310')">信用社会临近 央行征信系统已收录8.7亿人数据</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910307')">市食药监公布19批次质量不合格食品（附名单）</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910302')">园区地税提交457户企业列入园区失信法人库</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910177')">关于联合发布2014年长三角地区备案信用服务机构名单的通知</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910179')">2014年度“苏州市级信用管理示范企业”认定公示</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="search f_r">
+            <form id="searchform" action="../content/listContentByTitle.action" method="post">
+                <fieldset>
+                <table>
+                 	<tr>
+				      <td width="70%">
+				      	 <input type="text" onfocus="if(this.value =='请输入关键字') {this.value=''; }" onblur="if(this.value==''){this.value='请输入关键字';}" class="text_input" style="width:200px" value="请输入关键字" name="title" id="title">
+				         <input type="button" onclick="seachContent()" name="button"> 
+				      </td>
+				   	</tr>
+				   	<tr>
+				   		 <td id="hotkw"></td>
+				   	</tr>
+				  </table> 
+                </fieldset>
+            </form>
+        </div>
+    </div>
+    <script type="text/javascript" src="js/muqruujs.js"></script>
+    <!--notice over-->
+    <!--center begin-->
+    <div class="wrap mt5 content">
+        <div class="breadcrumbs">
+            <ul>
+                <li>当前位置：</li>
+          		<li><a href="content306_1.html">政策法规</a> > </li>
+            <li><a href="content309_1.html">本地法规</a> > </li>
+                <li><em>详细</em></li>
+            </ul>
+        </div>
+        
+        <div class="pad50">
+            <div class="art_head">
+                <h1>江苏省南京市劳动保障诚信单位、服务机构评定试行办法</h1>
+                <div class="tc art_date"> 【发布日期： 】【<a href="javascript:void(0)" onclick="window.print();">打印</a>】 </div>
+            </div>
+            <div class="artnr">
+                <p><div style='font-size:font-size:px;'><p><span style="font-size: small;"> 第一条 &nbsp;
+为加快全市劳动保障诚信工程建设，推动用人单位建立与社会主义市场经济体制相适应的自我规范、自我约束、自我激励、自我发展的劳动保障长效管理机制，树立
+ 
+诚实守信的社会形象，营造良好的劳动保障环境，实现市委、市政府提出的“两个率先”和构建“和谐南京”的战略目标，根据《中华人民共和国劳动法》、国务院
+ 《劳动保障监察条例》、劳动保障部办公厅《关于推行企业劳动保障诚信制度的指导意见》和市政府办公厅《关于开展贯彻国务院&lt;劳动保障监察条 
+例&gt;创建劳动保障诚信工程工作的通知》的规定和要求，制定本办法。 <br/><br/>第二条 本市行政区域内的用人单位和职业介绍机构、职业技能培训机构、职业技能鉴定机构、医疗保险定点机构（以下简称用人单位和服务机构）进行劳动保障诚信评定，适用本办法。 <br/><br/>第三条 劳动保障诚信评定是劳动保障行政部门依法对用人单位和服务机构遵守劳动保障法律、法规情况实施监督检查，根据劳动保障相关要求进行诚信评定，并实行分类监管和服务的措施。 <br/><br/>第四条 &nbsp;
+劳动保障行政部门依据本办法，对用人单位进行劳动和社会保障综合诚信评定，评出劳动保障诚信单位；对用人单位进行社会保险费申报缴纳诚信评定，评出社会保
+ 
+险费申报缴纳诚信单位；对职业介绍机构进行诚信评定，评出职业介绍诚信机构；对职业技能培训机构进行诚信评定，评出职业技能培训诚信机构；对职业技能鉴定
+ 机构进行诚信评定，评出职业技能鉴定诚信机构；对医疗保险定点机构进行诚信评定，评出定点医疗诚信机构。 <br/><br/>第五条 市劳动保障行政部门负责对全市用人单位和服务机构的劳动保障诚信评定工作实行统一规范指导和综合评定。各区县劳动保障行政部门按照属地管理的原则，根据本办法负责本地区劳动保障诚信的创建、申报和考核工作。 <br/><br/>第六条 评定劳动保障诚信单位，应当符合下列条件： <br/><br/>（一）依法办理《劳动和社会保障证》和社会保险登记，具有一定规模，经营、生产正常； <br/><br/>（二）依法制定和健全本单位各项劳动保障规章制度，认真执行各项劳动保障法律、法规和规章，积极预防和妥善处理劳动争议，维护劳动者合法权益； <br/><br/>（三）主动接受和配合劳动保障行政部门的监督检查，按规定参加相关劳动保障年度检查、申报、审核，并依照劳动保障行政部门的指令及时整改违规行为， <br/><br/>（四）没有受到行政处罚的劳动保障违法行为； <br/><br/>（五）本单位劳动用工、社会保险参保、工资支付等主要评定指标均需达到下列要求： &nbsp;<br/><br/>1、劳动合同签订率达100%，签订集体合同，工会组织健全； <br/>2、社会保险参保率达100%，按时足额申报缴费基数，无欠缴社会保险费； <br/>3、按时足额支付劳动者工资，没有违反最低工资规定； &nbsp;<br/>4、遵守女职工、未成年工特殊保护规定，没有违法使用童工； <br/>5、遵守工作时间和休息休假规定，没有违法延长劳动者工作时间。 <br/><br/>第七条 评定社会保险费申报缴纳诚信单位，应当符合本办法第六条第（一）至（四）项及下列条件： <br/><br/>（一）按规定及时进行社会保险登记、变更和年检工作，主动足额申报社会保险参保人数、缴费基数，参保职工对个人缴费基数的确认率达100%； <br/><br/>（二）按时足额缴纳社会保险费，做好参保职工个人应缴社会保险费的代扣代缴工作； <br/><br/>（三）建立健全职工收入台帐管理，主动配合社会保险经办机构稽核检查，整改措施到位，社会保险补缴基金到帐率达100%； <br/><br/>（四）配合做好社会保险个人帐户清单发放工作，清单发放手续符合规定，清单发放率达100%。 <br/><br/>第八条 评定职业介绍诚信机构，应当符合本办法第六条第（一）至（四）项及下列条件： &nbsp;<br/><br/>（一）有100平方米以上的固定服务场所（有产权证或三年以上租赁合同），有健全的内部管理制度、规范的服务制度和相应的计算机等服务设施； <br/><br/>（二）从业人员50%以上获得《职业资格证书》； <br/><br/>（三）连续两年通过职业介绍资格年审，合法经营，无经查实的违法行为，每年推荐就业1000人以上。 <br/><br/>第九条 评定职业技能培训诚信机构，应当符合本办法第六条第（一）至（四）项及下列条件： <br/><br/>（一）基本办学规模不少于每年200人，关心、尊重学员，积极推荐就业，学员和用人单位满意率达70%以上； <br/><br/>（二）具备满足办学需要的培训、实习场所和设施设备并符合安全卫生要求，培训专业设置、教学计划和内容符合国家职业标准要求，认真按计划组织教学培训； <br/><br/>（三）办学负责人和管理、工作人员具有较高职业道德和专业素质，熟悉国家职业培训方针、政策和法律法规，熟悉本单位培训及考试业务，配备与办学规模相适应、结构合理的专兼职教师，每个专业配备2名以上理论课教师和实习指导教师； <br/><br/>（四）管理制度健全，诚信规范办学，广告和招生简章真实，收费合理，公平竞争，没有超审批范围办学，没有损害其他职业培训机构利益的行为。 &nbsp;<br/><br/>第十条 评定职业技能鉴定诚信机构，应当符合本办法第六条第（一）至（四）项及下列条件： <br/><br/>（一）具备与鉴定范围和规模相适应的固定鉴定场所，鉴定设备与检测仪器数量、性能满足要求，理论鉴定场所不少于4个标准教室，实际操作鉴定场地设施能容纳30人同时鉴定，考评员配备人数满足鉴定职业（工种）要求； <br/><br/>（二）连续两年完成鉴定工作目标任务，年度目标考核达到优秀等次，年鉴定量在1000人以上，鉴定质量抽查合格率在98％以上； <br/><br/>（三）管理制度健全，公示有关制度、考务规则、收费标准和工作流程，能按照相关国家职业标准制定鉴定方案并组织实施，考务管理严格规范，考务系统数据准确，鉴定资料保存完好、存档规范； <br/><br/>（四）无超规定职业（工种）鉴定，无违规收费，无质量管理方面的有效投诉。 <br/><br/>第十一条 评定定点医疗诚信机构，应当符合本办法第六条第（一）至（四）项及下列条件： <br/><br/>（一）建立健全基础管理制度和长效管理、内控机制，主动配合医疗保险管理部门，落实各项政策法规，严格履行《南京市城镇职工基本医疗保险定点医疗机构服务协议书》； <br/><br/>（二）经办人员和相关医务人员熟练掌握医保政策和业务，三个目录库和数据信息管理规范化、标准化，“三门”准入规范、准确，及时、完整提供医保病人基础资料和医疗文书等； <br/><br/>（三）因病施治、合理用药、合理检查、合理治疗，确保参保人员基本医疗需求，对参保人员使用医保目录以外的药品及诊疗主动征求病人或家属同意并签字； <br/><br/>（四）建立完善的价格公示、查询和费用清单制度，按规定使用医疗保险专用票据，上传数据真实、准确，无分解收费、自定收费、增加收费、重复收费和比照项目收费等现象。 &nbsp;<br/><br/>第十二条 劳动保障诚信单位和诚信服务机构评定每年评定一次，按诚信申报、受理审核、公示和诚信评定决定的程序进行。 <br/><br/>市劳动保障行政部门成立由相关职能部门参加的劳动保障诚信评定小组，负责对受理、上报的诚信单位进行评定，对通过评定的申报单位向社会公示。对经过公示无异议的，由市劳动保障行政部门决定授予相应诚信单位称号。 <br/><br/>（一）申报评定劳动保障诚信单位的，按照属地管辖原则，由市或区、县（含两个开发区）劳动保障监察机构受理；经审核合格的，报市劳动保障诚信评定小组评定、公示，由市劳动保障行政部门授予诚信单位称号； <br/><br/>（二）申报评定社会保险费缴纳诚信单位的，按属地管辖原则，分别由市或区、县社会保险经办机构受理；经审核合格的，报劳动保障诚信评定小组评定、公示，由市劳动保障行政部门授予诚信单位称号； <br/><br/>（三）申报评定职业介绍诚信机构的，由所在区、县就业管理服务机构受理；经初审合格的，由市就业管理服务机构审核，报市劳动保障诚信评定小组评定、公示，由市劳动保障行政部门授予诚信单位称号； <br/><br/>（四）申报评定职业技能培训诚信机构的，由批准成立的市或区、县职业技能培训管理机构受理；经审核合格的，报劳动保障诚信评定小组评定、公示，由市劳动保障行政部门授予诚信单位称号； <br/><br/>（五）申报评定职业技能鉴定诚信机构的，由市职业技能鉴定管理机构受理；经审核合格的，报劳动保障诚信评定小组评定、公示，由市劳动保障行政部门授予诚信单位称号； <br/><br/>（六）申报评定定点医疗诚信机构的，由市医疗保险经办机构受理；经审核合格的，报劳动保障诚信评定小组评定、公示，由市劳动保障行政部门授予诚信单位称号。 <br/><br/>第十三条 用人单位或服务机构获得的诚信单位称号有效期三年，有效期内每年公告一次，有效期满重新申报、评定。 <br/><br/>第十四条 用人单位或服务机构获得诚信单位称号后三年内，劳动保障行政部门免费提供公共职业介绍服务、免费提供劳动人事干部培训、免费赠阅《南京劳动》和相关政策法规汇编；除有举报投诉或上级规定的专项检查外，免于常规检查。 <br/><br/>第十五条 用人单位或服务机构在获得诚信单位称号后三年内，如发生违反劳动保障法律、法规行为，未完成整改或者情节严重的，劳动保障行政部门撤消其诚信单位称号并向社会公告。 <br/><br/>第十六条 本办法由市劳动保障行政部门解释。 &nbsp;<br/><br/>第十七条 本办法自公布之日起试行。 </span></p></div></p>
+            </div>
+        </div>
+    </div>
+    <!--center over-->
+        
+    <!--footer begin-->
+    <div class="wrap mt10">
+        <div class="link">
+            <h1>友情链接</h1>
+            <ul class="l_list">
+                <li><a href="http://www.creditchina.gov.cn/" target="_blank">信用中国</a></li>
+                <li><a href="http://www.js.gov.cn/jsxy/index.htm" target="_blank">诚信江苏</a></li>
+                <li><a href="http://www.njcredit.gov.cn/" target="_blank">诚信南京</a></li>
+                <li><a href="http://www.szcredit.gov.cn/" target="_blank">诚信苏州</a></li>
+                <li><a href="http://credit.zjg.gov.cn/toIndex.action" target="_blank">诚信张家港</a></li>
+            </ul>
+        </div>
+        
+         <div class="foot">
+            <p><span>主办单位：苏州工业园区信用办 </span><span>技术支持：江苏中集科技有限公司</span><span><script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1256639142'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1256639142' type='text/javascript'%3E%3C/script%3E"));</script></span></p>
+        </div>
+        
+    </div>
+    <!--footer over-->
+</div>
+<!--content over-->
+    
+</body>
+</html>

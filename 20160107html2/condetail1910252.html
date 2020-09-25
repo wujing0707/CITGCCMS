@@ -1,0 +1,426 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
+<meta name="description" content=""/>
+<meta name="keyWords" content=""/>
+<title>诚信园区</title>
+<link type="text/css" href="css/common.css" rel="stylesheet" />
+<link href="js/artDialog2.0.6/skin/chrome/chrome.css" rel="stylesheet" />
+<script type="text/javascript" src="js/jquery-1.7.2.js"></script>
+<script type="text/javascript" src="js/artDialog2.0.6/artDialog.min.js"></script>
+
+<style type="text/css">  
+        .code{   
+            background-image:url("../html/images/QQ.jpg");   
+            margin-left: 10px !important;
+            font-family:Arial;   
+            font-style:italic;   
+            color:Red;   
+            padding:2px 3px;   
+            letter-spacing:3px;   
+            font-weight:bolder;     
+        }   
+</style> 
+<script type="text/javascript">
+$(function () {
+	createCode(0);
+	createCode(3);
+});
+ var code ; //在全局 定义验证码   
+ function createCode(no){    
+   code = "";   
+   var codeLength = 4;//验证码的长度   
+   var checkCode = document.getElementById("checkCodeID"+no);   
+   var selectChar = new Array(0,1,2,3,4,5,6,7,8,9);//所有候选组成验证码的字符，当然也可以用中文的      
+   for(var i=0;i<codeLength;i++){   
+    var charIndex = Math.floor(Math.random()*10);   
+    code +=selectChar[charIndex];   
+   }    
+   if(checkCode){   
+     checkCode.className="code";   
+     checkCode.value = code;
+     checkCode.blur();   
+   }        
+ }
+  function validate (i,t){  
+    //   var checkCode = document.getElementById("checkCodeID"+i).value;  
+       var inputCode = document.getElementById("validCode"+i).value;
+       var zzjgdm=$('#zzjgdm').val();   
+       var gszch=$('#gszch').val();   
+       var companyname=$('#companyname').val();   
+       if(inputCode.length <=0){   
+           alert("请输入验证码！");   
+       }   
+    //   else if(inputCode.toUpperCase()!=checkCode){   
+      //    alert("验证码输入错误！");   
+       //}
+       else if(zzjgdm==""&&gszch==""&&companyname==""){
+       		alert("请至少输入一个查询条件!");
+       }
+       else{   
+          //window.location.href="../seach/seachdetail.action?zzjgdm="+zzjgdm+"&gszch="+gszch+"&companyname="+companyname+"&template="+2; 
+            $.post('../seach/checkSeachdetail.action',
+            {zzjgdm: zzjgdm, gszch:gszch, companyname:companyname,vcode:inputCode, template:2 },
+            function(data){
+                 if (data == '1') {
+                     $('#seaForm').submit(); 
+                 }else if(data=='2'){
+                 	alert("验证码输入错误！");
+                 } else {
+                    alert("暂无相关数据");
+                 }
+               }, "json");   
+       }    
+ }
+ function seachList(i){
+ 	//   var checkCode = document.getElementById("checkCodeID0").value;  
+       var inputCode = document.getElementById("validCode0").value;
+       var name=$('#name').val();   
+       var sfzhm=$('#sfzhm').val();   
+       var zyzhm=$('#zyzhm').val(); 
+       if(inputCode.length <=0){   
+           alert("请输入验证码！");   
+   //    }else if(inputCode.toUpperCase()!=checkCode){   
+   //       alert("验证码输入错误！");   
+       }else if(name==""&&sfzhm==""&&zyzhm==""){
+       		alert("请至少输入一个查询条件!");
+       }else{   
+         //window.location.href="../seach/personalSeachList.action?zyzhm="+zyzhm+"&sfzhm="+sfzhm+"&name="+name+"&template=2";
+                     $.post('../seach/checkPersonalSeachList.action',
+            {zyzhm: zyzhm, sfzhm:sfzhm, name:name,vcode:inputCode,template:2 },
+            function(data){
+                 if (data == 1) {
+                     $('#personForm').submit(); 
+                 }else if(data=='2'){
+                 	alert("验证码输入错误！");
+                 } else {
+                    alert("暂无相关数据");
+                 }
+               }, "json"); 
+       }  
+ }
+ function reset(){
+  	$('#zzjgdm').val('');   
+    $('#gszch').val('');   
+    $('#companyname').val('');  
+    $('#validCode0').val('');  
+ }  
+ function personalReset(){
+ 	$('#name').val('');  
+ 	$('#sfzhm').val('');  
+ 	$('#zyzhm').val('');  
+ 	$('#validCode0').val(''); 
+ }   
+function show(str){
+		var id=document.getElementById(str+"_0").value;
+		window.location.href='content'+id+"_1.html"; 
+}
+function reload(i){
+	if(i==1)
+ 	 window.location.href="qycheck.html";
+ 	 if(i==2)
+ 	 window.location.href="mycheck.html";
+ 	 if(i==3)
+ 	 window.location.href="qyyyshensu.html";
+}
+function goto(staus,name,index,size){
+	if(staus=='up'&&index!=1){
+		window.location.href=name+"_"+(index-1)+".html"; 
+	}else if(staus=='first'){
+		window.location.href=name+"_"+"1.html"; 
+	}else if(staus=='down'){
+		if(index!=size){
+			window.location.href=name+"_"+(index+1)+".html"; 
+		}
+	}else if(staus=='last'){
+		window.location.href=name+"_"+size+".html"; 
+	}
+}
+ function seachContent(){
+ 	//var channelid=document.getElementById("channelid").value;
+ 	//var title=document.getElementById("title").value;
+ 	//if(title==""){
+ 		//return;
+ 	//}else{
+ 		//window.location.href="../content/listContentByChannelId.action?channelid="+channelid+"&title="+title;   
+ 	//	window.location.href="../content/listContentByTitle.action?title="+title;   
+ 	//}
+ 	var title=document.getElementById("title").value;
+ 	if (title == '' || title == '请输入关键字') {
+ 	   alert('请输入关键字');
+ 	   return;
+ 	}
+ 	title = encodeURIComponent(title);
+ 	window.location.href="../content/listContentByTitle.action?title="+title; 
+ }
+ function query(){
+ 	 var checknumber=document.getElementById("checkNumber").value;
+ 	  var reg = new RegExp("^[0-9]*$");  
+    if(!reg.test(checknumber)){  
+        alert("请输入数字!");  
+        return;
+    }  
+ 	 if (checknumber == "") {
+ 	    alert("信用核查码不能为空！");
+ 	 } else {
+ 	        $.post('../seach/approveContent.action',
+            {checknumber: checknumber},
+            function(data){
+                 if (data == 1) {
+                      window.open("http://172.25.119.13/creditVerification/getDetailVerificationInfo.action?checkcode=" + checknumber,
+	               'newwindow','height=900,width=1000,top='+(window.screen.availHeight-30-900)/2+
+	                   ',left='+(window.screen.availWidth-10-1000)/2+
+	                 ',toolbar=no,menubar=no,scrollbars=yes,resizable=yes,location=no,status=no');
+               } else if (data == 2) {
+                     window.open("http://172.25.119.13/creditVerification/getgroupsDetailVerificationInfo.action?checkcode=" + checknumber,
+	                  'newwindow','height=900,width=1000,top='+(window.screen.availHeight-30-900)/2+
+	                   ',left='+(window.screen.availWidth-10-1000)/2+
+	                 ',toolbar=no,menubar=no,scrollbars=yes,resizable=yes,location=no,status=no');
+               }else {
+                   if (data == '-1') {
+                     alert("信用查询码不存在！");
+                   } else if (data == '-2') {
+                     alert("信用查询码已过期！");
+                   } else if (data == '-3') {
+                     alert("信用查询码已重新生成,请输入最新核查码!");
+                   }
+                }
+            },'json');
+ 	 }
+ }
+function SetWinHeight(obj)
+{
+
+} 
+
+function gotoPage(total,cid){
+	var p=$("#textFooter").val();
+	var i = parseInt(total);
+	if(p!=""){
+		var a=parseInt(p);
+		if(a>0&&a<=i)
+		window.location.href="../content"+cid+"_"+p+".html";
+		if(a>i)
+		window.location.href="../content"+cid+"_"+1+".html";
+	}
+}
+$(document).ready(function() {
+ 	$.ajax({
+        type: "post",//使用post方法访问后台
+        dataType: "json",//返回json格式的数据
+        url: "../getCCS.action",//要访问的后台地址
+        data:{},//要发送的数据
+        complete :function(){$("#load").hide();},//AJAX请求完成时隐藏loading提示
+        success: function(msg){//msg为返回的数据，在这里做数据绑定
+				$("#thrNum").html(msg);
+        }
+    });
+    $.ajax({
+        type: "post",//使用post方法访问后台
+        dataType: "json",//返回json格式的数据
+        url: "../content/findHOTKeyword.action",//要访问的后台地址
+        data:{},//要发送的数据
+        complete :function(){$("#load").hide();},//AJAX请求完成时隐藏loading提示
+        success: function(msg){//msg为返回的数据，在这里做数据绑定
+        	var b='关键字:&nbsp;';
+        	$.each(msg.rows, function(i, n){
+        	var a = '<a href="javascript:void(0)" onclick="byHotKwSeachContent(\''+msg.rows[i]+'\')" >'+msg.rows[i]+'</a>&nbsp;&nbsp;';
+        	b+=a;
+           });
+           $("#hotkw").html(b);
+        }
+    });
+});
+	function byHotKwSeachContent(str) {
+		var title = encodeURIComponent(str);
+		window.location.href = "../content/listContentByTitle.action?title="
+				+ title;
+	}	
+	function queryOfPreview(contentId, category){
+   		 window.location.href="../content/queryOfPreview.action?contentId="+contentId+"&date="+new Date();
+	}
+</script>
+</head>
+
+<body>
+<!--header begin-->
+<div class="header">
+	<div class="wrap">
+    	<div class="logo f_l"><a href="http://www.sipac.gov.cn/" target="_blank"><img src="images/logo.png" /></a></div>
+    	<div class="number f_r" id="thrNum">
+        </div>
+    </div>
+</div>
+<!--header over-->
+
+<!--nav begin-->
+<div class="nav">
+    <ul class="wrap tabs">
+        <li><a href="../goToIndex.action">首页</a></li>
+        	<li><a href="javascript:void(0)" id="22" onclick='show("22")'>信用动态</a></li>
+		        	<input type="hidden" id="22_0" value="365">
+		        	<input type="hidden" id="22_1" value="364">
+		        	<input type="hidden" id="22_2" value="335">
+        	<li><a href="javascript:void(0)" id="420" onclick='show("420")'>信用公示</a></li>
+		        	<input type="hidden" id="420_0" value="318">
+		        	<input type="hidden" id="420_1" value="60">
+		        	<input type="hidden" id="420_2" value="61">
+        	<li><a href="javascript:void(0)" id="26" onclick='show("26")'>重点领域</a></li>
+		        	<input type="hidden" id="26_0" value="486">
+		        	<input type="hidden" id="26_1" value="487">
+		        	<input type="hidden" id="26_2" value="488">
+		        	<input type="hidden" id="26_3" value="489">
+		        	<input type="hidden" id="26_4" value="490">
+		        	<input type="hidden" id="26_5" value="491">
+		        	<input type="hidden" id="26_6" value="492">
+		        	<input type="hidden" id="26_7" value="493">
+        	<li><a href="javascript:void(0)" id="423" onclick='show("423")'>专项资金</a></li>
+		        	<input type="hidden" id="423_0" value="469">
+        	<li><a href="javascript:void(0)" id="416" onclick='show("416")'>政策法规</a></li>
+		        	<input type="hidden" id="416_0" value="306">
+		        	<input type="hidden" id="416_1" value="334">
+		        	<input type="hidden" id="416_2" value="309">
+        <li><a href="http://gzjd.sipac.gov.cn/Web/BBS/MainList.aspx"  target="_blank">在线交流</a></li>
+    </ul>
+</div>
+<!--nav over-->
+
+<!--content begin-->
+<div class="cloud">
+    <!--notice begin-->
+    <div class="wrap">
+    	<div class="notice f_l"> 
+            <div class="notice_tit f_l f_b">通知公告</div>
+            <div class="f_l notice_list"  id="mq" onmouseover=iScrollAmount=0 style="overflow:hidden; width:500px; height:30px;color:#000" onmouseout=iScrollAmount=1 >
+                <ul>
+		                    <li><a href="javascript:queryOfPreview('1911122')">苏州出台省内首部《住房公积金个人失信惩戒实施细则》</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911059')">关于印发江苏省推行食品生产企业 “黑名单”制度指导意见(试行)的通知(苏食药监规</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911231')">家庭成员不履行抚养义务记入个人信用档案</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911061')">2015年我市电梯维保单位星级评定结果公示</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910971')">2015年度“诚信宣传周”活动开始啦</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910519')">2015年12月苏州工业园区公积金（社会保险）公示欠费单位名单</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910520')">苏州工业园区从业建筑业企业不良信用处罚公示汇总</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910381')">2015年11月苏州工业园区社会保险基金（公积金）公示欠费单位名单</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910282')">园区信用体系建设项目接受市领导专项督查并开展座谈会</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911034')">苏州积分落户制度2016年1月15日起实施 失信行为将扣减分</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910988')">关于做好2015年园区建筑业企业信用综合评价良好行为信息录入工作的通知</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910976')">诚信记录纳入流动人口积分管理</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910972')">江苏省研究生考试26日开考 省考试院提醒考生诚信参考</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910518')">2015年中国十佳诚信政府排行榜发布</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910467')">老忘交电费 当心成老赖失信</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910361')">首个国际征信论坛即将在沪登陆</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910338')">居民身份证将可异地换领补领 有不良信用记录的不予受理</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910329')">双十一”消费信用大数据监测评价启动</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910328')">发改委：年底前全面实施统一社会信用代码制度</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910310')">信用社会临近 央行征信系统已收录8.7亿人数据</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910307')">市食药监公布19批次质量不合格食品（附名单）</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910302')">园区地税提交457户企业列入园区失信法人库</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910177')">关于联合发布2014年长三角地区备案信用服务机构名单的通知</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910179')">2014年度“苏州市级信用管理示范企业”认定公示</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="search f_r">
+            <form id="searchform" action="../content/listContentByTitle.action" method="post">
+                <fieldset>
+                <table>
+                 	<tr>
+				      <td width="70%">
+				      	 <input type="text" onfocus="if(this.value =='请输入关键字') {this.value=''; }" onblur="if(this.value==''){this.value='请输入关键字';}" class="text_input" style="width:200px" value="请输入关键字" name="title" id="title">
+				         <input type="button" onclick="seachContent()" name="button"> 
+				      </td>
+				   	</tr>
+				   	<tr>
+				   		 <td id="hotkw"></td>
+				   	</tr>
+				  </table> 
+                </fieldset>
+            </form>
+        </div>
+    </div>
+    <script type="text/javascript" src="js/muqruujs.js"></script>
+    <!--notice over-->
+    <!--center begin-->
+    <div class="wrap mt5 content">
+        <div class="breadcrumbs">
+            <ul>
+                <li>当前位置：</li>
+          		<li><a href="content365_1.html">信用动态</a> > </li>
+            <li><a href="content365_1.html">苏州动态</a> > </li>
+                <li><em>详细</em></li>
+            </ul>
+        </div>
+        
+        <div class="pad50">
+            <div class="art_head">
+                <h1>市容市政管理局：沿街店铺占道违章将接入诚信系统</h1>
+                <div class="tc art_date"> 【发布日期： 】【<a href="javascript:void(0)" onclick="window.print();">打印</a>】 </div>
+            </div>
+            <div class="artnr">
+                <p><div style='font-size: 19px;'><p style="text-indent: 2em;"><span style="font-family: 黑体; font-size: 19px;">三次违章将影响贷款　古城区内不允许有“路边摊”</span></p><p style="margin: 21px 0px 0px; line-height: 35px; text-indent: 2em;"><span style="font-family: 黑体; font-size: 19px;">背街小巷投用小型环卫车扫垃圾　整合零散地块修造停车场</span></p><p style="margin: 21px 0px 0px; line-height: 35px; text-indent: 2em;"><span style="font-size: 19px;"><span style="font-family: 宋体;">昨天(15日)我市市容市政管理局邀请了20多位志愿者参加了“城事大家管”的座谈会。会上，前来座谈的志愿者们畅所欲言，提出了不少中肯的意见，也问了许多关于城市管理中的问题，现场的气氛十分活跃。面对这些问题，我市市容市政管理局局长金锡奇一一予以解答。</span></span></p><p style="margin: 21px 0px 0px; line-height: 35px; text-indent: 2em;"><span style="font-size: 19px;"><span style="font-family: 宋体;">而在座谈会上金锡奇明确，在即将开始的新一轮环境整治中古城区内决不允许有路边摊存在，沿街店铺占道、违章将被接入诚信系统。接下来这一系列的城市管理创意办法将剑指城市顽疾。</span></span></p><p style="margin: 21px 0px 0px; line-height: 35px; text-indent: 2em;"><span style="font-family: 黑体; font-size: 19px;">路边摊就真管不了了?有了疏导点不去就要重罚了</span></p><p style="margin: 21px 0px 0px; line-height: 35px; text-indent: 2em;"><span style="font-size: 19px;"><span style="font-family: 宋体;">座谈会上，几位志愿者毫不客气地指出了苏州路边摊脏乱差的问题。他们认为，一到晚上各类摊点就会涌出来，好点的占用人行道，更有甚者就直接搬上机动车
+道，严重扰乱了交通秩序，此外很多路边摊都聚集在各个小区附近的道路旁，不仅弄得路面上脏乱差，还有沿街卖唱的，影响了周边居民的正常生活。</span></span></p><p style="margin: 21px 0px 0px; line-height: 35px; text-indent: 2em;"><span style="font-size: 19px;"><span style="font-family: 宋体;">金锡奇坦言，志愿者说的这些问题是市民反映最多，也是最难管理的环境顽疾。对于这类问题，突击整治的效果是十分明显，但长效治理确实不尽如人意。金锡奇
+说，根据相关部门统计，现在苏州外来常住人口已将近790万人，与本地人口已达到了1:1，这么大的人口基数意味着有巨大的消费市场，而这些流动摊贩“冒
+死”出来经营的原因就是有利可图。而在姑苏区里这种情况尤为严重，原先城管队员管到晚上10点就下班了，10点后摊贩们就会出来。现在城管队员排班管到晚
+上12点，但凌晨1点后摊贩仍会出来经营，经营时间一直要到清晨五六点。天一亮，各条街上到处散落着垃圾，地面到处是油渍，给环卫工人的工作增添了很大的
+压力，而路面上的油渍是很难清理干净的。</span></span></p><p style="margin: 21px 0px 0px; line-height: 35px; text-indent: 2em;"><span style="font-size: 19px;"><span style="font-family: 宋体;">金锡奇说，接下来肯定要扩大城管的队伍，人员多了延长管理时间，今后管理的时间要延长至清晨5点。而光靠人管是远远不够的，说白了你断了别人的活路，他
+当然要和你拼命，同时要是这种对抗过度了，有这种需求的市民也不会理解，会让执法人员的执法更为被动。所以光堵是治标而不是治本，解决的方式就是要配套疏
+导。目前我市园区、高新区已经有了很成熟的经验，在园区东振路上已经开了这样的疏导点。这个疏导点很规范，里面有各个部门的执法人员长期驻点，商贩只需交
+很少的管理费，就可以依次排队进入该疏导点摆设摊点，但进去经营的摊贩是不允许转租的，而且必须遵循整个市场的管理规则进行经营。</span></span></p><p style="margin: 21px 0px 0px; line-height: 35px; text-indent: 2em;"><span style="font-size: 19px;"><span style="font-family: 宋体;">“但下来明确的一点是，古城区的14.2平方公里内决不允许有路边摊存在。”金锡奇说，古城区的一草一木都是有历史沉淀的，再也经不起伤害了，所以姑苏
+区要建疏导点就要建到外围去。疏导点有了以后，接下来就是劝说这些摊贩前往疏导点经营，不听劝一意孤行的，那就要罚，而且要按照行政处罚中的最高标准来
+罚。目前，姑苏区已经开始前期准备工作，在近几个月中姑苏区城管队员天天加班，对夜排档开始了前期的整治工作。</span></span></p><p style="margin: 21px 0px 0px; line-height: 35px; text-indent: 2em;"><span style="font-family: 黑体; font-size: 19px;">背街小巷内环境如何改善?商家违章占道将纳入诚信系统</span></p><p style="margin: 21px 0px 0px; line-height: 35px; text-indent: 2em;"><span style="font-size: 19px;"><span style="font-family: 宋体;">在座谈中有位志愿者说，在她看来现在苏州除了几条主干道因施工路面欠缺点外，像干将路、三香路这些主干道都管得十分好，不仅环境好，也没有路边摊，更没
+有车辆违停。如果说主干道是苏州的面子，那么背街小巷就是苏州的里子，但大家现在去古城区里小街小巷看看，真可用脏乱差来形容，而且她反映过了很多次，几
+乎都得不到根本性的解决。而沿街商铺占道经营也是志愿者们一致认为的环境管理顽疾。古城区里，水果店、服装店、五金店等沿街店铺很多，多数会占据人行道，
+占道的同时把路面上也弄得一塌糊涂。</span></span></p><p style="margin: 21px 0px 0px; line-height: 35px; text-indent: 2em;"><span style="font-size: 19px;"><span style="font-family: 宋体;">金锡奇说，作为苏州城市管理的一分子，有时候走在背街小巷里他也觉得挺难为情的。说实话，小巷里的环境整治确实难管，现在大量的本地居民迁至新的小区，
+而原先背街小巷中的房子都转租给了来我市务工的人员，很多务工人员干脆就把住的地方弄成了小作坊，对背街小巷的环境影响可见一斑。与之对应的就是，背街小
+巷中道路狭窄，大型的环卫作业车辆根本无法进入，只能靠环卫工人来扫，但这种效果也是捉襟见肘的。金锡奇说，接下来他们将引进可以走街串巷的小型环卫车
+辆，以此提高背街小巷清扫的频率和效率。接下来，背街小巷还要分区域进行“阵地战”“歼灭战”，也就是重点区域重点关照，配合突击清扫，还背街小巷以整洁
+的环境。对苏州来说，背街小巷中少不了的是水，尽管这几年来我市整治的力度很大，但由于居民的素质参差不齐，往河道中抛撒垃圾的情况会时常出现，接下来相
+关部门会在一些重点的水系周边加装监控探头，对于向水中倾倒垃圾的人予以严惩。同时，古城区窝在背街小巷中的废品收购站、铝合金店将逐步外迁，渐渐被“清
+理”。</span></span></p><p style="margin: 21px 0px 0px; line-height: 35px; text-indent: 2em;"><span style="font-size: 19px;"><span style="font-family: 宋体;">金锡奇说，近期为了寻求解决这些顽疾的办法，他们去了宁川，那个城市的居民非常爱干净，可以说有游客前脚随手扔垃圾，后脚就有市民捡起来把垃圾扔进垃圾
+桶。同时为了衡量他们城市的环境质量，他们提出了按克称垃圾的说法，这也就是说他们有信心保证每平方米的垃圾不超过几克。尽管苏州与这个城市相比人口要多
+得多，但这未尝不是一种好的办法，说每平方米几克可能做不到，但说几斤还是可以去努力达到的。</span></span></p><p style="margin: 21px 0px 0px; line-height: 35px; text-indent: 2em;"><span style="font-size: 19px;"><span style="font-family: 宋体;">而在他们学习的过程中，几个城市对付占道经营的办法也让他们受益匪浅。金锡奇说在他看来，占道经营如果管得好，还能成为一道靓丽的风景。那问题就在于怎
+么管，金锡奇认为，在道路条件允许的情况下，固定时间段不影响路人通行、车辆的行驶，不占用盲道，可以让沿街店家适度占道经营。而这种占道经营也是要有规
+范的，首先在占道的区域要铺上红地毯，经营时间结束了，必须要打扫干净，把所有占道的用品收回店中。有志愿者问，要是放开了有些商家不服管怎么办，还是弄
+得脏乱差怎么办?金锡奇说，他们也已经研究出了一套办法，今后每个沿街店面都要配套一个微信二维码，这个微信二维码包含了店内的所有经营信息，以及店主的
+身份信息。一旦店家因为环境类问题遭到了投诉，执法人员就会上门教育，并扫取二维码，一家店有两次机会，第三次再被投诉，其信息就会被记入诚信系统中。其
+行为被记录进诚信系统的后果就是，买房的贷款会受到影响，孩子的入学会受到影响，总体来说在城市中方方面面的生活会因其破坏环境而受到很大的限制。</span></span></p><p style="margin: 21px 0px 0px; line-height: 35px; text-indent: 2em;"><span style="font-family: 黑体; font-size: 19px;">人行道被占了没人管?在安全保障下，逐步开放单位停车资源</span></p><p style="margin: 21px 0px 0px; line-height: 35px; text-indent: 2em;"><span style="font-size: 19px;"><span style="font-family: 宋体;">昨天(15日)座谈会中还有一位已经退休的老校长，他的一席话直接戳中了我市环境问题整治的痛点。这位老校长说，现在苏州很多的非机动车道都被占据，而
+最让他气愤的是，人行道的盲道完全被遮挡，像平桥直街就是最明显的代表，他认为不应该牺牲公众的利益而满足个人的利益。他记得，当时学校里一位女教师在上
+课时对孩子们说，现在就路上开的车有人管，别的没人管。当时得知这个情况后，他把老师喊到了办公室足足批评了一个多小时。十几年过去了，那位老师和他一样
+也退休了，有次遇见时提起这个事情，那位老师还理直气壮地说：你看看现在的实际情况是怎么样，是不“是和我当时说的一样?”</span></span></p><p style="margin: 21px 0px 0px; line-height: 35px; text-indent: 2em;"><span style="font-size: 19px;"><span style="font-family: 宋体;">这位老校长说，现在这种状况作为他来说可以理解，执法人员力量有限，停车资源有限，而有车的人越来越多。他打趣地说自己儿子来家里看他也时常会找不到地方停车，但他觉得不能因为这样而放弃了公共利益，以此换取有车人的个人利益。</span></span></p><p style="margin: 21px 0px 0px; line-height: 35px; text-indent: 2em;"><span style="font-size: 19px;"><span style="font-family: 宋体;">金锡奇说，正如这位老校长所说的那样，现在苏州的汽车保有量依旧在不断增长，车辆占用人行道的违法情况也十分突出。在执法人员有限的情况下，罚是一种强
+制手段，很见效但不是目的，也不能让人心服口服。那如何解决停车问题?经过近一年的时间，他们梳理了古城的停车资源，目前大大小小的停车位有将近44万
+个，而这些车位远远不能满足需求。那就要考虑利用现有的资源尽可能地创造停车资源，比如拙政园周边，由于是商贸旅游区，一到节假日就拥堵异常，不仅是车难
+停，进入了这个区域要行驶都很困难。目前拙政园周边已经开始规划，将建3个地下停车场，并区分旅游大巴和私家车的停放区域。</span></span></p><p style="margin: 21px 0px 0px; line-height: 35px; text-indent: 2em;"><span style="font-size: 19px;"><span style="font-family: 宋体;">拙政园周边只是古城的一部分，要让整个城市交通管理顺畅起来，就要充分利用现有资源。目前，相关部门已经在整理可以使用的零散地块，有条件的地块将建起
+室内、地下停车场。与此同时，相关部门也在积极地协调各个单位，争取让古城区单位的停车资源向市民开放，但前提是保证安全，适度收费，以及限制时间。</span></span></p><p style="margin: 21px 0px 0px; line-height: 35px; text-indent: 2em;"><span style="font-size: 19px;"><span style="font-family: 宋体;">“接下来还有一块重点工作就是工地扬尘的治理。”金锡奇说，目前他们已经与我市住建局商议相应办法，各司其职，由住建局监管建筑工地内的扬尘，而他们则
+重点监管工地的围挡，以及车辆开出建筑工地后的扬尘情况。金锡奇说，在这次外出学习过程中，他看到有些城市建筑工地的围挡非常漂亮，让人赏心悦目，而苏州
+目前很多工地的围挡还不符合要求，接下来他们将重点进行整治。</span></span></p><p><br/></p></div></p>
+            </div>
+        </div>
+    </div>
+    <!--center over-->
+        
+    <!--footer begin-->
+    <div class="wrap mt10">
+        <div class="link">
+            <h1>友情链接</h1>
+            <ul class="l_list">
+                <li><a href="http://www.creditchina.gov.cn/" target="_blank">信用中国</a></li>
+                <li><a href="http://www.js.gov.cn/jsxy/index.htm" target="_blank">诚信江苏</a></li>
+                <li><a href="http://www.njcredit.gov.cn/" target="_blank">诚信南京</a></li>
+                <li><a href="http://www.szcredit.gov.cn/" target="_blank">诚信苏州</a></li>
+                <li><a href="http://credit.zjg.gov.cn/toIndex.action" target="_blank">诚信张家港</a></li>
+            </ul>
+        </div>
+        
+         <div class="foot">
+            <p><span>主办单位：苏州工业园区信用办 </span><span>技术支持：江苏中集科技有限公司</span><span><script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1256639142'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1256639142' type='text/javascript'%3E%3C/script%3E"));</script></span></p>
+        </div>
+        
+    </div>
+    <!--footer over-->
+</div>
+<!--content over-->
+    
+</body>
+</html>

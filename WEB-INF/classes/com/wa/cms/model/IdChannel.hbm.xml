@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.wa.cms.model.IdChannel" table="id_channel" >
+        <id name="id" type="integer">
+            <column name="id"/>
+            <generator class="native"></generator>
+        </id>
+        <property name="no" type="integer">
+            <column name="no"/>
+        </property>
+        <property name="channelId" type="integer">
+            <column name="channel_id"/>
+        </property>
+    </class>
+</hibernate-mapping>

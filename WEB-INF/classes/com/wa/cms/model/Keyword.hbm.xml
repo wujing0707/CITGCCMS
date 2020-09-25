@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2014-5-5 16:40:13 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.wa.cms.model.Keyword" table="KEYWORD">
+        <comment>&#185;&#216;&#188;&#252;&#215;&#214;&#177;&#237;</comment>
+        <id name="keywordId" type="long">
+            <column name="KEYWORD_ID" precision="10" scale="0" />
+            <generator class="native"></generator>
+        </id>
+        <property name="name" type="string">
+            <column name="NAME" length="100">
+                <comment>&#185;&#216;&#188;&#252;&#215;&#214;&#195;&#251;&#179;&#198;</comment>
+            </column>
+        </property>
+        <property name="isDisabled" type="java.lang.Byte">
+            <column name="IS_DISABLED" precision="2" scale="0">
+                <comment>&#202;&#199;&#183;&#241;&#189;&#251;&#211;&#195;(0-&#178;&#187;&#189;&#251;&#211;&#195;,1-&#189;&#251;&#211;&#195;)</comment>
+            </column>
+        </property>
+        <property name="replaceValue" type="string">
+            <column name="REPLACE_VALUE" length="100">
+                <comment>&#180;&#250;&#204;&#230;&#214;&#181;</comment>
+            </column>
+        </property>
+    </class>
+</hibernate-mapping>

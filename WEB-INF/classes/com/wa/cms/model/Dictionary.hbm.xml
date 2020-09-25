@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2014-5-5 16:40:13 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.wa.cms.model.Dictionary" table="DICTIONARY" >
+        <comment>&#215;&#214;&#181;&#228;&#177;&#237;</comment>
+        <id name="dictionaryId" type="long">
+            <column name="DICTIONARY_ID" precision="10" scale="0" />
+        </id>
+        <property name="name" type="string">
+            <column name="NAME">
+                <comment>&#195;&#251;&#179;&#198;</comment>
+            </column>
+        </property>
+        <property name="value" type="string">
+            <column name="VALUE">
+                <comment>&#214;&#181;</comment>
+            </column>
+        </property>
+        <property name="type" type="string">
+            <column name="TYPE">
+                <comment>&#192;&#224;&#208;&#205;</comment>
+            </column>
+        </property>
+        <property name="description" type="string">
+            <column name="DESCRIPTION" />
+        </property>
+    </class>
+</hibernate-mapping>

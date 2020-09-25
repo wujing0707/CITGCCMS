@@ -1,0 +1,391 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
+<meta name="description" content=""/>
+<meta name="keyWords" content=""/>
+<title>诚信园区</title>
+<link type="text/css" href="css/common.css" rel="stylesheet" />
+<link href="js/artDialog2.0.6/skin/chrome/chrome.css" rel="stylesheet" />
+<script type="text/javascript" src="js/jquery-1.7.2.js"></script>
+<script type="text/javascript" src="js/artDialog2.0.6/artDialog.min.js"></script>
+
+<style type="text/css">  
+        .code{   
+            background-image:url("../html/images/QQ.jpg");   
+            margin-left: 10px !important;
+            font-family:Arial;   
+            font-style:italic;   
+            color:Red;   
+            padding:2px 3px;   
+            letter-spacing:3px;   
+            font-weight:bolder;     
+        }   
+</style> 
+<script type="text/javascript">
+$(function () {
+	createCode(0);
+	createCode(3);
+});
+ var code ; //在全局 定义验证码   
+ function createCode(no){    
+   code = "";   
+   var codeLength = 4;//验证码的长度   
+   var checkCode = document.getElementById("checkCodeID"+no);   
+   var selectChar = new Array(0,1,2,3,4,5,6,7,8,9);//所有候选组成验证码的字符，当然也可以用中文的      
+   for(var i=0;i<codeLength;i++){   
+    var charIndex = Math.floor(Math.random()*10);   
+    code +=selectChar[charIndex];   
+   }    
+   if(checkCode){   
+     checkCode.className="code";   
+     checkCode.value = code;
+     checkCode.blur();   
+   }        
+ }
+  function validate (i,t){  
+    //   var checkCode = document.getElementById("checkCodeID"+i).value;  
+       var inputCode = document.getElementById("validCode"+i).value;
+       var zzjgdm=$('#zzjgdm').val();   
+       var gszch=$('#gszch').val();   
+       var companyname=$('#companyname').val();   
+       if(inputCode.length <=0){   
+           alert("请输入验证码！");   
+       }   
+    //   else if(inputCode.toUpperCase()!=checkCode){   
+      //    alert("验证码输入错误！");   
+       //}
+       else if(zzjgdm==""&&gszch==""&&companyname==""){
+       		alert("请至少输入一个查询条件!");
+       }
+       else{   
+          //window.location.href="../seach/seachdetail.action?zzjgdm="+zzjgdm+"&gszch="+gszch+"&companyname="+companyname+"&template="+2; 
+            $.post('../seach/checkSeachdetail.action',
+            {zzjgdm: zzjgdm, gszch:gszch, companyname:companyname,vcode:inputCode, template:2 },
+            function(data){
+                 if (data == '1') {
+                     $('#seaForm').submit(); 
+                 }else if(data=='2'){
+                 	alert("验证码输入错误！");
+                 } else {
+                    alert("暂无相关数据");
+                 }
+               }, "json");   
+       }    
+ }
+ function seachList(i){
+ 	//   var checkCode = document.getElementById("checkCodeID0").value;  
+       var inputCode = document.getElementById("validCode0").value;
+       var name=$('#name').val();   
+       var sfzhm=$('#sfzhm').val();   
+       var zyzhm=$('#zyzhm').val(); 
+       if(inputCode.length <=0){   
+           alert("请输入验证码！");   
+   //    }else if(inputCode.toUpperCase()!=checkCode){   
+   //       alert("验证码输入错误！");   
+       }else if(name==""&&sfzhm==""&&zyzhm==""){
+       		alert("请至少输入一个查询条件!");
+       }else{   
+         //window.location.href="../seach/personalSeachList.action?zyzhm="+zyzhm+"&sfzhm="+sfzhm+"&name="+name+"&template=2";
+                     $.post('../seach/checkPersonalSeachList.action',
+            {zyzhm: zyzhm, sfzhm:sfzhm, name:name,vcode:inputCode,template:2 },
+            function(data){
+                 if (data == 1) {
+                     $('#personForm').submit(); 
+                 }else if(data=='2'){
+                 	alert("验证码输入错误！");
+                 } else {
+                    alert("暂无相关数据");
+                 }
+               }, "json"); 
+       }  
+ }
+ function reset(){
+  	$('#zzjgdm').val('');   
+    $('#gszch').val('');   
+    $('#companyname').val('');  
+    $('#validCode0').val('');  
+ }  
+ function personalReset(){
+ 	$('#name').val('');  
+ 	$('#sfzhm').val('');  
+ 	$('#zyzhm').val('');  
+ 	$('#validCode0').val(''); 
+ }   
+function show(str){
+		var id=document.getElementById(str+"_0").value;
+		window.location.href='content'+id+"_1.html"; 
+}
+function reload(i){
+	if(i==1)
+ 	 window.location.href="qycheck.html";
+ 	 if(i==2)
+ 	 window.location.href="mycheck.html";
+ 	 if(i==3)
+ 	 window.location.href="qyyyshensu.html";
+}
+function goto(staus,name,index,size){
+	if(staus=='up'&&index!=1){
+		window.location.href=name+"_"+(index-1)+".html"; 
+	}else if(staus=='first'){
+		window.location.href=name+"_"+"1.html"; 
+	}else if(staus=='down'){
+		if(index!=size){
+			window.location.href=name+"_"+(index+1)+".html"; 
+		}
+	}else if(staus=='last'){
+		window.location.href=name+"_"+size+".html"; 
+	}
+}
+ function seachContent(){
+ 	//var channelid=document.getElementById("channelid").value;
+ 	//var title=document.getElementById("title").value;
+ 	//if(title==""){
+ 		//return;
+ 	//}else{
+ 		//window.location.href="../content/listContentByChannelId.action?channelid="+channelid+"&title="+title;   
+ 	//	window.location.href="../content/listContentByTitle.action?title="+title;   
+ 	//}
+ 	var title=document.getElementById("title").value;
+ 	if (title == '' || title == '请输入关键字') {
+ 	   alert('请输入关键字');
+ 	   return;
+ 	}
+ 	title = encodeURIComponent(title);
+ 	window.location.href="../content/listContentByTitle.action?title="+title; 
+ }
+ function query(){
+ 	 var checknumber=document.getElementById("checkNumber").value;
+ 	  var reg = new RegExp("^[0-9]*$");  
+    if(!reg.test(checknumber)){  
+        alert("请输入数字!");  
+        return;
+    }  
+ 	 if (checknumber == "") {
+ 	    alert("信用核查码不能为空！");
+ 	 } else {
+ 	        $.post('../seach/approveContent.action',
+            {checknumber: checknumber},
+            function(data){
+                 if (data == 1) {
+                      window.open("http://172.25.119.13/creditVerification/getDetailVerificationInfo.action?checkcode=" + checknumber,
+	               'newwindow','height=900,width=1000,top='+(window.screen.availHeight-30-900)/2+
+	                   ',left='+(window.screen.availWidth-10-1000)/2+
+	                 ',toolbar=no,menubar=no,scrollbars=yes,resizable=yes,location=no,status=no');
+               } else if (data == 2) {
+                     window.open("http://172.25.119.13/creditVerification/getgroupsDetailVerificationInfo.action?checkcode=" + checknumber,
+	                  'newwindow','height=900,width=1000,top='+(window.screen.availHeight-30-900)/2+
+	                   ',left='+(window.screen.availWidth-10-1000)/2+
+	                 ',toolbar=no,menubar=no,scrollbars=yes,resizable=yes,location=no,status=no');
+               }else {
+                   if (data == '-1') {
+                     alert("信用查询码不存在！");
+                   } else if (data == '-2') {
+                     alert("信用查询码已过期！");
+                   } else if (data == '-3') {
+                     alert("信用查询码已重新生成,请输入最新核查码!");
+                   }
+                }
+            },'json');
+ 	 }
+ }
+function SetWinHeight(obj)
+{
+
+} 
+
+function gotoPage(total,cid){
+	var p=$("#textFooter").val();
+	var i = parseInt(total);
+	if(p!=""){
+		var a=parseInt(p);
+		if(a>0&&a<=i)
+		window.location.href="../content"+cid+"_"+p+".html";
+		if(a>i)
+		window.location.href="../content"+cid+"_"+1+".html";
+	}
+}
+$(document).ready(function() {
+ 	$.ajax({
+        type: "post",//使用post方法访问后台
+        dataType: "json",//返回json格式的数据
+        url: "../getCCS.action",//要访问的后台地址
+        data:{},//要发送的数据
+        complete :function(){$("#load").hide();},//AJAX请求完成时隐藏loading提示
+        success: function(msg){//msg为返回的数据，在这里做数据绑定
+				$("#thrNum").html(msg);
+        }
+    });
+    $.ajax({
+        type: "post",//使用post方法访问后台
+        dataType: "json",//返回json格式的数据
+        url: "../content/findHOTKeyword.action",//要访问的后台地址
+        data:{},//要发送的数据
+        complete :function(){$("#load").hide();},//AJAX请求完成时隐藏loading提示
+        success: function(msg){//msg为返回的数据，在这里做数据绑定
+        	var b='关键字:&nbsp;';
+        	$.each(msg.rows, function(i, n){
+        	var a = '<a href="javascript:void(0)" onclick="byHotKwSeachContent(\''+msg.rows[i]+'\')" >'+msg.rows[i]+'</a>&nbsp;&nbsp;';
+        	b+=a;
+           });
+           $("#hotkw").html(b);
+        }
+    });
+});
+	function byHotKwSeachContent(str) {
+		var title = encodeURIComponent(str);
+		window.location.href = "../content/listContentByTitle.action?title="
+				+ title;
+	}	
+	function queryOfPreview(contentId, category){
+   		 window.location.href="../content/queryOfPreview.action?contentId="+contentId+"&date="+new Date();
+	}
+</script>
+</head>
+
+<body>
+<!--header begin-->
+<div class="header">
+	<div class="wrap">
+    	<div class="logo f_l"><a href="http://www.sipac.gov.cn/" target="_blank"><img src="images/logo.png" /></a></div>
+    	<div class="number f_r" id="thrNum">
+        </div>
+    </div>
+</div>
+<!--header over-->
+
+<!--nav begin-->
+<div class="nav">
+    <ul class="wrap tabs">
+        <li><a href="../goToIndex.action">首页</a></li>
+        	<li><a href="javascript:void(0)" id="22" onclick='show("22")'>信用动态</a></li>
+		        	<input type="hidden" id="22_0" value="365">
+		        	<input type="hidden" id="22_1" value="364">
+		        	<input type="hidden" id="22_2" value="335">
+        	<li><a href="javascript:void(0)" id="420" onclick='show("420")'>信用公示</a></li>
+		        	<input type="hidden" id="420_0" value="318">
+		        	<input type="hidden" id="420_1" value="60">
+		        	<input type="hidden" id="420_2" value="61">
+        	<li><a href="javascript:void(0)" id="26" onclick='show("26")'>重点领域</a></li>
+		        	<input type="hidden" id="26_0" value="486">
+		        	<input type="hidden" id="26_1" value="487">
+		        	<input type="hidden" id="26_2" value="488">
+		        	<input type="hidden" id="26_3" value="489">
+		        	<input type="hidden" id="26_4" value="490">
+		        	<input type="hidden" id="26_5" value="491">
+		        	<input type="hidden" id="26_6" value="492">
+		        	<input type="hidden" id="26_7" value="493">
+        	<li><a href="javascript:void(0)" id="423" onclick='show("423")'>专项资金</a></li>
+		        	<input type="hidden" id="423_0" value="469">
+        	<li><a href="javascript:void(0)" id="416" onclick='show("416")'>政策法规</a></li>
+		        	<input type="hidden" id="416_0" value="306">
+		        	<input type="hidden" id="416_1" value="334">
+		        	<input type="hidden" id="416_2" value="309">
+        <li><a href="http://gzjd.sipac.gov.cn/Web/BBS/MainList.aspx"  target="_blank">在线交流</a></li>
+    </ul>
+</div>
+<!--nav over-->
+
+<!--content begin-->
+<div class="cloud">
+    <!--notice begin-->
+    <div class="wrap">
+    	<div class="notice f_l"> 
+            <div class="notice_tit f_l f_b">通知公告</div>
+            <div class="f_l notice_list"  id="mq" onmouseover=iScrollAmount=0 style="overflow:hidden; width:500px; height:30px;color:#000" onmouseout=iScrollAmount=1 >
+                <ul>
+		                    <li><a href="javascript:queryOfPreview('1911122')">苏州出台省内首部《住房公积金个人失信惩戒实施细则》</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911059')">关于印发江苏省推行食品生产企业 “黑名单”制度指导意见(试行)的通知(苏食药监规</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911231')">家庭成员不履行抚养义务记入个人信用档案</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911061')">2015年我市电梯维保单位星级评定结果公示</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910971')">2015年度“诚信宣传周”活动开始啦</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910519')">2015年12月苏州工业园区公积金（社会保险）公示欠费单位名单</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910520')">苏州工业园区从业建筑业企业不良信用处罚公示汇总</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910381')">2015年11月苏州工业园区社会保险基金（公积金）公示欠费单位名单</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910282')">园区信用体系建设项目接受市领导专项督查并开展座谈会</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911034')">苏州积分落户制度2016年1月15日起实施 失信行为将扣减分</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910988')">关于做好2015年园区建筑业企业信用综合评价良好行为信息录入工作的通知</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910976')">诚信记录纳入流动人口积分管理</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910972')">江苏省研究生考试26日开考 省考试院提醒考生诚信参考</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910518')">2015年中国十佳诚信政府排行榜发布</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910467')">老忘交电费 当心成老赖失信</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910361')">首个国际征信论坛即将在沪登陆</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910338')">居民身份证将可异地换领补领 有不良信用记录的不予受理</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910329')">双十一”消费信用大数据监测评价启动</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910328')">发改委：年底前全面实施统一社会信用代码制度</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910310')">信用社会临近 央行征信系统已收录8.7亿人数据</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910307')">市食药监公布19批次质量不合格食品（附名单）</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910302')">园区地税提交457户企业列入园区失信法人库</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910177')">关于联合发布2014年长三角地区备案信用服务机构名单的通知</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910179')">2014年度“苏州市级信用管理示范企业”认定公示</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="search f_r">
+            <form id="searchform" action="../content/listContentByTitle.action" method="post">
+                <fieldset>
+                <table>
+                 	<tr>
+				      <td width="70%">
+				      	 <input type="text" onfocus="if(this.value =='请输入关键字') {this.value=''; }" onblur="if(this.value==''){this.value='请输入关键字';}" class="text_input" style="width:200px" value="请输入关键字" name="title" id="title">
+				         <input type="button" onclick="seachContent()" name="button"> 
+				      </td>
+				   	</tr>
+				   	<tr>
+				   		 <td id="hotkw"></td>
+				   	</tr>
+				  </table> 
+                </fieldset>
+            </form>
+        </div>
+    </div>
+    <script type="text/javascript" src="js/muqruujs.js"></script>
+    <!--notice over-->
+    <!--center begin-->
+    <div class="wrap mt5 content">
+        <div class="breadcrumbs">
+            <ul>
+                <li>当前位置：</li>
+          		<li><a href="content365_1.html">信用动态</a> > </li>
+            <li><a href="content335_1.html">国内动态</a> > </li>
+                <li><em>详细</em></li>
+            </ul>
+        </div>
+        
+        <div class="pad50">
+            <div class="art_head">
+                <h1>商务部研究院酝酿互联网金融企业 信用评级国家级认证标准</h1>
+                <div class="tc art_date"> 【发布日期： 】【<a href="javascript:void(0)" onclick="window.print();">打印</a>】 </div>
+            </div>
+            <div class="artnr">
+                <p><div style='font-size: 18px;'><p style="margin: 0px 0px 16px; line-height: 2em; text-indent: 28px;"><span style="font-family: 宋体; font-size: 18px;">导读</span></p><p style="margin: 0px 0px 16px; line-height: 2em; text-indent: 28px;"><span style="font-family: 宋体; font-size: 18px;">正在酝酿中的《标准》将会创造某些差异化的信用评级方式，比如在判断互联网金融机构是否存在自融行为时，以往不少评级机构主要先考量这家机构产品平均收益率是否远高于行业标准，但《标准》除此之外，还打算引入前十大借款人待收资金占比、贷款地域集中度、投资标的的期限分布、待收资金增速等因素进行综合判断。</span></p><p style="margin: 0px 0px 16px; line-height: 2em; text-indent: 28px;"><span style="font-size: 18px;"><span style="font-family: 宋体; font-size: 18px;">本报记者</span> <span style="font-family: 宋体; font-size: 18px;">陈植</span> <span style="font-family: 宋体; font-size: 18px;">上海报道</span></span></p><p style="margin: 0px 0px 16px; line-height: 2em; text-indent: 28px;"><span style="font-family: 宋体; font-size: 18px;">尽管互联网金融产业发展迅速，但由于整个行业始终缺乏一个权威的机构信用评级认证标准，某种程度制约了它的健康发展。</span></p><p style="margin: 0px 0px 16px; line-height: 2em; text-indent: 28px;"><span style="font-family: 宋体; font-size: 18px;">记者独家获悉，近期商务部直属机构——商务部国际贸易经济合作研究院（下称“商务部研究院”）正在酝酿制定《互联网金融机构信用评级与认证标准》（下称《标准》），计划年底前向社会公开征求意见，于明年正式推广。到时《标准》有望成为国内首个互联网金融机构信用评级与认证的“国家级”标准。</span></p><p style="margin: 0px 0px 16px; line-height: 2em; text-indent: 28px;"><span style="font-family: 宋体; font-size: 18px;">在业内人士看来，这或许是商务部相关部门促进互联网金融健康发展的一次探索。</span></p><p style="margin: 0px 0px 16px; line-height: 2em; text-indent: 28px;"><span style="font-size: 18px;"><span style="font-family: 宋体; font-size: 18px;">值得注意的是，今年</span><span style="font-family: Calibri; font-size: 18px;">7</span><span style="font-family: 宋体; font-size: 18px;">月</span><span style="font-family: Calibri; font-size: 18px;">18</span><span style="font-family: 宋体; font-size: 18px;">日，中国人民银行、工业和信息化部、公安部、财政部、国家工商总局、国务院法制办、中国银行业监督管理委员会、中国证券监督管理委员会、中国保险监督管理委员会、国家互联网信息办公室联合印发《关于促进互联网金融健康发展的指导意见》（下称《指导意见》），商务部似乎不在发布《指导意见》的十部委之列。</span></span></p><p style="margin: 0px 0px 16px; line-height: 2em; text-indent: 28px;"><span style="font-family: 宋体; font-size: 18px;">“但是，商务部相关部门一直在关注互联网金融产业发展。”一位知情人士透露，此次商务部研究院酝酿制定《标准》，正是想借助自身在企业信用评级方面的操作经验，扭转国内互联网金融机构信用评级“乱象”。</span></p><p style="margin: 0px 0px 16px; line-height: 2em; text-indent: 28px;"><span style="font-family: 宋体; font-size: 18px;">作为国内主管商业经济和贸易的政府部门，商务部研究院下属信用评级与认证中心，一直负责为企业机构提供信用评级和认证服务。记者向《标准》制定课题组专家徐洲求证，对方表示目前《标准》相关条款尚在调研论证过程，目前没有进一步信息可以披露。</span></p><p style="margin: 0px 0px 16px; line-height: 2em; text-indent: 28px;"><span style="font-family: 宋体; font-size: 18px;">商务部研究院“牵头”制定《标准》</span></p><p style="margin: 0px 0px 16px; line-height: 2em; text-indent: 28px;"><span style="font-size: 18px;"><span style="font-family: 宋体; font-size: 18px;">今年</span><span style="font-family: Calibri; font-size: 18px;">3</span><span style="font-family: 宋体; font-size: 18px;">月，中国评级机构大公国际资信评估有限公司突然决定将陆金所从互联网金融信用风险预警观察名单转入黑名单，由此引发陆金所与这家信用评级机构的激烈矛盾。</span></span></p><p style="margin: 0px 0px 16px; line-height: 2em; text-indent: 28px;"><span style="font-family: 宋体; font-size: 18px;">“这反映了国内互联网金融机构信用评级缺乏一个权威标准，导致互联网金融机构与评级机构之间往往存在各种不服气。”上述知情人士透露，这也促成商务部研究院将制定《标准》纳入工作日程。</span></p><p style="margin: 0px 0px 16px; line-height: 2em; text-indent: 28px;"><span style="font-family: 宋体; font-size: 18px;">毕竟，商务部研究院的一项重要工作，就是在全国建立企业信用体系，并适时推出符合中国市场的企业信用评级与认证技术操作规范。</span></p><p style="margin: 0px 0px 16px; line-height: 2em; text-indent: 28px;"><span style="font-size: 18px;"><span style="font-family: 宋体; font-size: 18px;">记者了解到，商务部研究院真正启动《标准》课题研究制定，是在《指导意见》出台之后。</span> <span style="font-family: 宋体; font-size: 18px;">一些人士最初认为，互联网金融机构属于金融机构，应由金融监管部门负责发放业务资格牌照，并设定相应的企业信用评级认证标准。但《指导意见》明确指出“支持具备资质的信用中介组织开展互联网企业信用评级，增强市场信息透明度”，无形间给商务部研究院制定互联网金融机构信用评级与认证“国家级”标准，提供了政策操作指引。</span></span></p><p style="margin: 0px 0px 16px; line-height: 2em; text-indent: 28px;"><span style="font-size: 18px;"><span style="font-family: 宋体; font-size: 18px;">徐洲向记者介绍，目前商务部研究院牵头制定《标准》相关条款，评级认证工作则由商务部研究院信用评级与认证中心操作，后者从</span><span style="font-family: Calibri; font-size: 18px;">1987</span><span style="font-family: 宋体; font-size: 18px;">年就引入国际信用风险管理技术，涉足中国信用风险管理市场。</span></span></p><p style="margin: 0px 0px 16px; line-height: 2em; text-indent: 28px;"><span style="font-family: 宋体; font-size: 18px;">“目前，《标准》制定课题组已经调研了多家国内大型互联网金融机构，相关条款也基本制定完毕，下一步将是年底前向社会公开征求建议。”他指出。按照商务部相关部门的规划，若社会征求建议顺利完成，明年将择机推动标准的成果转化，进入实际应用。</span></p><p style="margin: 0px 0px 16px; line-height: 2em; text-indent: 28px;"><span style="font-family: 宋体; font-size: 18px;">“目前，课题组是打算将这份《标准》设计成国内首个互联网金融机构信用评级与认证方面的国家级标准。”徐洲向记者表示。所有按照《标准》评级的互联网金融企业信息还将通过第三方合作平台——互联网金融信息查询系统进行公示，并为互联网金融消费者提供查询服务，改变投资者、互联网金融机构、以及评级机构之间信息不对称，缺乏权威评级判断标准的局面。</span></p><p style="margin: 0px 0px 16px; line-height: 2em; text-indent: 28px;"><span style="font-family: 宋体; font-size: 18px;">评级标准“与众不同”</span></p><p style="margin: 0px 0px 16px; line-height: 2em; text-indent: 28px;"><span style="font-size: 18px;"><span style="font-family: 宋体; font-size: 18px;">在上述知情人士看来，作为互联网金融机构信用评级与认证的“国家级”标准，它在机构信用评级评估方法方面力争“与众不同”。</span> <span style="font-family: 宋体; font-size: 18px;">“有别于不少信用评级机构主要根据互联网金融企业自己提交的财务数据进行评级，《标准》要求在互联网金融机构财务经营信息采集环节，必须引入律师与会计师事务所，先对机构财务数据等信息的真实性进行审核，确保信用评级数据来源的准确性。</span></span></p><p style="margin: 0px 0px 16px; line-height: 2em; text-indent: 28px;"><span style="font-family: 宋体; font-size: 18px;">在信用评级认定方面，《标准》一方面延续现有的互联网金融机构评级认定标准——从注册资本（实缴资本或权益资本）、企业规模、成立年限、资金规模、收益率、逾期率、风控机制、投资者权益保护机制、从业人员资格等方面进行认证，一方面也会创造某些差异化的信用评级方式，比如在判断互联网金融机构是否存在自融行为时，以往不少评级机构主要先考量这家机构产品平均收益率是否远高于行业标准，但《标准》除此之外，还打算引入前十大借款人待收资金占比、贷款地域集中度、投资标的的期限分布、待收资金增速等因素进行综合判断。</span></p><p style="margin: 0px 0px 16px; line-height: 2em; text-indent: 28px;"><span style="font-family: 宋体; font-size: 18px;">“至于各项因素在信用评级打分体系里的评估比重，目前课题组还在进一步研究完善过程，很快会有最终结果。”徐洲表示。但他强调，有别于传统信用评级主要通过财务数据及偿债能力进行征信，《标准》将更侧重通过对互联网金融机构真实经营能力、风控水准和投资者权益保护机制的考察，提供一个相对权威的评级标准。</span></p><p style="margin: 0px 0px 16px; line-height: 2em; text-indent: 28px;"><span style="font-size: 18px;"><span style="font-family: 宋体; font-size: 18px;">记者了解到，《标准》制定课题组还有意通过鼓励、奖励等方式，吸引互联网金融机构员工、投资者反馈企业第一手的经营状况。</span> <span style="font-family: 宋体; font-size: 18px;">在徐洲看来，这些员工与投资者能第一时间了解互联网金融机构产品违约状况，有助于商务部相关部门能及时调整这些机构的信用评级，避免评级调整滞后造成的影响。</span> <span style="font-family: 宋体; font-size: 18px;">“按照标准课题组的设想，《标准》的首要职责，是过滤存在欺诈经营行为的互联网金融机构，避免投资者上当受骗；再通过设立不同的信用评级分数，让投资者能更全面地了解互联网金融机构经营风险高低，避免掉入投资陷阱。”上述知情人士表示。</span></span></p><p style="margin: 0px 0px 16px; text-align: right; line-height: 2em; text-indent: 28px;"><span style="font-family: 宋体; font-size: 18px;">信息来源：新浪网</span></p><p></p></div></p>
+            </div>
+        </div>
+    </div>
+    <!--center over-->
+        
+    <!--footer begin-->
+    <div class="wrap mt10">
+        <div class="link">
+            <h1>友情链接</h1>
+            <ul class="l_list">
+                <li><a href="http://www.creditchina.gov.cn/" target="_blank">信用中国</a></li>
+                <li><a href="http://www.js.gov.cn/jsxy/index.htm" target="_blank">诚信江苏</a></li>
+                <li><a href="http://www.njcredit.gov.cn/" target="_blank">诚信南京</a></li>
+                <li><a href="http://www.szcredit.gov.cn/" target="_blank">诚信苏州</a></li>
+                <li><a href="http://credit.zjg.gov.cn/toIndex.action" target="_blank">诚信张家港</a></li>
+            </ul>
+        </div>
+        
+         <div class="foot">
+            <p><span>主办单位：苏州工业园区信用办 </span><span>技术支持：江苏中集科技有限公司</span><span><script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1256639142'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1256639142' type='text/javascript'%3E%3C/script%3E"));</script></span></p>
+        </div>
+        
+    </div>
+    <!--footer over-->
+</div>
+<!--content over-->
+    
+</body>
+</html>

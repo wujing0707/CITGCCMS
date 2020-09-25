@@ -1,0 +1,398 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
+<meta name="description" content=""/>
+<meta name="keyWords" content=""/>
+<title>诚信园区</title>
+<link type="text/css" href="css/common.css" rel="stylesheet" />
+<link href="js/artDialog2.0.6/skin/chrome/chrome.css" rel="stylesheet" />
+<script type="text/javascript" src="js/jquery-1.7.2.js"></script>
+<script type="text/javascript" src="js/artDialog2.0.6/artDialog.min.js"></script>
+
+<style type="text/css">  
+        .code{   
+            background-image:url("../html/images/QQ.jpg");   
+            margin-left: 10px !important;
+            font-family:Arial;   
+            font-style:italic;   
+            color:Red;   
+            padding:2px 3px;   
+            letter-spacing:3px;   
+            font-weight:bolder;     
+        }   
+</style> 
+<script type="text/javascript">
+$(function () {
+	createCode(0);
+	createCode(3);
+});
+ var code ; //在全局 定义验证码   
+ function createCode(no){    
+   code = "";   
+   var codeLength = 4;//验证码的长度   
+   var checkCode = document.getElementById("checkCodeID"+no);   
+   var selectChar = new Array(0,1,2,3,4,5,6,7,8,9);//所有候选组成验证码的字符，当然也可以用中文的      
+   for(var i=0;i<codeLength;i++){   
+    var charIndex = Math.floor(Math.random()*10);   
+    code +=selectChar[charIndex];   
+   }    
+   if(checkCode){   
+     checkCode.className="code";   
+     checkCode.value = code;
+     checkCode.blur();   
+   }        
+ }
+  function validate (i,t){  
+    //   var checkCode = document.getElementById("checkCodeID"+i).value;  
+       var inputCode = document.getElementById("validCode"+i).value;
+       var zzjgdm=$('#zzjgdm').val();   
+       var gszch=$('#gszch').val();   
+       var companyname=$('#companyname').val();   
+       if(inputCode.length <=0){   
+           alert("请输入验证码！");   
+       }   
+    //   else if(inputCode.toUpperCase()!=checkCode){   
+      //    alert("验证码输入错误！");   
+       //}
+       else if(zzjgdm==""&&gszch==""&&companyname==""){
+       		alert("请至少输入一个查询条件!");
+       }
+       else{   
+          //window.location.href="../seach/seachdetail.action?zzjgdm="+zzjgdm+"&gszch="+gszch+"&companyname="+companyname+"&template="+2; 
+            $.post('../seach/checkSeachdetail.action',
+            {zzjgdm: zzjgdm, gszch:gszch, companyname:companyname,vcode:inputCode, template:2 },
+            function(data){
+                 if (data == '1') {
+                     $('#seaForm').submit(); 
+                 }else if(data=='2'){
+                 	alert("验证码输入错误！");
+                 } else {
+                    alert("暂无相关数据");
+                 }
+               }, "json");   
+       }    
+ }
+ function seachList(i){
+ 	//   var checkCode = document.getElementById("checkCodeID0").value;  
+       var inputCode = document.getElementById("validCode0").value;
+       var name=$('#name').val();   
+       var sfzhm=$('#sfzhm').val();   
+       var zyzhm=$('#zyzhm').val(); 
+       if(inputCode.length <=0){   
+           alert("请输入验证码！");   
+   //    }else if(inputCode.toUpperCase()!=checkCode){   
+   //       alert("验证码输入错误！");   
+       }else if(name==""&&sfzhm==""&&zyzhm==""){
+       		alert("请至少输入一个查询条件!");
+       }else{   
+         //window.location.href="../seach/personalSeachList.action?zyzhm="+zyzhm+"&sfzhm="+sfzhm+"&name="+name+"&template=2";
+                     $.post('../seach/checkPersonalSeachList.action',
+            {zyzhm: zyzhm, sfzhm:sfzhm, name:name,vcode:inputCode,template:2 },
+            function(data){
+                 if (data == 1) {
+                     $('#personForm').submit(); 
+                 }else if(data=='2'){
+                 	alert("验证码输入错误！");
+                 } else {
+                    alert("暂无相关数据");
+                 }
+               }, "json"); 
+       }  
+ }
+ function reset(){
+  	$('#zzjgdm').val('');   
+    $('#gszch').val('');   
+    $('#companyname').val('');  
+    $('#validCode0').val('');  
+ }  
+ function personalReset(){
+ 	$('#name').val('');  
+ 	$('#sfzhm').val('');  
+ 	$('#zyzhm').val('');  
+ 	$('#validCode0').val(''); 
+ }   
+function show(str){
+		var id=document.getElementById(str+"_0").value;
+		window.location.href='content'+id+"_1.html"; 
+}
+function reload(i){
+	if(i==1)
+ 	 window.location.href="qycheck.html";
+ 	 if(i==2)
+ 	 window.location.href="mycheck.html";
+ 	 if(i==3)
+ 	 window.location.href="qyyyshensu.html";
+}
+function goto(staus,name,index,size){
+	if(staus=='up'&&index!=1){
+		window.location.href=name+"_"+(index-1)+".html"; 
+	}else if(staus=='first'){
+		window.location.href=name+"_"+"1.html"; 
+	}else if(staus=='down'){
+		if(index!=size){
+			window.location.href=name+"_"+(index+1)+".html"; 
+		}
+	}else if(staus=='last'){
+		window.location.href=name+"_"+size+".html"; 
+	}
+}
+ function seachContent(){
+ 	//var channelid=document.getElementById("channelid").value;
+ 	//var title=document.getElementById("title").value;
+ 	//if(title==""){
+ 		//return;
+ 	//}else{
+ 		//window.location.href="../content/listContentByChannelId.action?channelid="+channelid+"&title="+title;   
+ 	//	window.location.href="../content/listContentByTitle.action?title="+title;   
+ 	//}
+ 	var title=document.getElementById("title").value;
+ 	if (title == '' || title == '请输入关键字') {
+ 	   alert('请输入关键字');
+ 	   return;
+ 	}
+ 	title = encodeURIComponent(title);
+ 	window.location.href="../content/listContentByTitle.action?title="+title; 
+ }
+ function query(){
+ 	 var checknumber=document.getElementById("checkNumber").value;
+ 	  var reg = new RegExp("^[0-9]*$");  
+    if(!reg.test(checknumber)){  
+        alert("请输入数字!");  
+        return;
+    }  
+ 	 if (checknumber == "") {
+ 	    alert("信用核查码不能为空！");
+ 	 } else {
+ 	        $.post('../seach/approveContent.action',
+            {checknumber: checknumber},
+            function(data){
+                 if (data == 1) {
+                      window.open("http://172.25.119.13/creditVerification/getDetailVerificationInfo.action?checkcode=" + checknumber,
+	               'newwindow','height=900,width=1000,top='+(window.screen.availHeight-30-900)/2+
+	                   ',left='+(window.screen.availWidth-10-1000)/2+
+	                 ',toolbar=no,menubar=no,scrollbars=yes,resizable=yes,location=no,status=no');
+               } else if (data == 2) {
+                     window.open("http://172.25.119.13/creditVerification/getgroupsDetailVerificationInfo.action?checkcode=" + checknumber,
+	                  'newwindow','height=900,width=1000,top='+(window.screen.availHeight-30-900)/2+
+	                   ',left='+(window.screen.availWidth-10-1000)/2+
+	                 ',toolbar=no,menubar=no,scrollbars=yes,resizable=yes,location=no,status=no');
+               }else {
+                   if (data == '-1') {
+                     alert("信用查询码不存在！");
+                   } else if (data == '-2') {
+                     alert("信用查询码已过期！");
+                   } else if (data == '-3') {
+                     alert("信用查询码已重新生成,请输入最新核查码!");
+                   }
+                }
+            },'json');
+ 	 }
+ }
+function SetWinHeight(obj)
+{
+
+} 
+
+function gotoPage(total,cid){
+	var p=$("#textFooter").val();
+	var i = parseInt(total);
+	if(p!=""){
+		var a=parseInt(p);
+		if(a>0&&a<=i)
+		window.location.href="../content"+cid+"_"+p+".html";
+		if(a>i)
+		window.location.href="../content"+cid+"_"+1+".html";
+	}
+}
+$(document).ready(function() {
+ 	$.ajax({
+        type: "post",//使用post方法访问后台
+        dataType: "json",//返回json格式的数据
+        url: "../getCCS.action",//要访问的后台地址
+        data:{},//要发送的数据
+        complete :function(){$("#load").hide();},//AJAX请求完成时隐藏loading提示
+        success: function(msg){//msg为返回的数据，在这里做数据绑定
+				$("#thrNum").html(msg);
+        }
+    });
+    $.ajax({
+        type: "post",//使用post方法访问后台
+        dataType: "json",//返回json格式的数据
+        url: "../content/findHOTKeyword.action",//要访问的后台地址
+        data:{},//要发送的数据
+        complete :function(){$("#load").hide();},//AJAX请求完成时隐藏loading提示
+        success: function(msg){//msg为返回的数据，在这里做数据绑定
+        	var b='关键字:&nbsp;';
+        	$.each(msg.rows, function(i, n){
+        	var a = '<a href="javascript:void(0)" onclick="byHotKwSeachContent(\''+msg.rows[i]+'\')" >'+msg.rows[i]+'</a>&nbsp;&nbsp;';
+        	b+=a;
+           });
+           $("#hotkw").html(b);
+        }
+    });
+});
+	function byHotKwSeachContent(str) {
+		var title = encodeURIComponent(str);
+		window.location.href = "../content/listContentByTitle.action?title="
+				+ title;
+	}	
+	function queryOfPreview(contentId, category){
+   		 window.location.href="../content/queryOfPreview.action?contentId="+contentId+"&date="+new Date();
+	}
+</script>
+</head>
+
+<body>
+<!--header begin-->
+<div class="header">
+	<div class="wrap">
+    	<div class="logo f_l"><a href="http://www.sipac.gov.cn/" target="_blank"><img src="images/logo.png" /></a></div>
+    	<div class="number f_r" id="thrNum">
+        </div>
+    </div>
+</div>
+<!--header over-->
+
+<!--nav begin-->
+<div class="nav">
+    <ul class="wrap tabs">
+        <li><a href="../goToIndex.action">首页</a></li>
+        	<li><a href="javascript:void(0)" id="22" onclick='show("22")'>信用动态</a></li>
+		        	<input type="hidden" id="22_0" value="365">
+		        	<input type="hidden" id="22_1" value="364">
+		        	<input type="hidden" id="22_2" value="335">
+        	<li><a href="javascript:void(0)" id="420" onclick='show("420")'>信用公示</a></li>
+		        	<input type="hidden" id="420_0" value="318">
+		        	<input type="hidden" id="420_1" value="60">
+		        	<input type="hidden" id="420_2" value="61">
+        	<li><a href="javascript:void(0)" id="26" onclick='show("26")'>重点领域</a></li>
+		        	<input type="hidden" id="26_0" value="486">
+		        	<input type="hidden" id="26_1" value="487">
+		        	<input type="hidden" id="26_2" value="488">
+		        	<input type="hidden" id="26_3" value="489">
+		        	<input type="hidden" id="26_4" value="490">
+		        	<input type="hidden" id="26_5" value="491">
+		        	<input type="hidden" id="26_6" value="492">
+		        	<input type="hidden" id="26_7" value="493">
+        	<li><a href="javascript:void(0)" id="423" onclick='show("423")'>专项资金</a></li>
+		        	<input type="hidden" id="423_0" value="469">
+        	<li><a href="javascript:void(0)" id="416" onclick='show("416")'>政策法规</a></li>
+		        	<input type="hidden" id="416_0" value="306">
+		        	<input type="hidden" id="416_1" value="334">
+		        	<input type="hidden" id="416_2" value="309">
+        <li><a href="http://gzjd.sipac.gov.cn/Web/BBS/MainList.aspx"  target="_blank">在线交流</a></li>
+    </ul>
+</div>
+<!--nav over-->
+
+<!--content begin-->
+<div class="cloud">
+    <!--notice begin-->
+    <div class="wrap">
+    	<div class="notice f_l"> 
+            <div class="notice_tit f_l f_b">通知公告</div>
+            <div class="f_l notice_list"  id="mq" onmouseover=iScrollAmount=0 style="overflow:hidden; width:500px; height:30px;color:#000" onmouseout=iScrollAmount=1 >
+                <ul>
+		                    <li><a href="javascript:queryOfPreview('1911122')">苏州出台省内首部《住房公积金个人失信惩戒实施细则》</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911059')">关于印发江苏省推行食品生产企业 “黑名单”制度指导意见(试行)的通知(苏食药监规</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911231')">家庭成员不履行抚养义务记入个人信用档案</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911061')">2015年我市电梯维保单位星级评定结果公示</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910971')">2015年度“诚信宣传周”活动开始啦</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910519')">2015年12月苏州工业园区公积金（社会保险）公示欠费单位名单</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910520')">苏州工业园区从业建筑业企业不良信用处罚公示汇总</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910381')">2015年11月苏州工业园区社会保险基金（公积金）公示欠费单位名单</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910282')">园区信用体系建设项目接受市领导专项督查并开展座谈会</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911034')">苏州积分落户制度2016年1月15日起实施 失信行为将扣减分</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910988')">关于做好2015年园区建筑业企业信用综合评价良好行为信息录入工作的通知</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910976')">诚信记录纳入流动人口积分管理</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910972')">江苏省研究生考试26日开考 省考试院提醒考生诚信参考</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910518')">2015年中国十佳诚信政府排行榜发布</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910467')">老忘交电费 当心成老赖失信</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910361')">首个国际征信论坛即将在沪登陆</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910338')">居民身份证将可异地换领补领 有不良信用记录的不予受理</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910329')">双十一”消费信用大数据监测评价启动</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910328')">发改委：年底前全面实施统一社会信用代码制度</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910310')">信用社会临近 央行征信系统已收录8.7亿人数据</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910307')">市食药监公布19批次质量不合格食品（附名单）</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910302')">园区地税提交457户企业列入园区失信法人库</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910177')">关于联合发布2014年长三角地区备案信用服务机构名单的通知</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910179')">2014年度“苏州市级信用管理示范企业”认定公示</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="search f_r">
+            <form id="searchform" action="../content/listContentByTitle.action" method="post">
+                <fieldset>
+                <table>
+                 	<tr>
+				      <td width="70%">
+				      	 <input type="text" onfocus="if(this.value =='请输入关键字') {this.value=''; }" onblur="if(this.value==''){this.value='请输入关键字';}" class="text_input" style="width:200px" value="请输入关键字" name="title" id="title">
+				         <input type="button" onclick="seachContent()" name="button"> 
+				      </td>
+				   	</tr>
+				   	<tr>
+				   		 <td id="hotkw"></td>
+				   	</tr>
+				  </table> 
+                </fieldset>
+            </form>
+        </div>
+    </div>
+    <script type="text/javascript" src="js/muqruujs.js"></script>
+    <!--notice over-->
+    <!--center begin-->
+    <div class="wrap mt5 content">
+        <div class="breadcrumbs">
+            <ul>
+                <li>当前位置：</li>
+          		<li><a href="content306_1.html">政策法规</a> > </li>
+            <li><a href="content309_1.html">本地法规</a> > </li>
+                <li><em>详细</em></li>
+            </ul>
+        </div>
+        
+        <div class="pad50">
+            <div class="art_head">
+                <h1>证券期货市场诚信监督管理暂行办法</h1>
+                <div class="tc art_date"> 【发布日期： 】【<a href="javascript:void(0)" onclick="window.print();">打印</a>】 </div>
+            </div>
+            <div class="artnr">
+                <p><p>第一章 总则</p><p>第一条 为了加强证券期货市场诚信建设，保护投资者合法权益，维护证券期货市场秩序，促进证券期货市场健康稳定发展，根据有关法律、行政法规，制定本办法。</p><p>第二条 中国证券监督管理委员会（以下简称中国证监会）建立全国统一的证券期货市场诚信档案数据（以下简称诚信档案），记录证券期货市场诚信信息。</p><p>第三条 记入诚信档案的诚信信息的界定、采集与管理，诚信信息的公开、查询，诚信约束、激励与引导等，适用本办法。</p><p>第四条 公民（自然人）、法人或其他组织从事证券期货市场活动，应当诚实信用，遵守法律、行政法规、规章和依法制定的自律规则，禁止欺诈、内幕交易、操纵市场以及其他损害投资者合法权益的不诚实信用行为。</p><p>第五条 中国证监会鼓励、支持诚实信用的公民、法人或其他组织从事证券期货市场活动，实施诚信约束、激励与引导。</p><p>第六条 中国证监会可以和国务院其他部门、地方政府、司法机关、行业组织建立诚信监督合作机制，实施诚信信息共享，推动健全社会信用体系。</p><p>第二章 诚信信息的采集</p><p>第七条 下列从事证券期货市场活动的公民、法人或其他组织的诚信信息，记入诚信档案：</p><p>（一）证券业从业人员和期货从业人员；</p><p>（二）发行人、上市公司及其董事、监事、高级管理人员、主要股东和实际控制人；</p><p>（三）证券公司、基金管理公司、期货公司及其董事、监事、高级管理人员、主要股东和实际控制人；</p><p>（四）会计师事务所、律师事务所、保荐机构、财务顾问机构、资产评估机构、投资咨询机构、信用评级机构等证券期货服务机构及其从业人员；</p><p>（五）独立基金销售机构、基金评价机构及其相关业务人员，非公开募集基金管理人、合格境外机构投资者、合格境内机构投资者及其主要投资管理人员，境外证券类机构驻华代表机构及其首席代表；</p><p>（六）为证券期货业提供信息技术服务或者软硬件产品的供应商；</p><p>（七）为发行人、上市公司提供投资者关系管理及其他公关服务的服务机构及其人员；</p><p>（八）其他有与证券期货市场活动相关的违法失信行为的公民、法人或其他组织。</p><p>第八条 本办法所称诚信信息包括：</p><p>（一）公民的姓名、性别、国籍、身份证件号码，法人或其他组织的名称、住所、组织机构代码等基本信息；</p><p>（二）中国证监会、国务院其他主管部门等其他省部级及以上单位和证券期货交易所、证券期货市场行业协会、证券登记结算机构等全国性证券期货市场行业组织（以下简称证券期货市场行业组织）作出的表彰、奖励、评比，以及信用评级机构作出的信用评级；</p><p>（三）中国证监会及其派出机构作出的行政许可决定；</p><p>（四）发行人、上市公司及其主要股东、实际控制人，董事、监事和高级管理人员，重大资产重组交易各方，及收购人所作的公开承诺的未履行或未如期履行、正在履行、已如期履行等情况；</p><p>（五）中国证监会及其派出机构作出的行政处罚、市场禁入决定和采取的监督管理措施；</p><p>（六）证券期货市场行业组织实施的纪律处分措施和法律、行政法规、规章规定的管理措施；</p><p>（七）因涉嫌证券期货违法被中国证监会及其派出机构调查及采取强制措施；</p><p>（八）因涉嫌证券期货犯罪被中国证监会及其派出机构移送公安机关、人民检察院处理；</p><p>（九）因证券期货犯罪或其他犯罪被人民法院判处刑罚；</p><p>（十）因证券期货侵权、违约行为被人民法院判决承担较大民事赔偿责任；</p><p>（十一）因违法开展经营活动被银行、保险、财政、税收、环保、工商、海关等相关主管部门予以行政处罚；</p><p>（十二）违背诚实信用原则的其他行为信息。</p><p>第九条 本办法第七条所列公民、法人或其他组织所受表彰、奖励、评比和信用评级信息，由其自行向中国证监会及其派出机构申报，记入诚信档案。</p><p>第十条 本办法第八条第（一）项、第（三）项至第（八）项诚信信息，由中国证监会及其派出机构、证券期货市场行业组织依其职责采集并记入诚信档案。</p><p>第十一条 本办法第八条第（九）项至第（十一）项诚信信息，由中国证监会及其派出机构通过政府信息公开、信用信息共享等途径采集并记入诚信档案。</p><p>第十二条 记入诚信档案的诚信信息所对应的决定或者行为经法定程序撤销、变更的，中国证监会及其派出机构将相应删除、修改该诚信信息。</p><p>第十三条 本办法第八条规定的违法失信信息，在诚信档案中的效力期限为5年，但因证券期货违法行为被行政处罚、市场禁入、刑事处罚的违法信息，其效力期限为10年。</p><p>前款所规定的期限，自对违法失信行为的处理决定作出之日起算，被行政处罚、市场禁入、刑事处罚的，自处罚执行完毕或禁入期满之日起算。</p><p>第三章 诚信信息的公开与查询</p><p>第十四条 本办法第八条第（二）、（三）、（四）、（六）项信息和第（五）项的行政处罚、市场禁入信息依法向社会公开。</p><p>第十五条 除本办法第十四条规定之外的诚信信息，公民、法人或其他组织可以根据本办法规定向中国证监会及其派出机构申请查询。</p><p>第十六条 公民、法人或其他组织提出诚信信息查询申请，符合以下条件之一的，中国证监会及其派出机构应当予以办理：</p><p>（一）公民、法人或其他组织申请查询自己的诚信信息的；</p><p>（二）发行人、上市公司申请查询拟任董事、监事、高级管理人员的诚信信息的；</p><p>（三）发行人、上市公司申请查询拟参与本公司并购、重组的公民、法人或其他组织的诚信信息的；</p><p>（四）发行人、上市公司申请查询拟委托的证券公司、证券服务机构及其相关从业人员的诚信信息的；</p><p>（五）证券公司、证券服务机构申请查询其所提供专业服务的发行人、上市公司及其董事、监事、高级管理人员、控股股东和实际控制人的诚信信息的；</p><p>（六）证券公司、基金管理公司、期货公司、证券期货服务机构申请查询已聘任或拟聘任的董事、监事、高级管理人员或其他从业人员的诚信信息的；</p><p>（七）中国证监会规定的其他条件。</p><p>第十七条 公民、法人或其他组织提出诚信信息查询申请，应当提供如下材料：</p><p>（一）查询申请书；</p><p>（二）身份证明文件；</p><p>（三）办理本办法第十六条第（二）项至第（六）项查询申请的，查询申请书应经查询对象签字或盖章同意，或有查询对象的其他书面同意文件。</p><p>第十八条 公民、法人或其他组织提出的查询申请，符合条件，材料齐备的，中国证监会及其派出机构应当自收到查询申请之日起5个工作日内反馈。</p><p>第十九条 公民、法人或其他组织申请查询的诚信信息属于国家秘密，其他公民、法人或其他组织的商业秘密及个人隐私的，中国证监会及其派出机构不予查询，但应当在答复中说明。</p><p>第二十条 记入诚信档案的公民、法人或其他组织，认为其诚信信息具有本办法第十二条规定的应予删除、修改情形的，或者具有其他重大、明显错误的，可以向中国证监会及其派出机构申请更正。</p><p>中国证监会及其派出机构收到公民、法人或其他组织的信息更正申请后，应当在15个工作日内进行处理，并将处理结果告知申请人。确有本办法第十二条规定的应予删除、修改情形的，或者其他重大、明显错误情形的，应予更正。</p><p>第二十一条 公民、法人或其他组织通过查询获取诚信信息的，不得泄露或提供他人使用，不得进行以营利为目的的使用、加工或处理，不得用于其他非法目的。</p><p>第四章 诚信约束、激励与引导</p><p>第二十二条 中国证监会及其派出机构审核行政许可申请，应当查阅申请人以及申请事项所涉及的有关当事人的诚信档案。</p><p>第二十三条 
+中国证监会及其派出机构审核行政许可申请，发现申请人以及有关当事人有本办法第八条第（四）项中的未履行或未如期履行承诺信息，或者第（五）项至第（十
+一）项规定的违法失信信息的，可以要求申请人或受申请人委托为行政许可申请提供证券期货服务的有关机构，进行口头或书面说明、解释。</p><p>第二十四条 根据本办法第二十三条规定进行书面说明、解释的，申请人或有关证券期货服务机构应当在规定期限内提交书面回复意见。</p><p>书面回复意见应就如下事项进行说明：</p><p>（一）诚信信息所涉及相关事实的基本情况；</p><p>（二）有关部门对申请人所作决定的执行及其他后续情况，并提供证明材料；</p><p>（三）有关证券期货服务机构关于诚信信息对行政许可事项是否构成影响的分析。</p><p>第二十五条 申请人或有关证券期货服务机构的书面回复意见不明确，有关分析、说明不充分的，中国证监会及其派出机构可以直接或者委托有关机构对有关事项进行核查。</p><p>第二十六条 根据本办法第二十三条、第二十四条、第二十五条进行书面说明、解释或核查的时间，不计入行政许可审核法定期限。</p><p>第二十七条 行政许可申请人以及申请事项所涉及的有关当事人有本办法第八条第（四）项中的未履行或未如期履行承诺信息，或者第（五）项至第（十一）项规定的违法失信信息之一，属于法定不予许可条件范围的，中国证监会及其派出机构应当依法作出不予许可的决定。</p><p>申请人以及申请事项所涉及的有关当事人的诚信信息虽不属于法定不予许可条件范围，但有关法律、行政法规和规章对行政许可法定条件提出诚实信用要求、
+作出原则性规定或设定授权性条款的，中国证监会及其派出机构可以综合考虑诚信状况等相关因素，审慎审核申请人提出的行政许可申请事项。</p><p>第二十八条 
+非行政许可事项、业务创新试点申请人有本办法第八条第（四）项中的未履行或未如期履行承诺信息，或者第（五）项至第（十一）项规定的违法失信信息之一的，
+中国证监会及其派出机构可以暂缓或不予审批、安排，但申请人能证明该违法失信信息与非行政许可事项或业务创新明显无关的除外。</p><p>第二十九条 中国证监会及其派出机构在非行政许可审批、业务创新试点安排中，可以在法律、行政法规规定的范围内，对于同等条件下诚信状况较好的申请人予以优先审批、安排。</p><p>第三十条 
+中国证监会及其派出机构在对公民、法人或其他组织进行行政处罚、实施市场禁入和采取监督管理措施中，可以查阅诚信档案，在综合考虑当事人违法行为的性质、
+情节以及损害投资者合法权益的程度的基础上，将当事人的诚信状况作为确定处罚幅度、禁入期间和监督管理措施类别的酌定因素。</p><p>第三十一条 中国证监会及其派出机构在开展监督检查等日常监管工作中，可以综合考虑被监管的机构及其人员的诚信状况，有针对性地进行现场检查和非现场检查，或者适当调整、安排现场检查的对象、频率和内容。</p><p>第三十二条 公民、法人或其他组织公开发布证券期货市场评论信息，所述事实内容与实际情况不相符合的，或者存在其他显著误导公众情形的，中国证监会及其派出机构可以对其出具诚信关注函，记入诚信档案，并可将有关情况向其所在工作单位、所属主管部门或行业自律组织通报。</p><p>证券期货投资咨询机构及其人员公开发布证券期货市场评论信息违反规定的，依照有关规定处理、处罚。</p><p>公民、法人或其他组织利用公开发布证券期货市场评论信息进行内幕交易、操纵市场等违法行为的，依法予以处罚；构成犯罪的，由司法机关依法追究刑事责任。</p><p>第三十三条 证券期货市场行业组织应当教育和鼓励其成员以及从业人员遵守法律，诚实信用。对遵守法律、诚实信用的成员以及从业人员，可以给予表彰、奖励。</p><p>中国证监会鼓励证券期货市场行业组织等建立证券期货市场诚信评估制度，组织开展对有关行业和市场主体的诚信状况评估，并将评估结果予以公示。</p><p>第三十四条 上市公司、证券公司、基金管理公司、期货公司和证券期货服务机构等应当不断完善内部诚信监督、约束制度机制，提高诚信水平。</p><p>中国证监会及其派出机构对前款规定机构的内部诚信监督、约束制度机制建设情况进行检查、指导，并可将检查情况在行业和辖区内进行通报。</p><p>第三十五条 对有本办法第八条第（四）项中的未履行或未如期履行承诺信息，或者第（五）项至第（十一）项规定的违法失信信息的公民，中国证监会及其派出机构、证券期货市场行业组织可以不聘任其担任下列职务：</p><p>（一）中国证监会主板、创业板发行审核委员会委员；</p><p>（二）中国证监会上市公司并购重组审核委员会委员；</p><p>（三）中国证监会及其派出机构、证券期货市场行业组织成立的负有审核、监督、核查、咨询职责的其他组织的成员。</p><p>第五章 监督与管理</p><p>第三十六条 中国证监会诚信监督管理机构履行下列职责：</p><p>（一）界定、组织采集证券期货市场诚信信息；</p><p>（二）建立、管理诚信档案，组织、督促诚信信息的记入；</p><p>（三）组织办理诚信信息的公开、查询和共享；</p><p>（四）建立、协调实施诚信监督、约束与激励机制；</p><p>（五）中国证监会规定的其他诚信监督管理与服务职责。</p><p>第三十七条 中国证监会各派出机构负责接收、办理住所地在本辖区的公民、法人或其他组织根据本办法规定提出的诚信信息记入申报、诚信信息查询申请、诚信信息更正申请等事项。</p><p>第三十八条 中国证监会及其派出机构、证券期货市场行业组织，未按照本办法规定及时、真实、准确、完整地记入诚信信息，造成不良后果的，按照有关规定对相关责任人员进行行政处分；情节严重的，依法追究法律责任。</p><p>第三十九条 公民、法人或其他组织对自己申报和依法报告、公告的诚信信息的真实性、准确性、完整性负责。</p><p>公民、法人或其他组织申报、报告和公告的诚信信息，有虚假内容的，中国证监会及其派出机构可以采取责令改正、监管谈话、出具警示函、责令公开说明等监督管理措施；情节严重的，依法追究法律责任。</p><p>第四十条 公民、法人或其他组织违反本办法规定获取、使用、泄露诚信信息的，中国证监会及其派出机构可以采取责令改正、监管谈话、出具警示函等监督管理措施；情节严重的，依法追究法律责任。</p><p>第六章 附则</p><p>第四十一条 中国证监会及其派出机构办理诚信信息查询，除可以收取打印、复制、装订、邮寄成本费用外，不得收取其他费用。</p><p>第四十二条 证券期货市场行业组织在履行自律管理职责中，查询诚信档案，实施诚信约束、激励的，参照本办法有关规定执行。</p><p>第四十三条 本办法自2012年9月1日起施行。</p><p><br/></p></p>
+            </div>
+        </div>
+    </div>
+    <!--center over-->
+        
+    <!--footer begin-->
+    <div class="wrap mt10">
+        <div class="link">
+            <h1>友情链接</h1>
+            <ul class="l_list">
+                <li><a href="http://www.creditchina.gov.cn/" target="_blank">信用中国</a></li>
+                <li><a href="http://www.js.gov.cn/jsxy/index.htm" target="_blank">诚信江苏</a></li>
+                <li><a href="http://www.njcredit.gov.cn/" target="_blank">诚信南京</a></li>
+                <li><a href="http://www.szcredit.gov.cn/" target="_blank">诚信苏州</a></li>
+                <li><a href="http://credit.zjg.gov.cn/toIndex.action" target="_blank">诚信张家港</a></li>
+            </ul>
+        </div>
+        
+         <div class="foot">
+            <p><span>主办单位：苏州工业园区信用办 </span><span>技术支持：江苏中集科技有限公司</span><span><script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1256639142'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1256639142' type='text/javascript'%3E%3C/script%3E"));</script></span></p>
+        </div>
+        
+    </div>
+    <!--footer over-->
+</div>
+<!--content over-->
+    
+</body>
+</html>

@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2014-5-5 16:40:13 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.wa.cms.model.Authority" table="AUTHORITY">
+        <comment>&#200;&#168;&#207;&#222;&#177;&#237;</comment>
+        <id name="authorityId" type="long">
+            <column name="AUTHORITY_ID" precision="10" scale="0" />
+        </id>
+        <property name="name" type="string">
+            <column name="NAME" length="100">
+                <comment>&#195;&#251;&#179;&#198;</comment>
+            </column>
+        </property>
+        <property name="value" type="big_decimal">
+            <column name="VALUE" precision="22" scale="0">
+                <comment>&#200;&#168;&#207;&#222;&#214;&#181;</comment>
+            </column>
+        </property>
+        <property name="description" type="string">
+            <column name="DESCRIPTION">
+                <comment>&#195;&#232;&#202;&#246;</comment>
+            </column>
+        </property>
+        <property name="type" type="string">
+            <column name="TYPE" length="10">
+                <comment>&#178;&#217;&#215;&#247;&#183;&#214;&#192;&#224;</comment>
+            </column>
+        </property>
+        <set name="roleAuthorities" table="ROLE_AUTHORITY" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="AUTHORITY_ID" precision="10" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="com.wa.cms.model.RoleAuthority" />
+        </set>
+    </class>
+</hibernate-mapping>

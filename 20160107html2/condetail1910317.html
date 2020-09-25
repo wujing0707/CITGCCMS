@@ -1,0 +1,391 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
+<meta name="description" content=""/>
+<meta name="keyWords" content=""/>
+<title>诚信园区</title>
+<link type="text/css" href="css/common.css" rel="stylesheet" />
+<link href="js/artDialog2.0.6/skin/chrome/chrome.css" rel="stylesheet" />
+<script type="text/javascript" src="js/jquery-1.7.2.js"></script>
+<script type="text/javascript" src="js/artDialog2.0.6/artDialog.min.js"></script>
+
+<style type="text/css">  
+        .code{   
+            background-image:url("../html/images/QQ.jpg");   
+            margin-left: 10px !important;
+            font-family:Arial;   
+            font-style:italic;   
+            color:Red;   
+            padding:2px 3px;   
+            letter-spacing:3px;   
+            font-weight:bolder;     
+        }   
+</style> 
+<script type="text/javascript">
+$(function () {
+	createCode(0);
+	createCode(3);
+});
+ var code ; //在全局 定义验证码   
+ function createCode(no){    
+   code = "";   
+   var codeLength = 4;//验证码的长度   
+   var checkCode = document.getElementById("checkCodeID"+no);   
+   var selectChar = new Array(0,1,2,3,4,5,6,7,8,9);//所有候选组成验证码的字符，当然也可以用中文的      
+   for(var i=0;i<codeLength;i++){   
+    var charIndex = Math.floor(Math.random()*10);   
+    code +=selectChar[charIndex];   
+   }    
+   if(checkCode){   
+     checkCode.className="code";   
+     checkCode.value = code;
+     checkCode.blur();   
+   }        
+ }
+  function validate (i,t){  
+    //   var checkCode = document.getElementById("checkCodeID"+i).value;  
+       var inputCode = document.getElementById("validCode"+i).value;
+       var zzjgdm=$('#zzjgdm').val();   
+       var gszch=$('#gszch').val();   
+       var companyname=$('#companyname').val();   
+       if(inputCode.length <=0){   
+           alert("请输入验证码！");   
+       }   
+    //   else if(inputCode.toUpperCase()!=checkCode){   
+      //    alert("验证码输入错误！");   
+       //}
+       else if(zzjgdm==""&&gszch==""&&companyname==""){
+       		alert("请至少输入一个查询条件!");
+       }
+       else{   
+          //window.location.href="../seach/seachdetail.action?zzjgdm="+zzjgdm+"&gszch="+gszch+"&companyname="+companyname+"&template="+2; 
+            $.post('../seach/checkSeachdetail.action',
+            {zzjgdm: zzjgdm, gszch:gszch, companyname:companyname,vcode:inputCode, template:2 },
+            function(data){
+                 if (data == '1') {
+                     $('#seaForm').submit(); 
+                 }else if(data=='2'){
+                 	alert("验证码输入错误！");
+                 } else {
+                    alert("暂无相关数据");
+                 }
+               }, "json");   
+       }    
+ }
+ function seachList(i){
+ 	//   var checkCode = document.getElementById("checkCodeID0").value;  
+       var inputCode = document.getElementById("validCode0").value;
+       var name=$('#name').val();   
+       var sfzhm=$('#sfzhm').val();   
+       var zyzhm=$('#zyzhm').val(); 
+       if(inputCode.length <=0){   
+           alert("请输入验证码！");   
+   //    }else if(inputCode.toUpperCase()!=checkCode){   
+   //       alert("验证码输入错误！");   
+       }else if(name==""&&sfzhm==""&&zyzhm==""){
+       		alert("请至少输入一个查询条件!");
+       }else{   
+         //window.location.href="../seach/personalSeachList.action?zyzhm="+zyzhm+"&sfzhm="+sfzhm+"&name="+name+"&template=2";
+                     $.post('../seach/checkPersonalSeachList.action',
+            {zyzhm: zyzhm, sfzhm:sfzhm, name:name,vcode:inputCode,template:2 },
+            function(data){
+                 if (data == 1) {
+                     $('#personForm').submit(); 
+                 }else if(data=='2'){
+                 	alert("验证码输入错误！");
+                 } else {
+                    alert("暂无相关数据");
+                 }
+               }, "json"); 
+       }  
+ }
+ function reset(){
+  	$('#zzjgdm').val('');   
+    $('#gszch').val('');   
+    $('#companyname').val('');  
+    $('#validCode0').val('');  
+ }  
+ function personalReset(){
+ 	$('#name').val('');  
+ 	$('#sfzhm').val('');  
+ 	$('#zyzhm').val('');  
+ 	$('#validCode0').val(''); 
+ }   
+function show(str){
+		var id=document.getElementById(str+"_0").value;
+		window.location.href='content'+id+"_1.html"; 
+}
+function reload(i){
+	if(i==1)
+ 	 window.location.href="qycheck.html";
+ 	 if(i==2)
+ 	 window.location.href="mycheck.html";
+ 	 if(i==3)
+ 	 window.location.href="qyyyshensu.html";
+}
+function goto(staus,name,index,size){
+	if(staus=='up'&&index!=1){
+		window.location.href=name+"_"+(index-1)+".html"; 
+	}else if(staus=='first'){
+		window.location.href=name+"_"+"1.html"; 
+	}else if(staus=='down'){
+		if(index!=size){
+			window.location.href=name+"_"+(index+1)+".html"; 
+		}
+	}else if(staus=='last'){
+		window.location.href=name+"_"+size+".html"; 
+	}
+}
+ function seachContent(){
+ 	//var channelid=document.getElementById("channelid").value;
+ 	//var title=document.getElementById("title").value;
+ 	//if(title==""){
+ 		//return;
+ 	//}else{
+ 		//window.location.href="../content/listContentByChannelId.action?channelid="+channelid+"&title="+title;   
+ 	//	window.location.href="../content/listContentByTitle.action?title="+title;   
+ 	//}
+ 	var title=document.getElementById("title").value;
+ 	if (title == '' || title == '请输入关键字') {
+ 	   alert('请输入关键字');
+ 	   return;
+ 	}
+ 	title = encodeURIComponent(title);
+ 	window.location.href="../content/listContentByTitle.action?title="+title; 
+ }
+ function query(){
+ 	 var checknumber=document.getElementById("checkNumber").value;
+ 	  var reg = new RegExp("^[0-9]*$");  
+    if(!reg.test(checknumber)){  
+        alert("请输入数字!");  
+        return;
+    }  
+ 	 if (checknumber == "") {
+ 	    alert("信用核查码不能为空！");
+ 	 } else {
+ 	        $.post('../seach/approveContent.action',
+            {checknumber: checknumber},
+            function(data){
+                 if (data == 1) {
+                      window.open("http://172.25.119.13/creditVerification/getDetailVerificationInfo.action?checkcode=" + checknumber,
+	               'newwindow','height=900,width=1000,top='+(window.screen.availHeight-30-900)/2+
+	                   ',left='+(window.screen.availWidth-10-1000)/2+
+	                 ',toolbar=no,menubar=no,scrollbars=yes,resizable=yes,location=no,status=no');
+               } else if (data == 2) {
+                     window.open("http://172.25.119.13/creditVerification/getgroupsDetailVerificationInfo.action?checkcode=" + checknumber,
+	                  'newwindow','height=900,width=1000,top='+(window.screen.availHeight-30-900)/2+
+	                   ',left='+(window.screen.availWidth-10-1000)/2+
+	                 ',toolbar=no,menubar=no,scrollbars=yes,resizable=yes,location=no,status=no');
+               }else {
+                   if (data == '-1') {
+                     alert("信用查询码不存在！");
+                   } else if (data == '-2') {
+                     alert("信用查询码已过期！");
+                   } else if (data == '-3') {
+                     alert("信用查询码已重新生成,请输入最新核查码!");
+                   }
+                }
+            },'json');
+ 	 }
+ }
+function SetWinHeight(obj)
+{
+
+} 
+
+function gotoPage(total,cid){
+	var p=$("#textFooter").val();
+	var i = parseInt(total);
+	if(p!=""){
+		var a=parseInt(p);
+		if(a>0&&a<=i)
+		window.location.href="../content"+cid+"_"+p+".html";
+		if(a>i)
+		window.location.href="../content"+cid+"_"+1+".html";
+	}
+}
+$(document).ready(function() {
+ 	$.ajax({
+        type: "post",//使用post方法访问后台
+        dataType: "json",//返回json格式的数据
+        url: "../getCCS.action",//要访问的后台地址
+        data:{},//要发送的数据
+        complete :function(){$("#load").hide();},//AJAX请求完成时隐藏loading提示
+        success: function(msg){//msg为返回的数据，在这里做数据绑定
+				$("#thrNum").html(msg);
+        }
+    });
+    $.ajax({
+        type: "post",//使用post方法访问后台
+        dataType: "json",//返回json格式的数据
+        url: "../content/findHOTKeyword.action",//要访问的后台地址
+        data:{},//要发送的数据
+        complete :function(){$("#load").hide();},//AJAX请求完成时隐藏loading提示
+        success: function(msg){//msg为返回的数据，在这里做数据绑定
+        	var b='关键字:&nbsp;';
+        	$.each(msg.rows, function(i, n){
+        	var a = '<a href="javascript:void(0)" onclick="byHotKwSeachContent(\''+msg.rows[i]+'\')" >'+msg.rows[i]+'</a>&nbsp;&nbsp;';
+        	b+=a;
+           });
+           $("#hotkw").html(b);
+        }
+    });
+});
+	function byHotKwSeachContent(str) {
+		var title = encodeURIComponent(str);
+		window.location.href = "../content/listContentByTitle.action?title="
+				+ title;
+	}	
+	function queryOfPreview(contentId, category){
+   		 window.location.href="../content/queryOfPreview.action?contentId="+contentId+"&date="+new Date();
+	}
+</script>
+</head>
+
+<body>
+<!--header begin-->
+<div class="header">
+	<div class="wrap">
+    	<div class="logo f_l"><a href="http://www.sipac.gov.cn/" target="_blank"><img src="images/logo.png" /></a></div>
+    	<div class="number f_r" id="thrNum">
+        </div>
+    </div>
+</div>
+<!--header over-->
+
+<!--nav begin-->
+<div class="nav">
+    <ul class="wrap tabs">
+        <li><a href="../goToIndex.action">首页</a></li>
+        	<li><a href="javascript:void(0)" id="22" onclick='show("22")'>信用动态</a></li>
+		        	<input type="hidden" id="22_0" value="365">
+		        	<input type="hidden" id="22_1" value="364">
+		        	<input type="hidden" id="22_2" value="335">
+        	<li><a href="javascript:void(0)" id="420" onclick='show("420")'>信用公示</a></li>
+		        	<input type="hidden" id="420_0" value="318">
+		        	<input type="hidden" id="420_1" value="60">
+		        	<input type="hidden" id="420_2" value="61">
+        	<li><a href="javascript:void(0)" id="26" onclick='show("26")'>重点领域</a></li>
+		        	<input type="hidden" id="26_0" value="486">
+		        	<input type="hidden" id="26_1" value="487">
+		        	<input type="hidden" id="26_2" value="488">
+		        	<input type="hidden" id="26_3" value="489">
+		        	<input type="hidden" id="26_4" value="490">
+		        	<input type="hidden" id="26_5" value="491">
+		        	<input type="hidden" id="26_6" value="492">
+		        	<input type="hidden" id="26_7" value="493">
+        	<li><a href="javascript:void(0)" id="423" onclick='show("423")'>专项资金</a></li>
+		        	<input type="hidden" id="423_0" value="469">
+        	<li><a href="javascript:void(0)" id="416" onclick='show("416")'>政策法规</a></li>
+		        	<input type="hidden" id="416_0" value="306">
+		        	<input type="hidden" id="416_1" value="334">
+		        	<input type="hidden" id="416_2" value="309">
+        <li><a href="http://gzjd.sipac.gov.cn/Web/BBS/MainList.aspx"  target="_blank">在线交流</a></li>
+    </ul>
+</div>
+<!--nav over-->
+
+<!--content begin-->
+<div class="cloud">
+    <!--notice begin-->
+    <div class="wrap">
+    	<div class="notice f_l"> 
+            <div class="notice_tit f_l f_b">通知公告</div>
+            <div class="f_l notice_list"  id="mq" onmouseover=iScrollAmount=0 style="overflow:hidden; width:500px; height:30px;color:#000" onmouseout=iScrollAmount=1 >
+                <ul>
+		                    <li><a href="javascript:queryOfPreview('1911122')">苏州出台省内首部《住房公积金个人失信惩戒实施细则》</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911059')">关于印发江苏省推行食品生产企业 “黑名单”制度指导意见(试行)的通知(苏食药监规</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911231')">家庭成员不履行抚养义务记入个人信用档案</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911061')">2015年我市电梯维保单位星级评定结果公示</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910971')">2015年度“诚信宣传周”活动开始啦</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910519')">2015年12月苏州工业园区公积金（社会保险）公示欠费单位名单</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910520')">苏州工业园区从业建筑业企业不良信用处罚公示汇总</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910381')">2015年11月苏州工业园区社会保险基金（公积金）公示欠费单位名单</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910282')">园区信用体系建设项目接受市领导专项督查并开展座谈会</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911034')">苏州积分落户制度2016年1月15日起实施 失信行为将扣减分</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910988')">关于做好2015年园区建筑业企业信用综合评价良好行为信息录入工作的通知</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910976')">诚信记录纳入流动人口积分管理</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910972')">江苏省研究生考试26日开考 省考试院提醒考生诚信参考</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910518')">2015年中国十佳诚信政府排行榜发布</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910467')">老忘交电费 当心成老赖失信</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910361')">首个国际征信论坛即将在沪登陆</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910338')">居民身份证将可异地换领补领 有不良信用记录的不予受理</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910329')">双十一”消费信用大数据监测评价启动</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910328')">发改委：年底前全面实施统一社会信用代码制度</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910310')">信用社会临近 央行征信系统已收录8.7亿人数据</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910307')">市食药监公布19批次质量不合格食品（附名单）</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910302')">园区地税提交457户企业列入园区失信法人库</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910177')">关于联合发布2014年长三角地区备案信用服务机构名单的通知</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910179')">2014年度“苏州市级信用管理示范企业”认定公示</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="search f_r">
+            <form id="searchform" action="../content/listContentByTitle.action" method="post">
+                <fieldset>
+                <table>
+                 	<tr>
+				      <td width="70%">
+				      	 <input type="text" onfocus="if(this.value =='请输入关键字') {this.value=''; }" onblur="if(this.value==''){this.value='请输入关键字';}" class="text_input" style="width:200px" value="请输入关键字" name="title" id="title">
+				         <input type="button" onclick="seachContent()" name="button"> 
+				      </td>
+				   	</tr>
+				   	<tr>
+				   		 <td id="hotkw"></td>
+				   	</tr>
+				  </table> 
+                </fieldset>
+            </form>
+        </div>
+    </div>
+    <script type="text/javascript" src="js/muqruujs.js"></script>
+    <!--notice over-->
+    <!--center begin-->
+    <div class="wrap mt5 content">
+        <div class="breadcrumbs">
+            <ul>
+                <li>当前位置：</li>
+          		<li><a href="content306_1.html">政策法规</a> > </li>
+            <li><a href="content306_1.html">国家法规</a> > </li>
+                <li><em>详细</em></li>
+            </ul>
+        </div>
+        
+        <div class="pad50">
+            <div class="art_head">
+                <h1>国务院关于“先照后证”改革后 加强事中事后监管的意见</h1>
+                <div class="tc art_date"> 【发布日期： 】【<a href="javascript:void(0)" onclick="window.print();">打印</a>】 </div>
+            </div>
+            <div class="artnr">
+                <p><div style='font-size: 18px;'><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px"></span></p><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px"></span></p><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">国发〔2015〕62号</span></p><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">各省、自治区、直辖市人民政府，国务院各部委、各直属机构：<br/>　　为深化商事制度改革，强化“先照后证”改革后的事中事后监管，提出以下意见。<br/>　　一、总体要求<br/>　　（一）指导思想。<br/>　　全面贯彻党的十八大和十八届二中、三中、四中全会精神，认真落实党中央、国务院决策部署，深化商事制度改革，转变市场监管理念，明确监管职责，创新监管方式，构建权责明确、透明高效的事中事后监管机制，正确处理政府和市场的关系，维护公平竞争的市场秩序。<br/>　　（二）基本原则。<br/>　　职责法定。坚持权责法定、依法行政，谁审批、谁监管，谁主管、谁监管，按照法律、行政法规、国务院决定，厘清各部门市场监管职责，推进市场监管法治化、制度化、规范化、程序化。<br/>　　信用约束。加快推进全国统一的信用信息共享交换平台和企业信用信息公示系统建设，推进政府部门、行业协会、社会组织信用信息共享共用，强化信用对市场主体的约束作用，构建以信息归集共享为基础，以信息公示为手段，以信用监管为核心的监管制度，让失信主体“一处违法，处处受限”。<br/>　　协同监管。建立健全登记注册、行政审批、行业主管相互衔接的市场监管机制，实现各部门间依法履职信息的互联互通、联动响应，形成分工明确、沟通顺畅、齐抓共管的监管格局，切实增强监管合力，提升监管效能。<br/>　　社会共治。推进以法治为基础的社会多元治理，健全社会监督机制，切实保障市场主体和社会公众的知情权、参与权、监督权，构建市场主体自治、行业自律、社会监督、政府监管的社会共治格局。<br/>　　二、严格行政审批事项管理<br/>　　各地区各部门要切实落实“先照后证”改革，按照法定条件和法定程序规范审批行为，实现审批行为的公开便利。<br/>　　（三）实行行政审批事项目录管理。<br/>　　工商总局负责公布工商登记前置审批事项目录。法律、行政法规、国务院决定新增前置审批事项、取消行政审批事项、将前置审批事项改为后置审批事项的，实施审批的国务院相关部门应当及时通知工商总局对目录进行更新，并向社会公布，方便企业、群众办事和监督。除法律、行政法规和国务院决定外，一律不得设定工商登记前置审批事项，也不得通过备案等方式实施变相前置审批。<br/>　　经营者从事工商登记前置审批事项目录中事项的，应当依法报经相关审批部门审批后，凭许可文件、证件向工商部门申请登记注册，工商部门依法核发营业执照。经营者从事工商登记前置审批事项目录外事项的，直接向工商部门申请登记注册，工商部门依法核发营业执照。<br/>　　省级人民政府应当于2015年底前依法制定工商登记后置审批事项目录，并向社会公布。<br/>　　（四）确保审批行为严格依法、公开透明。<br/>　　各审批部门要严格按照法定条件和法定程序，逐项制定审批标准并予以公示。取消重复性、形式化的审批手续，推行网上审批，对审批标准和受理、审查、批准等审批信息通过互联网向社会公示，及时发现和纠正违规审批行为。<br/>　　各地区各部门要健全对行政审批的监督制约机制，不断提高政府管理科学化规范化水平。<br/>　　三、厘清市场监管职责<br/>　　按照谁审批、谁监管，谁主管、谁监管的原则切实履行市场监管职责，加强“先照后证”改革后的事中事后监管，防止出现监管真空。<br/>　　（五）工商部门履行“双告知”职责。<br/>　　在办理登记注册时，工商部门要根据省级人民政府公布的工商登记后置审批事项目录告知申请人需要申请审批的经营项目和相应的审批部门，并由申请人书面承诺在取得审批前不擅自从事相关经营活动。<br/>　　在办理登记注册后，工商部门要运用信息化手段，对经营项目的审批部门明确的，将市场主体登记注册信息及时告知同级相关审批部门；对经营项目的审批部门不明确或不涉及审批的，将市场主体登记注册信息及时在企业信息共享平台上发布，相关审批部门或行业主管部门应及时查询，根据职责做好后续监管工作。<br/>　　（六）明确市场监管责任。<br/>　　法律法规明确市场监管部门和监管职责的，严格依法执行。<br/>　　法律法规没有规定市场监管部门和监管职责或规定不明确的，工商部门、审批部门和行业主管部门要按照分工履行好市场监管职责，及时发现和查处问题。审批部门或行业主管部门在发现违法违规行为后，有专门执法力量的，由其牵头负责查处；没有专门执法力量或执法力量不足的，应充分发挥工商部门市场监管骨干作用，审批部门或行业主管部门可依法提请工商部门牵头共同予以查处。工商部门在执法过程中，发现违法违规行为线索，属于其他部门监管职责的，应及时告知相关部门。省级人民政府可根据这一原则并结合当地实际确定市场监管部门及监管职责，作出具体规定，确保事有人管、责有人负，实现无缝衔接。积极支持已出台加强事中事后监管文件的地方继续探索。<br/>　　四、完善协同监管机制<br/>　　各地区各部门要严格依法履行职责，按照有利于综合执法、重心下沉、强化地方监管责任的原则，在推进政府职能转变、深化商事制度改革中积极探索，创新市场监管体制机制，加强信息互联共享，完善信用监管机制，提高监管效能。<br/>　　（七）做好信息公示工作。<br/>　　大力建设企业信用信息公示“全国一张网”。工商部门要通过企业信用信息公示系统，认真履行公示市场主体信息的法定职责，督促市场主体履行信息公示义务。其他政府部门要通过企业信用信息公示系统、“信用中国”网站向社会公示行政许可、行政处罚等信息。2016年底前，地方政府要初步实现归集各政府部门在履行职责过程中产生的行政许可、行政处罚以及其他依法应当公示的企业信息。<br/>　　（八）建立信息互联共享机制。<br/>　　2016年底前，地方政府要初步实现工商部门、审批部门、行业主管部门及其他部门之间的信息实时传递和无障碍交换。区分涉密信息和非涉密信息，依法实施对企业信息在采集、共享、使用等环节的分类管理，依法予以公示，并将有关信息记于相对应企业名下。通过构建双向告知机制、数据比对机制，把握监管风险点，将证照衔接、监管联动、执法协作等方面的制度措施有机贯通，支撑事中事后监管。各部门要建立健全与同级人民法院、人民检察院等司法机关之间的信息共享和协调合作机制，有效形成工作合力。<br/>　　（九）加强监管风险监测研判。<br/>　　工商部门、审批部门、行业主管部门要按照法定职责牵头组织有关部门加强研判分析，充分运用大数据、物联网等现代信息技术，整合抽查抽检、网络市场定向监测、违法失信、投诉举报等相关信息，掌握相关领域违法活动特征，提高发现问题和防范化解区域性、行业性及系统性风险的能力，做到早发现、早预警。要建立健全网络市场监管分工协作机制，强化线上线下一体化监管。<br/>　　（十）防范化解风险。<br/>　　工商部门、审批部门、行业主管部门要通过信息公示、抽查、抽检等方式，综合运用提醒、约谈、告诫等手段，强化对市场主体及有关人员的事中监管，及时化解市场风险。要针对存在违法违规行为的市场主体强化事后监管，依法及时认定违法违规行为的种类和性质，组织有关部门依据各自职能共同参与处置。普遍推广随机抽取检查对象、随机选派执法检查人员的“双随机”抽查机制，建立健全市场主体名录库和执法检查人员名录库，通过摇号等方式，从市场主体名录库中随机抽取检查对象，从执法检查人员名录库中随机选派执法检查人员。<br/>　　（十一）建立健全联合惩戒机制。<br/>　　对违法市场主体加大行政处罚和信用约束力度，依法实施吊销营业执照、吊销注销撤销许可证、列入经营异常名录和黑名单等惩戒措施。2016年底前，要建立健全跨部门联动响应机制和失信惩戒机制，在经营、投融资、取得政府供应土地、进出口、出入境、注册新公司、招投标、政府采购、获得荣誉、安全许可、生产经营许可、从业任职资格、资质审核等工作中，将信用信息作为重要考量因素，对被列入经营异常名录、严重违法失信企业名单、重大税收违法案件当事人名单、失信被执行人名单、行贿犯罪档案等失信主体依法予以限制或禁入，形成“一处违法，处处受限”的联合惩戒机制。<br/>　　（十二）探索综合执法模式。<br/>　　探索推进统一市场监管和综合执法模式，按照减少层次、整合队伍、提高效率的原则，配置执法力量。大幅减少市县两级政府执法队伍种类。加强执法联动，形成监管合力。<br/>　　2015年底前，已经建立综合执法机构的地方，要充分发挥执法力量整合优势，通过企业信用信息公示系统和“信用中国”网站公示市场主体登记注册、行政许可、行政处罚等信息，实现联合惩戒。<br/>　　五、构建社会共治格局<br/>　　维护市场正常秩序是全社会的共同责任。各地区各部门要在依法履行市场监管职责的同时，充分发挥法律法规的规范作用、行业组织的自律作用以及市场专业化服务组织、公众和舆论的监督作用，促进市场主体自我约束、诚信经营。积极稳妥地推进政府向社会力量购买服务，支持社会力量在市场监管中发挥作用。<br/>　　（十三）引导市场主体自治。<br/>　　各地区各部门要采取守信激励和失信惩戒措施，促使市场主体强化主体责任，在安全生产、质量管理、营销宣传、售后服务、信息公示等各方面切实履行法定义务。引导市场主体充分认识信用状况对自身发展的关键作用，主动接受社会监督，提高诚信自治水平。鼓励支持市场主体通过互联网为交易当事人提供公平、公正的信用评价服务，客观公正记录、公开交易评价和消费评价信息。<br/>　　（十四）推进行业自律。<br/>　　各地区各部门要高度重视并切实创造有利条件，充分发挥行业协会商会对促进行业规范发展的重要作用。将行业协会商会的意见建议作为制定法规、重大政策及评估执行效果的重要参考。建立政府与行业协会商会间的信用信息互联共享机制。在事中事后监管的各个环节建立行业协会商会的参与机制。发挥和借重行业协会商会在权益保护、资质认定、纠纷处理、失信惩戒等方面的作用。支持行业协会商会开展行业信用评价工作，建立健全企业信用档案，完善行业信用体系。通过政府购买服务等方式，委托行业协会商会开展信用评价、咨询服务、法律培训、监管效果评估，推进监管执法和行业自律的良性互动。<br/>　　（十五）鼓励社会监督。<br/>　　各地区各部门要充分发挥市场专业化服务组织的监督作用。大力依靠消费者协会等社会组织，及时了解市场监管领域的突出问题，有针对性地加强监督检查。积极发挥会计师事务所、律师事务所、公证机构、检验检测认证机构等专业服务机构的监督作用。支持仲裁机构、调解组织等通过裁决、调解等方式解决市场主体之间的争议。积极构建第三方评估机制，培育、发展社会信用评价机构，支持开展信用评级，提供客观公正的市场主体资信信息。支持探索开展社会化的信用信息公示服务。各地区各部门要充分发挥社会舆论的监督作用，健全公众参与监督的激励机制，形成消费者“用脚投票”的倒逼机制，创造条件鼓励群众积极举报违法经营行为，充分利用新媒体等手段及时收集社会反映的问题。<br/>　　六、加强组织实施<br/>　　实行“先照后证”改革，加强事中事后监管，涉及的部门多、范围广、情况复杂，是一项系统工程。各地区各部门要高度重视、精心组织、周密部署、狠抓落实、强化问责。<br/>　　（十六）加强组织协调。<br/>　　地方各级人民政府要高度重视，建立健全政府主导、部门主抓、社会参与、统筹推进的工作机制，强化组织保障、机制保障、经费保障。省级人民政府要加强本行政区域内相关改革的统筹推进，市县级政府要强化执行力度，切实解决改革中遇到的具体问题，确保改革措施有序推进、落实到位。各部门要及时掌握和研究改革过程中遇到的新情况、新问题，加强指导，鼓励探索，协调推进。<br/>　　（十七）加强宣传引导。<br/>　　各地区各部门要通过多种途径、采取多种形式宣传事中事后监管各部门职责、措施、工作进展情况和成效，鼓励和引导全社会参与，形成理解、关心、支持改革的良好氛围和舆论监督环境。<br/>　　（十八）强化督促检查。<br/>　　工商总局会同有关部门负责对本意见落实工作的统筹协调、跟踪了解、督促检查，确保改革各项工作平稳有序。审计部门要加强对政策落实情况的跟踪审计，加大对设置许可项目、履行法定监管职责等方面的审计力度。</span></p><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">　　附件：法律法规明确规定监管部门和监管职责的“先照后证”改革相关审批项目</span></p><p style="TEXT-ALIGN: right; LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　国务院<br/>　　　　　　　　　　　　　　　　　　　　　　　　　　　　2015年10月13日</span></p><p style="TEXT-ALIGN: right; LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px">　　（此件公开发布）</span></p><p style="LINE-HEIGHT: 28px"><span style="FONT-FAMILY: 微软雅黑, &#39;Microsoft YaHei&#39;; FONT-SIZE: 14px">附件</span></p><p style="LINE-HEIGHT: 28px"><a title="法律法规明确规定监管部门和监管职责的 “先照后证”改革相关审批项目" href="http://www.gov.cn/zhengce/content/2015-11/03/content_10263.htm" target="_blank"><span style="FONT-FAMILY: 微软雅黑, &#39;Microsoft YaHei&#39;; FONT-SIZE: 14px">法律法规明确规定监管部门和监管职责的“先照后证”改革相关审批项目</span></a><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px"><br/></span></p><p style="LINE-HEIGHT: 1.75em"><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px"></span></p><span style="FONT-FAMILY: 宋体,SimSun; FONT-SIZE: 18px"></span></div></p>
+            </div>
+        </div>
+    </div>
+    <!--center over-->
+        
+    <!--footer begin-->
+    <div class="wrap mt10">
+        <div class="link">
+            <h1>友情链接</h1>
+            <ul class="l_list">
+                <li><a href="http://www.creditchina.gov.cn/" target="_blank">信用中国</a></li>
+                <li><a href="http://www.js.gov.cn/jsxy/index.htm" target="_blank">诚信江苏</a></li>
+                <li><a href="http://www.njcredit.gov.cn/" target="_blank">诚信南京</a></li>
+                <li><a href="http://www.szcredit.gov.cn/" target="_blank">诚信苏州</a></li>
+                <li><a href="http://credit.zjg.gov.cn/toIndex.action" target="_blank">诚信张家港</a></li>
+            </ul>
+        </div>
+        
+         <div class="foot">
+            <p><span>主办单位：苏州工业园区信用办 </span><span>技术支持：江苏中集科技有限公司</span><span><script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1256639142'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1256639142' type='text/javascript'%3E%3C/script%3E"));</script></span></p>
+        </div>
+        
+    </div>
+    <!--footer over-->
+</div>
+<!--content over-->
+    
+</body>
+</html>

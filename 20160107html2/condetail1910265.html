@@ -1,0 +1,422 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
+<meta name="description" content=""/>
+<meta name="keyWords" content=""/>
+<title>诚信园区</title>
+<link type="text/css" href="css/common.css" rel="stylesheet" />
+<link href="js/artDialog2.0.6/skin/chrome/chrome.css" rel="stylesheet" />
+<script type="text/javascript" src="js/jquery-1.7.2.js"></script>
+<script type="text/javascript" src="js/artDialog2.0.6/artDialog.min.js"></script>
+
+<style type="text/css">  
+        .code{   
+            background-image:url("../html/images/QQ.jpg");   
+            margin-left: 10px !important;
+            font-family:Arial;   
+            font-style:italic;   
+            color:Red;   
+            padding:2px 3px;   
+            letter-spacing:3px;   
+            font-weight:bolder;     
+        }   
+</style> 
+<script type="text/javascript">
+$(function () {
+	createCode(0);
+	createCode(3);
+});
+ var code ; //在全局 定义验证码   
+ function createCode(no){    
+   code = "";   
+   var codeLength = 4;//验证码的长度   
+   var checkCode = document.getElementById("checkCodeID"+no);   
+   var selectChar = new Array(0,1,2,3,4,5,6,7,8,9);//所有候选组成验证码的字符，当然也可以用中文的      
+   for(var i=0;i<codeLength;i++){   
+    var charIndex = Math.floor(Math.random()*10);   
+    code +=selectChar[charIndex];   
+   }    
+   if(checkCode){   
+     checkCode.className="code";   
+     checkCode.value = code;
+     checkCode.blur();   
+   }        
+ }
+  function validate (i,t){  
+    //   var checkCode = document.getElementById("checkCodeID"+i).value;  
+       var inputCode = document.getElementById("validCode"+i).value;
+       var zzjgdm=$('#zzjgdm').val();   
+       var gszch=$('#gszch').val();   
+       var companyname=$('#companyname').val();   
+       if(inputCode.length <=0){   
+           alert("请输入验证码！");   
+       }   
+    //   else if(inputCode.toUpperCase()!=checkCode){   
+      //    alert("验证码输入错误！");   
+       //}
+       else if(zzjgdm==""&&gszch==""&&companyname==""){
+       		alert("请至少输入一个查询条件!");
+       }
+       else{   
+          //window.location.href="../seach/seachdetail.action?zzjgdm="+zzjgdm+"&gszch="+gszch+"&companyname="+companyname+"&template="+2; 
+            $.post('../seach/checkSeachdetail.action',
+            {zzjgdm: zzjgdm, gszch:gszch, companyname:companyname,vcode:inputCode, template:2 },
+            function(data){
+                 if (data == '1') {
+                     $('#seaForm').submit(); 
+                 }else if(data=='2'){
+                 	alert("验证码输入错误！");
+                 } else {
+                    alert("暂无相关数据");
+                 }
+               }, "json");   
+       }    
+ }
+ function seachList(i){
+ 	//   var checkCode = document.getElementById("checkCodeID0").value;  
+       var inputCode = document.getElementById("validCode0").value;
+       var name=$('#name').val();   
+       var sfzhm=$('#sfzhm').val();   
+       var zyzhm=$('#zyzhm').val(); 
+       if(inputCode.length <=0){   
+           alert("请输入验证码！");   
+   //    }else if(inputCode.toUpperCase()!=checkCode){   
+   //       alert("验证码输入错误！");   
+       }else if(name==""&&sfzhm==""&&zyzhm==""){
+       		alert("请至少输入一个查询条件!");
+       }else{   
+         //window.location.href="../seach/personalSeachList.action?zyzhm="+zyzhm+"&sfzhm="+sfzhm+"&name="+name+"&template=2";
+                     $.post('../seach/checkPersonalSeachList.action',
+            {zyzhm: zyzhm, sfzhm:sfzhm, name:name,vcode:inputCode,template:2 },
+            function(data){
+                 if (data == 1) {
+                     $('#personForm').submit(); 
+                 }else if(data=='2'){
+                 	alert("验证码输入错误！");
+                 } else {
+                    alert("暂无相关数据");
+                 }
+               }, "json"); 
+       }  
+ }
+ function reset(){
+  	$('#zzjgdm').val('');   
+    $('#gszch').val('');   
+    $('#companyname').val('');  
+    $('#validCode0').val('');  
+ }  
+ function personalReset(){
+ 	$('#name').val('');  
+ 	$('#sfzhm').val('');  
+ 	$('#zyzhm').val('');  
+ 	$('#validCode0').val(''); 
+ }   
+function show(str){
+		var id=document.getElementById(str+"_0").value;
+		window.location.href='content'+id+"_1.html"; 
+}
+function reload(i){
+	if(i==1)
+ 	 window.location.href="qycheck.html";
+ 	 if(i==2)
+ 	 window.location.href="mycheck.html";
+ 	 if(i==3)
+ 	 window.location.href="qyyyshensu.html";
+}
+function goto(staus,name,index,size){
+	if(staus=='up'&&index!=1){
+		window.location.href=name+"_"+(index-1)+".html"; 
+	}else if(staus=='first'){
+		window.location.href=name+"_"+"1.html"; 
+	}else if(staus=='down'){
+		if(index!=size){
+			window.location.href=name+"_"+(index+1)+".html"; 
+		}
+	}else if(staus=='last'){
+		window.location.href=name+"_"+size+".html"; 
+	}
+}
+ function seachContent(){
+ 	//var channelid=document.getElementById("channelid").value;
+ 	//var title=document.getElementById("title").value;
+ 	//if(title==""){
+ 		//return;
+ 	//}else{
+ 		//window.location.href="../content/listContentByChannelId.action?channelid="+channelid+"&title="+title;   
+ 	//	window.location.href="../content/listContentByTitle.action?title="+title;   
+ 	//}
+ 	var title=document.getElementById("title").value;
+ 	if (title == '' || title == '请输入关键字') {
+ 	   alert('请输入关键字');
+ 	   return;
+ 	}
+ 	title = encodeURIComponent(title);
+ 	window.location.href="../content/listContentByTitle.action?title="+title; 
+ }
+ function query(){
+ 	 var checknumber=document.getElementById("checkNumber").value;
+ 	  var reg = new RegExp("^[0-9]*$");  
+    if(!reg.test(checknumber)){  
+        alert("请输入数字!");  
+        return;
+    }  
+ 	 if (checknumber == "") {
+ 	    alert("信用核查码不能为空！");
+ 	 } else {
+ 	        $.post('../seach/approveContent.action',
+            {checknumber: checknumber},
+            function(data){
+                 if (data == 1) {
+                      window.open("http://172.25.119.13/creditVerification/getDetailVerificationInfo.action?checkcode=" + checknumber,
+	               'newwindow','height=900,width=1000,top='+(window.screen.availHeight-30-900)/2+
+	                   ',left='+(window.screen.availWidth-10-1000)/2+
+	                 ',toolbar=no,menubar=no,scrollbars=yes,resizable=yes,location=no,status=no');
+               } else if (data == 2) {
+                     window.open("http://172.25.119.13/creditVerification/getgroupsDetailVerificationInfo.action?checkcode=" + checknumber,
+	                  'newwindow','height=900,width=1000,top='+(window.screen.availHeight-30-900)/2+
+	                   ',left='+(window.screen.availWidth-10-1000)/2+
+	                 ',toolbar=no,menubar=no,scrollbars=yes,resizable=yes,location=no,status=no');
+               }else {
+                   if (data == '-1') {
+                     alert("信用查询码不存在！");
+                   } else if (data == '-2') {
+                     alert("信用查询码已过期！");
+                   } else if (data == '-3') {
+                     alert("信用查询码已重新生成,请输入最新核查码!");
+                   }
+                }
+            },'json');
+ 	 }
+ }
+function SetWinHeight(obj)
+{
+
+} 
+
+function gotoPage(total,cid){
+	var p=$("#textFooter").val();
+	var i = parseInt(total);
+	if(p!=""){
+		var a=parseInt(p);
+		if(a>0&&a<=i)
+		window.location.href="../content"+cid+"_"+p+".html";
+		if(a>i)
+		window.location.href="../content"+cid+"_"+1+".html";
+	}
+}
+$(document).ready(function() {
+ 	$.ajax({
+        type: "post",//使用post方法访问后台
+        dataType: "json",//返回json格式的数据
+        url: "../getCCS.action",//要访问的后台地址
+        data:{},//要发送的数据
+        complete :function(){$("#load").hide();},//AJAX请求完成时隐藏loading提示
+        success: function(msg){//msg为返回的数据，在这里做数据绑定
+				$("#thrNum").html(msg);
+        }
+    });
+    $.ajax({
+        type: "post",//使用post方法访问后台
+        dataType: "json",//返回json格式的数据
+        url: "../content/findHOTKeyword.action",//要访问的后台地址
+        data:{},//要发送的数据
+        complete :function(){$("#load").hide();},//AJAX请求完成时隐藏loading提示
+        success: function(msg){//msg为返回的数据，在这里做数据绑定
+        	var b='关键字:&nbsp;';
+        	$.each(msg.rows, function(i, n){
+        	var a = '<a href="javascript:void(0)" onclick="byHotKwSeachContent(\''+msg.rows[i]+'\')" >'+msg.rows[i]+'</a>&nbsp;&nbsp;';
+        	b+=a;
+           });
+           $("#hotkw").html(b);
+        }
+    });
+});
+	function byHotKwSeachContent(str) {
+		var title = encodeURIComponent(str);
+		window.location.href = "../content/listContentByTitle.action?title="
+				+ title;
+	}	
+	function queryOfPreview(contentId, category){
+   		 window.location.href="../content/queryOfPreview.action?contentId="+contentId+"&date="+new Date();
+	}
+</script>
+</head>
+
+<body>
+<!--header begin-->
+<div class="header">
+	<div class="wrap">
+    	<div class="logo f_l"><a href="http://www.sipac.gov.cn/" target="_blank"><img src="images/logo.png" /></a></div>
+    	<div class="number f_r" id="thrNum">
+        </div>
+    </div>
+</div>
+<!--header over-->
+
+<!--nav begin-->
+<div class="nav">
+    <ul class="wrap tabs">
+        <li><a href="../goToIndex.action">首页</a></li>
+        	<li><a href="javascript:void(0)" id="22" onclick='show("22")'>信用动态</a></li>
+		        	<input type="hidden" id="22_0" value="365">
+		        	<input type="hidden" id="22_1" value="364">
+		        	<input type="hidden" id="22_2" value="335">
+        	<li><a href="javascript:void(0)" id="420" onclick='show("420")'>信用公示</a></li>
+		        	<input type="hidden" id="420_0" value="318">
+		        	<input type="hidden" id="420_1" value="60">
+		        	<input type="hidden" id="420_2" value="61">
+        	<li><a href="javascript:void(0)" id="26" onclick='show("26")'>重点领域</a></li>
+		        	<input type="hidden" id="26_0" value="486">
+		        	<input type="hidden" id="26_1" value="487">
+		        	<input type="hidden" id="26_2" value="488">
+		        	<input type="hidden" id="26_3" value="489">
+		        	<input type="hidden" id="26_4" value="490">
+		        	<input type="hidden" id="26_5" value="491">
+		        	<input type="hidden" id="26_6" value="492">
+		        	<input type="hidden" id="26_7" value="493">
+        	<li><a href="javascript:void(0)" id="423" onclick='show("423")'>专项资金</a></li>
+		        	<input type="hidden" id="423_0" value="469">
+        	<li><a href="javascript:void(0)" id="416" onclick='show("416")'>政策法规</a></li>
+		        	<input type="hidden" id="416_0" value="306">
+		        	<input type="hidden" id="416_1" value="334">
+		        	<input type="hidden" id="416_2" value="309">
+        <li><a href="http://gzjd.sipac.gov.cn/Web/BBS/MainList.aspx"  target="_blank">在线交流</a></li>
+    </ul>
+</div>
+<!--nav over-->
+
+<!--content begin-->
+<div class="cloud">
+    <!--notice begin-->
+    <div class="wrap">
+    	<div class="notice f_l"> 
+            <div class="notice_tit f_l f_b">通知公告</div>
+            <div class="f_l notice_list"  id="mq" onmouseover=iScrollAmount=0 style="overflow:hidden; width:500px; height:30px;color:#000" onmouseout=iScrollAmount=1 >
+                <ul>
+		                    <li><a href="javascript:queryOfPreview('1911122')">苏州出台省内首部《住房公积金个人失信惩戒实施细则》</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911059')">关于印发江苏省推行食品生产企业 “黑名单”制度指导意见(试行)的通知(苏食药监规</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911231')">家庭成员不履行抚养义务记入个人信用档案</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911061')">2015年我市电梯维保单位星级评定结果公示</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910971')">2015年度“诚信宣传周”活动开始啦</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910519')">2015年12月苏州工业园区公积金（社会保险）公示欠费单位名单</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910520')">苏州工业园区从业建筑业企业不良信用处罚公示汇总</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910381')">2015年11月苏州工业园区社会保险基金（公积金）公示欠费单位名单</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910282')">园区信用体系建设项目接受市领导专项督查并开展座谈会</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911034')">苏州积分落户制度2016年1月15日起实施 失信行为将扣减分</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910988')">关于做好2015年园区建筑业企业信用综合评价良好行为信息录入工作的通知</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910976')">诚信记录纳入流动人口积分管理</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910972')">江苏省研究生考试26日开考 省考试院提醒考生诚信参考</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910518')">2015年中国十佳诚信政府排行榜发布</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910467')">老忘交电费 当心成老赖失信</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910361')">首个国际征信论坛即将在沪登陆</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910338')">居民身份证将可异地换领补领 有不良信用记录的不予受理</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910329')">双十一”消费信用大数据监测评价启动</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910328')">发改委：年底前全面实施统一社会信用代码制度</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910310')">信用社会临近 央行征信系统已收录8.7亿人数据</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910307')">市食药监公布19批次质量不合格食品（附名单）</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910302')">园区地税提交457户企业列入园区失信法人库</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910177')">关于联合发布2014年长三角地区备案信用服务机构名单的通知</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910179')">2014年度“苏州市级信用管理示范企业”认定公示</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="search f_r">
+            <form id="searchform" action="../content/listContentByTitle.action" method="post">
+                <fieldset>
+                <table>
+                 	<tr>
+				      <td width="70%">
+				      	 <input type="text" onfocus="if(this.value =='请输入关键字') {this.value=''; }" onblur="if(this.value==''){this.value='请输入关键字';}" class="text_input" style="width:200px" value="请输入关键字" name="title" id="title">
+				         <input type="button" onclick="seachContent()" name="button"> 
+				      </td>
+				   	</tr>
+				   	<tr>
+				   		 <td id="hotkw"></td>
+				   	</tr>
+				  </table> 
+                </fieldset>
+            </form>
+        </div>
+    </div>
+    <script type="text/javascript" src="js/muqruujs.js"></script>
+    <!--notice over-->
+    <!--center begin-->
+    <div class="wrap mt5 content">
+        <div class="breadcrumbs">
+            <ul>
+                <li>当前位置：</li>
+          		<li><a href="content306_1.html">政策法规</a> > </li>
+            <li><a href="content309_1.html">本地法规</a> > </li>
+                <li><em>详细</em></li>
+            </ul>
+        </div>
+        
+        <div class="pad50">
+            <div class="art_head">
+                <h1>园区管委会关于印发苏州工业园区社会法人失信行为联动惩戒实施办法（试行）的通知</h1>
+                <div class="tc art_date"> 【发布日期： 】【<a href="javascript:void(0)" onclick="window.print();">打印</a>】 </div>
+            </div>
+            <div class="artnr">
+                <p><div style='font-size:font-size:px;'><table cellpadding="0" cellspacing="0" width="100%"><tbody><tr class="firstRow"><td style="VERTICAL-ALIGN: top; PADDING-LEFT: 5.4pt; PADDING-RIGHT: 5.4pt"><p style="TEXT-ALIGN: center; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0"><a style="COLOR: #000000" name="红头单位名称"></a><span style="FONT-SIZE: 60pt; FONT-FAMILY: 方正姚体; COLOR: #ff0000; LETTER-SPACING: -2pt">苏州工业园区管理委员</span></p><p style="margin: 0pt;"><span style="FONT-SIZE: 60pt; FONT-FAMILY: 方正姚体; COLOR: #ff0000; LETTER-SPACING: -2pt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 会</span><span style="FONT-SIZE: 60pt; FONT-FAMILY: 方正姚体; COLOR: #ff0000; LETTER-SPACING: -2pt">文件</span></p></td></tr><tr><td style="VERTICAL-ALIGN: top; PADDING-LEFT: 5.4pt; PADDING-RIGHT: 5.4pt"><br/></td></tr><tr><td style="VERTICAL-ALIGN: top; PADDING-LEFT: 5.4pt; PADDING-RIGHT: 5.4pt"><br/></td></tr><tr><td style="VERTICAL-ALIGN: top; BORDER-BOTTOM: #ff0000 2.25pt solid; PADDING-LEFT: 5.4pt; PADDING-RIGHT: 5.4pt"><p style="TEXT-ALIGN: center; MARGIN: 0pt 0pt 7.8pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt"><a style="COLOR: #000000" name="文号"></a><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">苏园管规字〔</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">2015</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">〕</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">4</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">号</span></p></td></tr></tbody></table><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">&nbsp;</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">&nbsp;</span></p><p style="TEXT-ALIGN: center; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 34pt"><a style="COLOR: #000000" name="标题"></a><span style="FONT-SIZE: 22pt; FONT-FAMILY: 华文中宋">园区管委会关于印发《苏州工业园区社会法人失信行为联动惩戒实施办法（试行）》的通知</span></p><p style="MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0"><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">&nbsp;</span></p><p style="MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">各局办、</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">各功能区、各公司、</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">各派驻机构、各直属单位、各街道、各社工委：</span></p><p style="MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; TEXT-INDENT: 23.2pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">《</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">苏州工业园区社会法人失信行为联动惩戒实施办法（试行）</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">》已经园区管委会同意，现印发给你们，请认真组织实施。</span></p><p style="MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; TEXT-INDENT: 23.2pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">&nbsp;</span></p><p style="TEXT-ALIGN: right; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 26pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">苏州工业园区管理委员会</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">&nbsp;&nbsp;&nbsp; </span></p><p style="TEXT-ALIGN: right; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; TEXT-INDENT: 23.2pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">2015</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">年</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">7</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">月</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">8</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">日</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></p><p style="MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0"><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">&nbsp;</span></p><p style="TEXT-ALIGN: center; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 34pt"><span style="FONT-SIZE: 22pt; FONT-FAMILY: 华文中宋">苏州工业园区社会法人失信行为</span></p><p style="TEXT-ALIGN: center; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 34pt"><span style="FONT-SIZE: 22pt; FONT-FAMILY: 华文中宋">联动惩戒实施办法（试行）</span></p><p style="TEXT-ALIGN: center; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">&nbsp;</span></p><p style="TEXT-ALIGN: center; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 黑体">第一章　总　则</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">第一条&nbsp; 
+为加快推进苏州工业园区（以下简称</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">“</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">园区</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">”</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">）社会信用体系建设，营造守信光荣、失信可耻的社会环境，促进经济社会健康发展，根据《江苏省社会法人失信惩戒办法（试行）》、《苏州市社会法人失信惩戒办法》、《苏州工业园区社会信用体系建设</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">2014-2016</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">年行动计划》等文件，特制定本办法。</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">第二条&nbsp; 
+本办法所称社会法人，是指国家机关以外依法独立享有民事权利和承担民事义务的组织，包括企业法人、事业单位法人、社会团体法人。</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">本办法所称的社会法人失信行为，是指各级行政机关和经依法授权或委托承担行政管理职能的组织、司法机关依法履职过程中，认定社会法人在生产、经营、服务等活动中具有违法违规失信记录的行为。</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">社会法人对其失信信息享有知情权、异议权。</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">第三条&nbsp; 
+本办法适用于园区行政区域内社会法人失信行为的认定、惩戒及其管理。法律、法规、规章另有规定的，从其规定。</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">第四条&nbsp; 
+园区信用办具体负责组织实施本办法，其他相关政府部门、事业单位、行业服务机构等，按照各自职责和权限，具体执行本办法。&nbsp; </span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">&nbsp;</span></p><p style="TEXT-ALIGN: center; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 黑体">第二章&nbsp; 失信行为认定</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">第五条&nbsp; 
+社会法人失信行为按照严重程度从低到高划分为三个等级，分别是一般失信行为、较重失信行为和严重失信行为。</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">第六条&nbsp; 社会法人一般失信行为包括：</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（一）被处以较轻行政处罚（按照各部门或者系统行政处罚自由裁量基准认定）；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（二）拖欠税款、员工工资或者社会保险费等</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">2</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">个月以内；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（三）经法院或者仲裁机构认定拖欠贷款等合同款以及公用事业缴费</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">6</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">个月以内；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（四）行政机关在强制执行时，被执行人因执行能力不足而无法履行法定义务；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（五）本办法第六条、第七条所列其他情形，情节轻微；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（六）法律、法规、规章和省、市信用管理机构规定的其他一般失信行为。</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">第七条&nbsp; 社会法人较重失信行为包括：</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（一）被处以较重行政处罚（按照各部门或者各系统行政处罚自由裁量基准认定）；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（二）拖欠税款、员工工资或者社会保险费等</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">2</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">个月以上</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">6</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">个月以下；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（三）经法院或者仲裁机构认定拖欠贷款等合同款以及公用事业缴费</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">6</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">个月以上</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">12</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">个月以下；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（四）未通过各类专项或者定期检验；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（五）违法用工；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（六）违反资质、资格管理规定从事生产、经营或者服务活动；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（七）被法院判决承担部分或次要民事责任；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（八）以多头申报、虚假材料等方式骗取政府扶持资金；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（九）政府扶持资金支持项目验收不合格、资金使用违规；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（十）统贷、贴息、风险补偿资金贷款等政策性贷款违约；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（十一）跟投、直投等政策性投资企业抽逃资金；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（十二）拖欠国有载体水电煤等公用事业费用；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（十三）</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">1</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">年内发生</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">2</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">次以上同类一般失信行为或者</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">1</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">年内发生一般失信行为</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">3</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">次以上；</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312; COLOR: #ff0000"> </span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（十四）本办法第六条、第七条所列其他情形，情节较重的；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（十五）法律、法规、规章和省信用管理机构规定的其他较重失信行为。</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">第八条&nbsp; 
+具有较重失信行为的社会法人，列入园区公共信用信息基础数据库黄名单，有效期</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">3</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">年。</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">第九条&nbsp; 社会法人严重失信行为包括：</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（一）被处以严重行政处罚（按照各部门或者各系统行政处罚自由裁量基准判定）或者被吊销许可证、营业执照；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（二）法定代表人或者主要负责人因生产、经营或者服务行为被追究刑事责任；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（三）依法被认定为单位犯罪； </span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（四）拖欠税款、员工工资或者社会保险费等</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">6</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">个月以上；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（五）经法院或者仲裁机构认定拖欠贷款等合同款以及公用事业缴费</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">12</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">个月以上；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（六）被法院判决承担全部或者主要民事责任；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（七）拒不执行生效判决、裁定或仲裁机构裁决；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（八）弄虚作假骗取资质、资格或者其他有关证书、证明材料； 
+</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（九）</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">1</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">年内发生</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">2</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">次以上同类较重失信行为或者</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">1</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">年内发生较重失信行为</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">3</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">次以上；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（十）本办法第六条、第七条所列其他情形，情节严重的；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（十一）法律、法规、规章和省信用管理机构规定的其他严重失信行为。</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">第十条&nbsp; 
+具有严重失信行为的社会法人，列入园区公共信用信息基础数据库黑名单，通过门户网站以及其他相关媒体，向全社会公开披露，禁止披露社会法人商业秘密及个人隐私。</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">失信社会法人黑名单有效期</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">7</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">年，黑名单披露时限应当与其有效期保持一致。</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">在第九条基础上，工程建设、食品安全、人力资源和社会保障、安全生产、产品质量、工商管理、税收管理领域列入</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">“</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">黑名单</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">”</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">的严重失信行为补充如下：</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">第十一条&nbsp; 
+企业涉及住房和城乡建设有下列失信行为的，应列入</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">“</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">黑名单</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">”</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">：</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（一）规划编制单位违规承揽城乡规划编制工作，被责令限期改正、罚款、责令停业整顿、吊销资质证书；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（二）未取得相关规划许可或未按规划许可建设，被责令停止建设、限期改正或拆除、罚款、强制拆除；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（三）在保护范围内占用保护规划确定保留的园林绿地、河湖水系、道路等，或修建生产、储存爆炸性、易燃性、放射性、毒害性、腐蚀性物品的工厂、仓库等，被责令停止违法行为、限期恢复原状或者采取其他补救措施、罚款、没收违法所得、指定有能力的单位代为恢复原状或者采取其他补救措施；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（四）勘察设计单位、施工单位、工程监理单位、房地产开发企业、工程勘察企业违反标准、不遵守规则、弄虚作假，被责令改正，没收违法所得，处以较大数额罚款，吊销资质证书；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（五）房地产价格评估机构出具虚假或者有重大差错的评估报告，物业服务企业未按规定开展管理服务，被责令限期改正、没收违法所得、罚款、吊销资质证书；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">具体参照《江苏省住房和城乡建设系统失信行为分类规范》。</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">第十二条&nbsp; 
+企业涉及食品安全有下列失信行为的，应列入</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">“</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">黑名单</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">”</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">：</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt 0pt 0pt 70.75pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: -42.75pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（一）</span><span style="FONT: 7pt &#39;Times New Roman&#39;">&nbsp;&nbsp;&nbsp; </span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">许可证过期失效从事食品经营活动；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt 0pt 0pt 70.75pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: -42.75pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（二）</span><span style="FONT: 7pt &#39;Times New Roman&#39;">&nbsp;&nbsp;&nbsp; </span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">超出许可范围或未经许可从事食品生产经营活动；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt 0pt 0pt 70.75pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: -42.75pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（三）</span><span style="FONT: 7pt &#39;Times New Roman&#39;">&nbsp;&nbsp;&nbsp; </span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">安排患有有碍食品安全疾病的人员从事接触直接入口食品的工作；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt 0pt 0pt 70.75pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: -42.75pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（四）</span><span style="FONT: 7pt &#39;Times New Roman&#39;">&nbsp;&nbsp;&nbsp; </span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">进货时未查验许可证和相关证明文件；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt 0pt 0pt 70.75pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: -42.75pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（五）</span><span style="FONT: 7pt &#39;Times New Roman&#39;">&nbsp;&nbsp;&nbsp; </span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">将食品与有毒、有害物品一同贮存、运输；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt 0pt 0pt 70.75pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: -42.75pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（六）</span><span style="FONT: 7pt &#39;Times New Roman&#39;">&nbsp;&nbsp;&nbsp; </span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">有《食品安全法》第八十五条所列违法行为；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt 0pt 0pt 70.75pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: -42.75pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（七）</span><span style="FONT: 7pt &#39;Times New Roman&#39;">&nbsp;&nbsp;&nbsp; </span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">经营被包装材料、容器、运输工具等污染的食品；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt 0pt 0pt 70.75pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: -42.75pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（八）</span><span style="FONT: 7pt &#39;Times New Roman&#39;">&nbsp;&nbsp;&nbsp; </span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">经营无标签的预包装食品或标签不符合《食品安全法》的食品；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt 0pt 0pt 70.75pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: -42.75pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（九）</span><span style="FONT: 7pt &#39;Times New Roman&#39;">&nbsp;&nbsp;&nbsp; </span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">因经营者的故意或过失行为以及质量管理存在缺陷造成销售违法食品行为；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt 0pt 0pt 70.75pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: -42.75pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（十）</span><span style="FONT: 7pt &#39;Times New Roman&#39;">&nbsp;&nbsp;&nbsp; </span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">发现不合格食品未按规定进行封存、退市或销毁；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21.2pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（十一）发现售出食品不合格，未及时履行报告义务，未追回相关食品和做好记录。</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">具体参照《江苏省流通环节食品质量安全信用分类分级管理办法（试行）》</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">第十三条&nbsp; 
+企业涉及人力资源和社会保障有下列失信行为的，应列入</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">“</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">黑名单</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">”</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">：</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（一）经查实处理的劳动保障监察案件</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">10</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">件以上的；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（二）发生集体劳动争议案件</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">4</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">件以上且有败诉的；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（三）依法处以罚款</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">30000</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">元以上行政处罚或暂扣、吊销许可证、执照的；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（四）社会保险登记申报时瞒报工资总额或人数比例在</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">15%</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">以上或者拖欠社会保险费</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">6</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">个月以上，且未按要求改正的；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（五）用人单位存在使用童工行为或强迫劳动者劳动的；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（六）因违法行为导致集体上访、停工等突发事件或其他严重后果；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（七）无理抗拒、阻挠劳动保障部门实施劳动保障监察或拒不配合社会保险稽核，隐瞒事实真相，出具伪证或者隐匿、毁灭证据，打击报复监察员、证人、举报投诉人的；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（八）用人单位不办理社会保险登记，被社会保险行政部门责令限期改正，并逾期不改正，被社会保险行政部门处以应缴社会保险费数额一倍以上三倍以下的罚款的；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（九）用人单位以欺诈、伪造证明材料或者其他手段骗取社会保险待遇或社会保险基金支出，被社会保险行政部门责令退回骗取的社会保险金，并处骗取金额二倍以上五倍以下的罚款的；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（十）用人单位未依法为其职工缴纳社会保险费，职工发生工伤事故并被认定为工伤后，用人单位拒绝支付工伤保险待遇及治疗费用的，或患病后，用人单位拒绝支付医疗费用的；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（十一）医疗机构、药品经营单位等社会保险服务机构以欺诈、伪造证明材料或者其他手段骗取社会保险基金支出，被社会保险行政部门责令退回骗取的社会保险金，并解除服务协议的；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（十二）其他严重侵害劳动者合法权益的行为。</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">第十四条&nbsp; 
+企业涉及安全生产有下列失信行为的，应列入</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">“</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">黑名单</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">”</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">：</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（一）生产经营单位发生死亡责任事故，或发生单次三人以上重伤责任事故，或发生有较大社会影响的责任事故；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（二）发生安全生产事故隐瞒不报、谎报或迟报；</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">或故意破坏事故现场、毁灭有关证据；或发生事故未组织开展抢险救援；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（三）重大安全生产隐患不及时整改或整改不到位；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（四）拒不执行安全监管监察指令，或逾期不履行停产停业、停止使用、停止施工和罚款等处罚，以及发生暴力抗法的行为；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（五）在未按规定取得证照情况下擅自组织生产经营；擅自从事危险化学品生产、经营以及使用危险化学品从事生产；擅自新建、改建、扩建生产、储存危险化学品建设项目和存在职业病危害建设项目；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（六）上一年度内受到安全生产监管部门行政处罚三次以上，或累计罚款三十万元以上；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（七）经安全生产监管部门认定为严重威胁安全生产的其他行为。</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">第十五条&nbsp; 
+企业涉及产品质量有下列失信行为的，应列入</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">“</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">黑名单</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">”</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">：</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（一）企业涉及质量技术监督管理有严重违法行为，被处以责令停产停业、依法吊销许可证等行政处罚，或者司法行政部门接受移送进行处理；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（二）在产品中掺杂、掺假，以假充真、以次充好，或以不合格产品冒充合格产品情节严重；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（三）特种设备不按规定登记报备、检验情节严重；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（四）属于强制检定范围的计量器具，未按规定申请检定或送检，情节严重的。</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">第十六条&nbsp; 
+企业涉及工商管理有下列失信行为的，应列入</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">“</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">黑名单</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">”</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">：</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21.2pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（一）被列入严重违法企业名单；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21.2pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（二）拒绝检查情节严重；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21.2pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（三）未履行法定或约定义务情节严重；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21.2pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（四）被处以严重行政处罚；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21.2pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（五）预付款消费逃逸：企业和个体工商户采取预付卡消费经营方式，在未通知有关持卡人处理善后事宜，未进行清算而关闭逃逸。</span></p><p style="MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">第十七条&nbsp; 
+企业涉及税收管理有下列失信行为的，应列入</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">“</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">黑名单</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">”</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">：</span></p><p style="MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（一）纳税人伪造、变造、隐匿、擅自销毁账簿、记账凭证，或者在账簿上多列支出或者不列、少列收入，或者经税务机关通知申报而拒不申报或者进行虚假的纳税申报，不缴或者少缴应纳税款，查补税款金额</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">500</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">万元以上，且占应纳税额百分之十以上；</span></p><p style="MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（二）纳税人欠缴应纳税款，采取转移或者隐匿财产的手段，妨碍税务机关追缴欠缴的税款，查补税款金额</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">500</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">万元以上；</span></p><p style="MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（三）以假报出口或者其他欺骗手段，骗取国家出口退税款，查补税款金额</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">500</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">万元以上；　　</span></p><p style="MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（四）以暴力、威胁方法拒不缴纳税款；</span></p><p style="MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（五）虚开增值税专用发票或者虚开用于骗取出口退税、抵扣税款的其他发票，虚开税款数额</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">1000</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">万元以上；</span></p><p style="MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（六）虚开普通发票，票面额累计</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">5000</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">万元以上；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（七）虽未达到上述标准，但违法情节严重、有较大社会影响；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21.2pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（八）存在税务机关依法认定的其他严重失信情形。</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21.2pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">第十八条&nbsp; 
+上级政府或各部门的上级部门在社会法人失信行为分类、失信名单提供等方面有相关具体办法和要求的，以上级政府或上级部门文件为准。</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">&nbsp;</span></p><p style="TEXT-ALIGN: center; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 黑体">第三章&nbsp; 联动惩戒</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">第十九条&nbsp; 
+对社会法人的一般失信行为，有关部门或者机构应当采取信用提醒和诚信约谈等方式予以惩戒，督促其停止失信行为并进行整改。</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">信用提醒。相关部门或者机构可以将失信信息书面通知社会法人，提醒其纠正和规范相关行为。</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">诚信约谈。信用管理或行业主管部门、机构可以对社会法人的主要负责人、分管负责人或者直接责任人进行约谈，宣传相关法律、法规、规章和政策，敦促其在今后的生产、经营和服务中严格自律、诚信守法。</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">第二十条&nbsp; 
+相关部门或者机构应当对信用提醒和诚信约谈进行登记，详细记载提醒和约谈对象、时间、方式以及内容。</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">第二十一条&nbsp; 
+社会法人接到信用提醒后无故不纠正相关失信行为或者无故不参加约谈、约谈事项不落实，经督促后仍不履行的，上升为较重失信行为予以惩戒。</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">第二十二条&nbsp; 
+对社会法人的较重失信行为，各部门应采取以下方式予以联动惩戒：</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（一）作为日常监督检查或者抽查的重点；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（二）减少优惠政策和资金扶持力度；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（三）进行限定范围的公示或者书面告知；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（四）在建设项目招标、货物招标、公共工程项目招标、药品采购招标、公共资源分配项目等管理工作中，采用综合评标法的，设置信用分，对有较重失信行为的社会法人，信用分减半；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（五）法律、法规、规章规定的其他惩戒方式。</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">第二十三条&nbsp; 
+行政机关、事业单位以及行业服务机构等，在日常监督管理、国有产权转让、土地出让、行政许可、采购招标、评先评优、信贷支持、资质管理、环境管理、定期检验、安排和拨付有关财政补贴资金等工作中，对有严重失信行为的社会法人，可以依法采取下列方式予以联动惩戒：</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（一）列为重点监控和监督检查对象；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（二）向社会公开失信信息；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（三）撤销相关荣誉称号，撤销或者降低相关评估等级，禁止参与评优、评先；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（四）不作为政府购买服务对象；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（五）不给予优惠政策或者财政资金补贴；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（六）禁止参加政府采购活动；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（七）限制或者取消其参与政府主导的建设项目、设备、公共工程项目、公共资源分配项目等招标投标活动，以及建设用地使用权、矿业权招拍挂出让活动的资格；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（八）法律、法规、规章规定的其他惩戒方式。</span></p><p style="TEXT-ALIGN: center; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">&nbsp;</span></p><p style="TEXT-ALIGN: center; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 黑体">第四章&nbsp; 异议处理与信用修复</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">第二十四条&nbsp; 
+社会法人对失信行为认定有异议的，可以向园区信用办提交异议申请，园区信用办应当自收到之日起</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">5</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">个工作日内将异议申请转交原信息提供单位，该单位自收到核实申请之日起</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">15</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">个工作日内进行核实，并向园区信用办提交书面处理意见，确实有误的，予以撤销或纠正。</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">园区信用办应当自收到异议申请之日起</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">30</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">日内对社会法人给予回复并说明理由。</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">申诉处理期间，不影响失信行为的记录公示与处理。</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">第二十五条&nbsp; 
+社会法人有下列情形之一的，可以按照一定条件和程序实施信用修复：</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（一）社会法人非因主观故意发生失信行为，已整改到位且在整改期间未发生失信行为的，符合管理要求的，经原信息报送单位同意，可取消公示但数据库内予以保留记录，保留记录时间和有效期；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（二）社会法人已履行义务，已整改到位且在一年内未发生失信行为的，符合管理要求的，经原信息报送单位同意，可在公示有效期内备注整改结果；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（三）对已清缴拖欠税款的社会法人、被税务机关认定非正常户后恢复正常的社会法人，原信息提供单位可主动修复，其中属于严重失信行为的仅可主动修复一次。</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">信用修复后的社会法人再次发生严重失信行为的，原修复行为取消并在有效期内不得再次修复。</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">第二十六条&nbsp; 
+失信社会法人信用修复的相关程序。</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（一）失信社会法人提出书面申请，经有关行政部门审核后予以实施；</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">（二）原信息提供单位提出书面申请，园区信用办根据处理意见将信用修复记录纳入园区公共信用信息基础数据库。</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">&nbsp;</span></p><p style="TEXT-ALIGN: center; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 黑体">第五章&nbsp; 制度保障</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">第二十七条&nbsp; 
+信用数据按照谁提供谁负责的原则进行审查。</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">第二十八条&nbsp; 
+园区有关职能部门、事业单位、行业服务机构等，应当将社会法人失信信息及时、准确、完整地录入信息管理系统，并依照本办法确定其失信等级，报送园区公共信用信息基础数据库。</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">第二十九条&nbsp; 
+各部门要高度重视，加快整合行业内、系统内的信用信息，按要求及时向园区公共信用信息平台报送本系统采集的信用信息特别是严重失信信息。加强部门信用制度建设和人员培训，结合本部门实际，强化对经济和社会生活中热点、重点问题的信用监管，加大失信惩戒力度。</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">第三十条&nbsp; 
+建立健全责任追究制度。对未按本办法执行而导致决策或者工作失误并造成严重后果的，有关主管部门要依法追究单位负责人和直接责任人的责任。</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">第三十一条&nbsp; 
+园区信用办定期督查、考评相关部门和机构执行落实情况，加强指导和监督，及时总结、推广好的做法和经验。</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">&nbsp;</span></p><p style="TEXT-ALIGN: center; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 黑体">第六章&nbsp; 附&nbsp; 则</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">第三十二条&nbsp; 
+民办非企业单位以及社会法人以外的其他经济组织的失信行为惩戒，参照本办法执行。</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">第三十三条&nbsp; 本办法所称</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">“</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">以内</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">”</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">、</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">“</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">以下</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">”</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">均包含本数，</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">“</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">以上</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">”</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">不包含本数。</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">第三十四条&nbsp; 本办法由园区信用办负责解释。</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 21pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">第三十五条&nbsp; 本办法自发布之日起实施。</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt; TEXT-INDENT: 31.5pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">&nbsp;</span></p><p style="TEXT-ALIGN: right; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">&nbsp;</span></p><p style="MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 28pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">&nbsp;</span></p><table cellpadding="0" cellspacing="0" width="100%"><tbody><tr class="firstRow"><td style="border-top: 1pt solid rgb(0, 0, 0); vertical-align: top; border-bottom: 1pt solid rgb(0, 0, 0); padding-left: 5.4pt; padding-right: 5.4pt;" width="455"><p style="TEXT-ALIGN: justify; MARGIN: 0pt 13.85pt 0pt 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 20pt; TEXT-INDENT: 10.5pt"><a style="COLOR: #000000" name="发文单位"></a><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">苏州工业园区管理委员会</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><a style="COLOR: #000000" name="发文日期"></a><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">2015</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">年</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">7</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">月</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">8</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">日</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">印发</span></p></td></tr></tbody></table><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 20pt; TEXT-INDENT: 236.25pt"><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">共印：</span><a style="COLOR: #000000" name="份数"></a><span style="FONT-SIZE: 16pt; FONT-FAMILY: &#39;Times New Roman&#39;">6</span><span style="FONT-SIZE: 16pt; FONT-FAMILY: 仿宋_GB2312">份</span></p><p style="TEXT-ALIGN: justify; MARGIN: 0pt; ORPHANS: 0; WIDOWS: 0; LINE-HEIGHT: 14pt"><span style="FONT-SIZE: 14pt; FONT-FAMILY: 宋体">－</span><span style="FONT-SIZE: 14pt; FONT-FAMILY: &#39;Times New Roman&#39;">15</span><span style="FONT-SIZE: 14pt; FONT-FAMILY: 宋体">－</span></p><p><br/></p></div></p>
+            </div>
+        </div>
+    </div>
+    <!--center over-->
+        
+    <!--footer begin-->
+    <div class="wrap mt10">
+        <div class="link">
+            <h1>友情链接</h1>
+            <ul class="l_list">
+                <li><a href="http://www.creditchina.gov.cn/" target="_blank">信用中国</a></li>
+                <li><a href="http://www.js.gov.cn/jsxy/index.htm" target="_blank">诚信江苏</a></li>
+                <li><a href="http://www.njcredit.gov.cn/" target="_blank">诚信南京</a></li>
+                <li><a href="http://www.szcredit.gov.cn/" target="_blank">诚信苏州</a></li>
+                <li><a href="http://credit.zjg.gov.cn/toIndex.action" target="_blank">诚信张家港</a></li>
+            </ul>
+        </div>
+        
+         <div class="foot">
+            <p><span>主办单位：苏州工业园区信用办 </span><span>技术支持：江苏中集科技有限公司</span><span><script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1256639142'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1256639142' type='text/javascript'%3E%3C/script%3E"));</script></span></p>
+        </div>
+        
+    </div>
+    <!--footer over-->
+</div>
+<!--content over-->
+    
+</body>
+</html>

@@ -1,0 +1,391 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
+<meta name="description" content=""/>
+<meta name="keyWords" content=""/>
+<title>诚信园区</title>
+<link type="text/css" href="css/common.css" rel="stylesheet" />
+<link href="js/artDialog2.0.6/skin/chrome/chrome.css" rel="stylesheet" />
+<script type="text/javascript" src="js/jquery-1.7.2.js"></script>
+<script type="text/javascript" src="js/artDialog2.0.6/artDialog.min.js"></script>
+
+<style type="text/css">  
+        .code{   
+            background-image:url("../html/images/QQ.jpg");   
+            margin-left: 10px !important;
+            font-family:Arial;   
+            font-style:italic;   
+            color:Red;   
+            padding:2px 3px;   
+            letter-spacing:3px;   
+            font-weight:bolder;     
+        }   
+</style> 
+<script type="text/javascript">
+$(function () {
+	createCode(0);
+	createCode(3);
+});
+ var code ; //在全局 定义验证码   
+ function createCode(no){    
+   code = "";   
+   var codeLength = 4;//验证码的长度   
+   var checkCode = document.getElementById("checkCodeID"+no);   
+   var selectChar = new Array(0,1,2,3,4,5,6,7,8,9);//所有候选组成验证码的字符，当然也可以用中文的      
+   for(var i=0;i<codeLength;i++){   
+    var charIndex = Math.floor(Math.random()*10);   
+    code +=selectChar[charIndex];   
+   }    
+   if(checkCode){   
+     checkCode.className="code";   
+     checkCode.value = code;
+     checkCode.blur();   
+   }        
+ }
+  function validate (i,t){  
+    //   var checkCode = document.getElementById("checkCodeID"+i).value;  
+       var inputCode = document.getElementById("validCode"+i).value;
+       var zzjgdm=$('#zzjgdm').val();   
+       var gszch=$('#gszch').val();   
+       var companyname=$('#companyname').val();   
+       if(inputCode.length <=0){   
+           alert("请输入验证码！");   
+       }   
+    //   else if(inputCode.toUpperCase()!=checkCode){   
+      //    alert("验证码输入错误！");   
+       //}
+       else if(zzjgdm==""&&gszch==""&&companyname==""){
+       		alert("请至少输入一个查询条件!");
+       }
+       else{   
+          //window.location.href="../seach/seachdetail.action?zzjgdm="+zzjgdm+"&gszch="+gszch+"&companyname="+companyname+"&template="+2; 
+            $.post('../seach/checkSeachdetail.action',
+            {zzjgdm: zzjgdm, gszch:gszch, companyname:companyname,vcode:inputCode, template:2 },
+            function(data){
+                 if (data == '1') {
+                     $('#seaForm').submit(); 
+                 }else if(data=='2'){
+                 	alert("验证码输入错误！");
+                 } else {
+                    alert("暂无相关数据");
+                 }
+               }, "json");   
+       }    
+ }
+ function seachList(i){
+ 	//   var checkCode = document.getElementById("checkCodeID0").value;  
+       var inputCode = document.getElementById("validCode0").value;
+       var name=$('#name').val();   
+       var sfzhm=$('#sfzhm').val();   
+       var zyzhm=$('#zyzhm').val(); 
+       if(inputCode.length <=0){   
+           alert("请输入验证码！");   
+   //    }else if(inputCode.toUpperCase()!=checkCode){   
+   //       alert("验证码输入错误！");   
+       }else if(name==""&&sfzhm==""&&zyzhm==""){
+       		alert("请至少输入一个查询条件!");
+       }else{   
+         //window.location.href="../seach/personalSeachList.action?zyzhm="+zyzhm+"&sfzhm="+sfzhm+"&name="+name+"&template=2";
+                     $.post('../seach/checkPersonalSeachList.action',
+            {zyzhm: zyzhm, sfzhm:sfzhm, name:name,vcode:inputCode,template:2 },
+            function(data){
+                 if (data == 1) {
+                     $('#personForm').submit(); 
+                 }else if(data=='2'){
+                 	alert("验证码输入错误！");
+                 } else {
+                    alert("暂无相关数据");
+                 }
+               }, "json"); 
+       }  
+ }
+ function reset(){
+  	$('#zzjgdm').val('');   
+    $('#gszch').val('');   
+    $('#companyname').val('');  
+    $('#validCode0').val('');  
+ }  
+ function personalReset(){
+ 	$('#name').val('');  
+ 	$('#sfzhm').val('');  
+ 	$('#zyzhm').val('');  
+ 	$('#validCode0').val(''); 
+ }   
+function show(str){
+		var id=document.getElementById(str+"_0").value;
+		window.location.href='content'+id+"_1.html"; 
+}
+function reload(i){
+	if(i==1)
+ 	 window.location.href="qycheck.html";
+ 	 if(i==2)
+ 	 window.location.href="mycheck.html";
+ 	 if(i==3)
+ 	 window.location.href="qyyyshensu.html";
+}
+function goto(staus,name,index,size){
+	if(staus=='up'&&index!=1){
+		window.location.href=name+"_"+(index-1)+".html"; 
+	}else if(staus=='first'){
+		window.location.href=name+"_"+"1.html"; 
+	}else if(staus=='down'){
+		if(index!=size){
+			window.location.href=name+"_"+(index+1)+".html"; 
+		}
+	}else if(staus=='last'){
+		window.location.href=name+"_"+size+".html"; 
+	}
+}
+ function seachContent(){
+ 	//var channelid=document.getElementById("channelid").value;
+ 	//var title=document.getElementById("title").value;
+ 	//if(title==""){
+ 		//return;
+ 	//}else{
+ 		//window.location.href="../content/listContentByChannelId.action?channelid="+channelid+"&title="+title;   
+ 	//	window.location.href="../content/listContentByTitle.action?title="+title;   
+ 	//}
+ 	var title=document.getElementById("title").value;
+ 	if (title == '' || title == '请输入关键字') {
+ 	   alert('请输入关键字');
+ 	   return;
+ 	}
+ 	title = encodeURIComponent(title);
+ 	window.location.href="../content/listContentByTitle.action?title="+title; 
+ }
+ function query(){
+ 	 var checknumber=document.getElementById("checkNumber").value;
+ 	  var reg = new RegExp("^[0-9]*$");  
+    if(!reg.test(checknumber)){  
+        alert("请输入数字!");  
+        return;
+    }  
+ 	 if (checknumber == "") {
+ 	    alert("信用核查码不能为空！");
+ 	 } else {
+ 	        $.post('../seach/approveContent.action',
+            {checknumber: checknumber},
+            function(data){
+                 if (data == 1) {
+                      window.open("http://172.25.119.13/creditVerification/getDetailVerificationInfo.action?checkcode=" + checknumber,
+	               'newwindow','height=900,width=1000,top='+(window.screen.availHeight-30-900)/2+
+	                   ',left='+(window.screen.availWidth-10-1000)/2+
+	                 ',toolbar=no,menubar=no,scrollbars=yes,resizable=yes,location=no,status=no');
+               } else if (data == 2) {
+                     window.open("http://172.25.119.13/creditVerification/getgroupsDetailVerificationInfo.action?checkcode=" + checknumber,
+	                  'newwindow','height=900,width=1000,top='+(window.screen.availHeight-30-900)/2+
+	                   ',left='+(window.screen.availWidth-10-1000)/2+
+	                 ',toolbar=no,menubar=no,scrollbars=yes,resizable=yes,location=no,status=no');
+               }else {
+                   if (data == '-1') {
+                     alert("信用查询码不存在！");
+                   } else if (data == '-2') {
+                     alert("信用查询码已过期！");
+                   } else if (data == '-3') {
+                     alert("信用查询码已重新生成,请输入最新核查码!");
+                   }
+                }
+            },'json');
+ 	 }
+ }
+function SetWinHeight(obj)
+{
+
+} 
+
+function gotoPage(total,cid){
+	var p=$("#textFooter").val();
+	var i = parseInt(total);
+	if(p!=""){
+		var a=parseInt(p);
+		if(a>0&&a<=i)
+		window.location.href="../content"+cid+"_"+p+".html";
+		if(a>i)
+		window.location.href="../content"+cid+"_"+1+".html";
+	}
+}
+$(document).ready(function() {
+ 	$.ajax({
+        type: "post",//使用post方法访问后台
+        dataType: "json",//返回json格式的数据
+        url: "../getCCS.action",//要访问的后台地址
+        data:{},//要发送的数据
+        complete :function(){$("#load").hide();},//AJAX请求完成时隐藏loading提示
+        success: function(msg){//msg为返回的数据，在这里做数据绑定
+				$("#thrNum").html(msg);
+        }
+    });
+    $.ajax({
+        type: "post",//使用post方法访问后台
+        dataType: "json",//返回json格式的数据
+        url: "../content/findHOTKeyword.action",//要访问的后台地址
+        data:{},//要发送的数据
+        complete :function(){$("#load").hide();},//AJAX请求完成时隐藏loading提示
+        success: function(msg){//msg为返回的数据，在这里做数据绑定
+        	var b='关键字:&nbsp;';
+        	$.each(msg.rows, function(i, n){
+        	var a = '<a href="javascript:void(0)" onclick="byHotKwSeachContent(\''+msg.rows[i]+'\')" >'+msg.rows[i]+'</a>&nbsp;&nbsp;';
+        	b+=a;
+           });
+           $("#hotkw").html(b);
+        }
+    });
+});
+	function byHotKwSeachContent(str) {
+		var title = encodeURIComponent(str);
+		window.location.href = "../content/listContentByTitle.action?title="
+				+ title;
+	}	
+	function queryOfPreview(contentId, category){
+   		 window.location.href="../content/queryOfPreview.action?contentId="+contentId+"&date="+new Date();
+	}
+</script>
+</head>
+
+<body>
+<!--header begin-->
+<div class="header">
+	<div class="wrap">
+    	<div class="logo f_l"><a href="http://www.sipac.gov.cn/" target="_blank"><img src="images/logo.png" /></a></div>
+    	<div class="number f_r" id="thrNum">
+        </div>
+    </div>
+</div>
+<!--header over-->
+
+<!--nav begin-->
+<div class="nav">
+    <ul class="wrap tabs">
+        <li><a href="../goToIndex.action">首页</a></li>
+        	<li><a href="javascript:void(0)" id="22" onclick='show("22")'>信用动态</a></li>
+		        	<input type="hidden" id="22_0" value="365">
+		        	<input type="hidden" id="22_1" value="364">
+		        	<input type="hidden" id="22_2" value="335">
+        	<li><a href="javascript:void(0)" id="420" onclick='show("420")'>信用公示</a></li>
+		        	<input type="hidden" id="420_0" value="318">
+		        	<input type="hidden" id="420_1" value="60">
+		        	<input type="hidden" id="420_2" value="61">
+        	<li><a href="javascript:void(0)" id="26" onclick='show("26")'>重点领域</a></li>
+		        	<input type="hidden" id="26_0" value="486">
+		        	<input type="hidden" id="26_1" value="487">
+		        	<input type="hidden" id="26_2" value="488">
+		        	<input type="hidden" id="26_3" value="489">
+		        	<input type="hidden" id="26_4" value="490">
+		        	<input type="hidden" id="26_5" value="491">
+		        	<input type="hidden" id="26_6" value="492">
+		        	<input type="hidden" id="26_7" value="493">
+        	<li><a href="javascript:void(0)" id="423" onclick='show("423")'>专项资金</a></li>
+		        	<input type="hidden" id="423_0" value="469">
+        	<li><a href="javascript:void(0)" id="416" onclick='show("416")'>政策法规</a></li>
+		        	<input type="hidden" id="416_0" value="306">
+		        	<input type="hidden" id="416_1" value="334">
+		        	<input type="hidden" id="416_2" value="309">
+        <li><a href="http://gzjd.sipac.gov.cn/Web/BBS/MainList.aspx"  target="_blank">在线交流</a></li>
+    </ul>
+</div>
+<!--nav over-->
+
+<!--content begin-->
+<div class="cloud">
+    <!--notice begin-->
+    <div class="wrap">
+    	<div class="notice f_l"> 
+            <div class="notice_tit f_l f_b">通知公告</div>
+            <div class="f_l notice_list"  id="mq" onmouseover=iScrollAmount=0 style="overflow:hidden; width:500px; height:30px;color:#000" onmouseout=iScrollAmount=1 >
+                <ul>
+		                    <li><a href="javascript:queryOfPreview('1911122')">苏州出台省内首部《住房公积金个人失信惩戒实施细则》</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911059')">关于印发江苏省推行食品生产企业 “黑名单”制度指导意见(试行)的通知(苏食药监规</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911231')">家庭成员不履行抚养义务记入个人信用档案</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911061')">2015年我市电梯维保单位星级评定结果公示</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910971')">2015年度“诚信宣传周”活动开始啦</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910519')">2015年12月苏州工业园区公积金（社会保险）公示欠费单位名单</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910520')">苏州工业园区从业建筑业企业不良信用处罚公示汇总</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910381')">2015年11月苏州工业园区社会保险基金（公积金）公示欠费单位名单</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910282')">园区信用体系建设项目接受市领导专项督查并开展座谈会</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911034')">苏州积分落户制度2016年1月15日起实施 失信行为将扣减分</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910988')">关于做好2015年园区建筑业企业信用综合评价良好行为信息录入工作的通知</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910976')">诚信记录纳入流动人口积分管理</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910972')">江苏省研究生考试26日开考 省考试院提醒考生诚信参考</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910518')">2015年中国十佳诚信政府排行榜发布</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910467')">老忘交电费 当心成老赖失信</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910361')">首个国际征信论坛即将在沪登陆</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910338')">居民身份证将可异地换领补领 有不良信用记录的不予受理</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910329')">双十一”消费信用大数据监测评价启动</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910328')">发改委：年底前全面实施统一社会信用代码制度</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910310')">信用社会临近 央行征信系统已收录8.7亿人数据</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910307')">市食药监公布19批次质量不合格食品（附名单）</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910302')">园区地税提交457户企业列入园区失信法人库</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910177')">关于联合发布2014年长三角地区备案信用服务机构名单的通知</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910179')">2014年度“苏州市级信用管理示范企业”认定公示</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="search f_r">
+            <form id="searchform" action="../content/listContentByTitle.action" method="post">
+                <fieldset>
+                <table>
+                 	<tr>
+				      <td width="70%">
+				      	 <input type="text" onfocus="if(this.value =='请输入关键字') {this.value=''; }" onblur="if(this.value==''){this.value='请输入关键字';}" class="text_input" style="width:200px" value="请输入关键字" name="title" id="title">
+				         <input type="button" onclick="seachContent()" name="button"> 
+				      </td>
+				   	</tr>
+				   	<tr>
+				   		 <td id="hotkw"></td>
+				   	</tr>
+				  </table> 
+                </fieldset>
+            </form>
+        </div>
+    </div>
+    <script type="text/javascript" src="js/muqruujs.js"></script>
+    <!--notice over-->
+    <!--center begin-->
+    <div class="wrap mt5 content">
+        <div class="breadcrumbs">
+            <ul>
+                <li>当前位置：</li>
+          		<li><a href="content474_1.html">通知公告</a> > </li>
+            <li><a href="content474_1.html">通知公告</a> > </li>
+                <li><em>详细</em></li>
+            </ul>
+        </div>
+        
+        <div class="pad50">
+            <div class="art_head">
+                <h1>苏州出台省内首部《住房公积金个人失信惩戒实施细则》</h1>
+                <div class="tc art_date"> 【发布日期： 】【<a href="javascript:void(0)" onclick="window.print();">打印</a>】 </div>
+            </div>
+            <div class="artnr">
+                <p><div style='font-size: 18px;'><p style="text-align: left; line-height: 1.75em;"><span style="font-family: 宋体,SimSun; font-size: 18px;">近日，苏州出台了省内首部《住房公积金个人失信惩戒实施细则》，规范对本市行政区域内与住房公积金业务有关联的个人所发生失信行为的认定、惩戒及管理，以营造良好的住房公积金缴存使用环境。具体细则如下：<br/></span></p><p>&nbsp;</p><p style="text-align: left; line-height: 1.75em;"><span style="font-family: 宋体,SimSun; font-size: 18px;"><strong>第一章&nbsp; 总则 </strong> <br/>第一条&nbsp; 为保障住房公积金制度的有序运行，倡导个人诚实守信，惩戒失信行为，营造良好的住房公积金使用环境，根据《住房公积金管理条例》、《苏州市住房公积金管理办法》、《苏州市自然人失信惩戒办法（试行）》（苏府办〔2014〕192号）等文件的有关规定，结合住房公积金管理实际，制定本实施细则。  <br/>第二条&nbsp; 本细则适用于本市行政区域内与住房公积金业务有关联的个人所发生失信行为的认定、惩戒及其管理。  <br/>第三条&nbsp; 苏州市住房公积金管理中心（以下简称市中心）建立全市统一的住房公积金个人失信行为管理系统（以下简称管理系统）。  <br/>市中心职能处室负责个人失信行为管理工作的指导与监督；市中心所属各分中心（以下简称分中心）根据市中心授权，具体负责所辖行政区域内个人失信行为的管理。  <br/>第四条&nbsp; 本细则所称个人是指在本市行政区域内缴存住房公积金的职工、各类法人组织的法定代表人或负责人、住房公积金个人住房贷款（以下简称公积金贷款）的借款人与共同借款人（不含未成年的共同借款人），以及其他与住房公积金业务有关联的个人。  <br/></span></p><p>&nbsp;</p><p style="text-align: left; line-height: 1.75em;"><span style="font-family: 宋体,SimSun; font-size: 18px;"><strong>第二章&nbsp; 失信行为</strong><br/>第五条&nbsp; 个人失信行为，分为提取失信行为、贷款失信行为、贷后还款失信行为及缴存失信行为。  <br/>第六条&nbsp; 提取失信行为包括：  <br/>（一）以虚构事实、提供虚假、伪造证明材料等欺骗手段违法提取本人住房公积金账户内存储余额的；  <br/>（二）以虚构事实、提供虚假、伪造证明材料等欺骗手段违法提取他人住房公积金账户内存储余额的；  <br/>（三）提取中的其他失信行为。  <br/>第七条&nbsp; 贷款失信行为包括：  <br/>（一）以虚构、隐瞒事实，提供虚假、伪造证明材料等欺骗手段违法获得公积金贷款的；  <br/>（二）贷款中的其他失信行为。  <br/>第八条&nbsp; 贷后还款失信行为包括：  <br/>（一）未按时、足额偿还住房公积金贷款的；  <br/>（二）贷后还款中的其他失信行为。  <br/>第九条&nbsp; 缴存失信行为包括：  <br/>（一）不按规定办理单位缴存登记手续，不按规定为本单位职工设立个人公积金账户的；  <br/>（二）缴存中的其他失信行为。  <br/></span></p><p>&nbsp;</p><p style="text-align: left; line-height: 1.75em;"><span style="font-family: 宋体,SimSun; font-size: 18px;"><strong>第三章&nbsp; 失信行为的认定</strong><br/>第十条&nbsp; 个人失信行为按照严重程度从低到高划分为三个等级，分别是一般失信行为、较重失信行为和严重失信行为。  <br/>第十一条&nbsp; 个人存在下列情形之一的，应列入一般失信行为：  <br/>（一）以虚构事实、提供虚假、伪造证明材料等欺骗手段违法提取本人住房公积金账户内存储余额未遂的；  <br/>（二）以虚构、隐瞒事实，提供虚假、伪造证明材料等欺骗手段违法获得公积金贷款未遂的；  <br/>（三）有还款能力，无故连续拖欠公积金贷款本息满2期的；  <br/>（四）1年内出现3次以上未按时、足额偿还公积金贷款的；  <br/>（五）本规定第六条、第七条、第八条、第九条所列其他情形，情节轻微的。  <br/>第十二条&nbsp; 个人存在下列情形之一的，应列入较重失信行为：  <br/>（一）以虚构事实、提供虚假、伪造证明材料等欺骗手段违法提取本人住房公积金账户内储存余额的；  <br/>（二）有还款能力，无故连续拖欠公积金贷款本息3期以上6期以下的；  <br/>（三）1年内发生3次以上一般失信行为的；  <br/>（四）本办法第六条、第七条、第八条、第九条所列其他情形，情节较重的。  <br/>第十三条&nbsp; 个人存在下列情形之一的，应列入严重失信行为：  <br/>（一）以虚构事实、提供虚假、伪造证明材料等欺骗手段违法提取他人住房公积金账户内存储余额的（含未遂）；  <br/>（二）以虚构、隐瞒事实，提供虚假、伪造证明材料等欺骗手段违法获得公积金贷款的；  <br/>（三）有还款能力，无故连续拖欠公积金贷款本息满6期的；  <br/>（四）１年内发生3次以上较重失信行为的；  <br/>（五）被市中心处以行政处罚的；  <br/>（六）本办法第六条、第七条、第八条、第九条所列其他情形，情节严重的。  <br/></span></p><p style="text-align: left; line-height: 1.75em;"><span style="font-family: 宋体,SimSun; font-size: 18px;"></span>&nbsp;</p><p style="text-align: left; line-height: 1.75em;"><strong><span style="font-family: 宋体,SimSun; font-size: 18px;">第四章&nbsp; 失信行为的惩戒</span></strong><span style="font-family: 宋体,SimSun; font-size: 18px;"><br/>第十四条&nbsp; 对个人一般失信行为，可以采取下列一种或多种方式予以惩戒，督促其停止失信行为并进行整改。  <br/>（一）信用提醒。将失信信息以书面形式通知个人，提醒其纠正和规范相关行为。  <br/>（二）诚信约谈。对个人进行约谈，宣传住房公积金相关法律、法规、规章和政策，敦促其严格自律、诚信守法。进行诚信约谈的，应当按规定制作约谈笔录。个人接到信用提醒后无故不纠正相关失信行为或者无故不参加约谈、约谈事项不落实，经督促后仍不履行的，上升为较重失信行为予以惩戒。  <br/>第十五条&nbsp; 对个人较重失信行为，可以依法采取下列一种或多种方式予以惩戒： <br/>（一）作为日常监督检查或者抽查的重点；  <br/>（二）书面通知所在单位；  <br/>（三）取消失信个人3年内提取住房公积金资格；  <br/>（四）取消失信个人3年内申请公积金贷款资格；  <br/>（五）向苏州市流动人口管理部门上报并扣分；  <br/>（六）法律、法规、规章规定的其他惩戒方式。  <br/>第十六条&nbsp; 对个人严重失信行为，可以依法采取下列一种或多种方式予以惩戒：  <br/>（一）列为重点监控和监督检查对象；  <br/>（二）向社会公开失信信息；  <br/>（三）取消失信个人5年内提取住房公积金资格；  <br/>（四）取消失信个人5年内申请公积金贷款资格；  <br/>（五）向苏州市流动人口管理部门上报并扣分；  <br/>（六）法律、法规、规章规定的其他惩戒方式。  <br/></span></p><p style="text-align: left; line-height: 1.75em;"><span style="font-family: 宋体,SimSun; font-size: 18px;">&nbsp;</span></p><p style="text-align: left; line-height: 1.75em;"><strong><span style="font-family: 宋体,SimSun; font-size: 18px;">第五章&nbsp; 失信行为处理程序<br/></span></strong><span style="font-family: 宋体,SimSun; font-size: 18px;">第十七条&nbsp; 个人出现失信行为的，由各分中心负责将个人失信信息及时、准确、完整地录入管理系统，并依照本细则拟订其失信等级，由分中心负责人审核后报市中心职能处室。  <br/>第十八条&nbsp; 市中心职能处室根据事实核定失信等级，其中核定为一般失信行为与较重失信行为的，报分管领导批准；核定为严重失信行为的，报分管领导审核，主要领导批准。  <br/>第十九条&nbsp; 分中心根据市中心的核定结果，按照本细则具体实施惩戒。实施前，应当将认定结果、惩戒措施等书面告知失信个人。  <br/>第二十条&nbsp; 市中心职能处室定期将失信个人名单报送市信用中心的公共信用信息基础数据库，同时将严重失信的行为通过公积金中心网站等渠道向社会公布。  <br/>第二十一条&nbsp; 个人出现多次不同类型的失信行为的，可从发现之日起，按失信行为的类型分别进行记录、定级，予以惩戒。个人在惩戒期内再次出现失信行为的，应当按规定追加惩戒。  <br/></span></p><p style="text-align: left; line-height: 1.75em;"><span style="font-family: 宋体,SimSun; font-size: 18px;"></span>&nbsp;</p><p style="text-align: left; line-height: 1.75em;"><strong><span style="font-family: 宋体,SimSun; font-size: 18px;">第六章&nbsp; 异议处理与信用修复<br/></span></strong><span style="font-family: 宋体,SimSun; font-size: 18px;">第二十二条&nbsp; 各分中心在实施信用惩戒的同时，应当督促个人纠正不当行为。  <br/>对轻微或者初次失信行为，应当以教育引导为主，减轻或者不予惩戒。  <br/>第二十三条&nbsp; 个人对失信行为认定有异议的，可以向市信用中心提交异议申请。  异议处理期间，不影响失信行为记录的公示与处理。  <br/>第二十四条&nbsp; 个人非因主观故意发生失信行为的，可以按照一定条件和程序实施信用修复。  <br/>第二十五条&nbsp; 个人信用修复的相关程序按《苏州市自然人失信惩戒办法（试行）》的相关规定执行，市中心做好配合工作。  <br/></span></p><p style="text-align: left; line-height: 1.75em;"><span style="font-family: 宋体,SimSun; font-size: 18px;"></span>&nbsp;</p><p style="text-align: left; line-height: 1.75em;"><strong><span style="font-family: 宋体,SimSun; font-size: 18px;">第七章&nbsp; 附则<br/></span></strong><span style="font-family: 宋体,SimSun; font-size: 18px;">第二十六条&nbsp; 本规定所称“以上”、“以内”包含本数，“以下”不包含本数。<br/>第二十七条&nbsp; 本规定自2016年1月1日起实施。  <br/></span></p><p style="text-align: left; line-height: 1.75em;"><span style="font-family: 宋体,SimSun; font-size: 18px;">&nbsp;</span></p><span style="line-height: 0px; display: none;" id="_baidu_bookmark_start_79">‍</span><p style="text-align: right; line-height: 1.75em;"><span style="font-family: 宋体,SimSun; font-size: 18px;">新闻来源：苏州市住房公积金管理中心网站</span></p></div></p>
+            </div>
+        </div>
+    </div>
+    <!--center over-->
+        
+    <!--footer begin-->
+    <div class="wrap mt10">
+        <div class="link">
+            <h1>友情链接</h1>
+            <ul class="l_list">
+                <li><a href="http://www.creditchina.gov.cn/" target="_blank">信用中国</a></li>
+                <li><a href="http://www.js.gov.cn/jsxy/index.htm" target="_blank">诚信江苏</a></li>
+                <li><a href="http://www.njcredit.gov.cn/" target="_blank">诚信南京</a></li>
+                <li><a href="http://www.szcredit.gov.cn/" target="_blank">诚信苏州</a></li>
+                <li><a href="http://credit.zjg.gov.cn/toIndex.action" target="_blank">诚信张家港</a></li>
+            </ul>
+        </div>
+        
+         <div class="foot">
+            <p><span>主办单位：苏州工业园区信用办 </span><span>技术支持：江苏中集科技有限公司</span><span><script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1256639142'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1256639142' type='text/javascript'%3E%3C/script%3E"));</script></span></p>
+        </div>
+        
+    </div>
+    <!--footer over-->
+</div>
+<!--content over-->
+    
+</body>
+</html>

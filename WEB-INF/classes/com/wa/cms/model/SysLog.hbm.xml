@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2014-5-5 16:40:13 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.wa.cms.model.SysLog" table="SYS_LOG" >
+        <comment>&#186;&#243;&#204;&#168;&#178;&#217;&#215;&#247;&#200;&#213;&#214;&#190;</comment>
+        <id name="sysLogId" type="long">
+            <column name="SYS_LOG_ID" precision="10" scale="0" />
+        </id>
+        <many-to-one name="sysUser" class="com.wa.cms.model.SysUser" fetch="select">
+            <column name="USER_ID" precision="10" scale="0" />
+        </many-to-one>
+        <property name="category" type="string">
+            <column name="CATEGORY" length="10" />
+        </property>
+        <property name="logDatetime" type="timestamp">
+            <column name="LOG_DATETIME" length="7" />
+        </property>
+        <property name="ip" type="string">
+            <column name="IP" length="100">
+                <comment>ip&#181;&#216;&#214;&#183;</comment>
+            </column>
+        </property>
+        <property name="url" type="string">
+            <column name="URL" length="100" />
+        </property>
+        <property name="title" type="string">
+            <column name="TITLE" length="100" />
+        </property>
+        <property name="content" type="string">
+            <column name="CONTENT" />
+        </property>
+    </class>
+</hibernate-mapping>

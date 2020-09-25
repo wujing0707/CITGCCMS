@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2014-5-5 16:40:13 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.wa.cms.model.Role" table="ROLE" >
+        <comment>&#189;&#199;&#201;&#171;&#177;&#237;</comment>
+        <id name="roleId" type="long">
+            <column name="ROLE_ID" precision="10" scale="0" />
+        </id>
+        <property name="name" type="string">
+            <column name="NAME" length="100">
+                <comment>&#189;&#199;&#201;&#171;&#195;&#251;&#179;&#198;</comment>
+            </column>
+        </property>
+        <property name="description" type="string">
+            <column name="DESCRIPTION">
+                <comment>&#195;&#232;&#202;&#246;</comment>
+            </column>
+        </property>
+        <property name="authorityValue" type="big_decimal">
+            <column name="AUTHORITY_VALUE" precision="22" scale="0">
+                <comment>&#200;&#168;&#207;&#222;&#188;&#175;&#186;&#207;&#214;&#181;</comment>
+            </column>
+        </property>
+        <set name="userRoles" table="USER_ROLE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ROLE_ID" precision="10" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="com.wa.cms.model.UserRole" />
+        </set>
+        <set name="workflowPriorities" table="WORKFLOW_PRIORITY" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ROLE_ID" precision="10" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="com.wa.cms.model.WorkflowPriority" />
+        </set>
+        <set name="roleAuthorities" table="ROLE_AUTHORITY" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ROLE_ID" precision="10" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="com.wa.cms.model.RoleAuthority" />
+        </set>
+    </class>
+</hibernate-mapping>

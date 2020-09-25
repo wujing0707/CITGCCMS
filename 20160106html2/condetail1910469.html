@@ -1,0 +1,391 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
+<meta name="description" content=""/>
+<meta name="keyWords" content=""/>
+<title>诚信园区</title>
+<link type="text/css" href="css/common.css" rel="stylesheet" />
+<link href="js/artDialog2.0.6/skin/chrome/chrome.css" rel="stylesheet" />
+<script type="text/javascript" src="js/jquery-1.7.2.js"></script>
+<script type="text/javascript" src="js/artDialog2.0.6/artDialog.min.js"></script>
+
+<style type="text/css">  
+        .code{   
+            background-image:url("../html/images/QQ.jpg");   
+            margin-left: 10px !important;
+            font-family:Arial;   
+            font-style:italic;   
+            color:Red;   
+            padding:2px 3px;   
+            letter-spacing:3px;   
+            font-weight:bolder;     
+        }   
+</style> 
+<script type="text/javascript">
+$(function () {
+	createCode(0);
+	createCode(3);
+});
+ var code ; //在全局 定义验证码   
+ function createCode(no){    
+   code = "";   
+   var codeLength = 4;//验证码的长度   
+   var checkCode = document.getElementById("checkCodeID"+no);   
+   var selectChar = new Array(0,1,2,3,4,5,6,7,8,9);//所有候选组成验证码的字符，当然也可以用中文的      
+   for(var i=0;i<codeLength;i++){   
+    var charIndex = Math.floor(Math.random()*10);   
+    code +=selectChar[charIndex];   
+   }    
+   if(checkCode){   
+     checkCode.className="code";   
+     checkCode.value = code;
+     checkCode.blur();   
+   }        
+ }
+  function validate (i,t){  
+    //   var checkCode = document.getElementById("checkCodeID"+i).value;  
+       var inputCode = document.getElementById("validCode"+i).value;
+       var zzjgdm=$('#zzjgdm').val();   
+       var gszch=$('#gszch').val();   
+       var companyname=$('#companyname').val();   
+       if(inputCode.length <=0){   
+           alert("请输入验证码！");   
+       }   
+    //   else if(inputCode.toUpperCase()!=checkCode){   
+      //    alert("验证码输入错误！");   
+       //}
+       else if(zzjgdm==""&&gszch==""&&companyname==""){
+       		alert("请至少输入一个查询条件!");
+       }
+       else{   
+          //window.location.href="../seach/seachdetail.action?zzjgdm="+zzjgdm+"&gszch="+gszch+"&companyname="+companyname+"&template="+2; 
+            $.post('../seach/checkSeachdetail.action',
+            {zzjgdm: zzjgdm, gszch:gszch, companyname:companyname,vcode:inputCode, template:2 },
+            function(data){
+                 if (data == '1') {
+                     $('#seaForm').submit(); 
+                 }else if(data=='2'){
+                 	alert("验证码输入错误！");
+                 } else {
+                    alert("暂无相关数据");
+                 }
+               }, "json");   
+       }    
+ }
+ function seachList(i){
+ 	//   var checkCode = document.getElementById("checkCodeID0").value;  
+       var inputCode = document.getElementById("validCode0").value;
+       var name=$('#name').val();   
+       var sfzhm=$('#sfzhm').val();   
+       var zyzhm=$('#zyzhm').val(); 
+       if(inputCode.length <=0){   
+           alert("请输入验证码！");   
+   //    }else if(inputCode.toUpperCase()!=checkCode){   
+   //       alert("验证码输入错误！");   
+       }else if(name==""&&sfzhm==""&&zyzhm==""){
+       		alert("请至少输入一个查询条件!");
+       }else{   
+         //window.location.href="../seach/personalSeachList.action?zyzhm="+zyzhm+"&sfzhm="+sfzhm+"&name="+name+"&template=2";
+                     $.post('../seach/checkPersonalSeachList.action',
+            {zyzhm: zyzhm, sfzhm:sfzhm, name:name,vcode:inputCode,template:2 },
+            function(data){
+                 if (data == 1) {
+                     $('#personForm').submit(); 
+                 }else if(data=='2'){
+                 	alert("验证码输入错误！");
+                 } else {
+                    alert("暂无相关数据");
+                 }
+               }, "json"); 
+       }  
+ }
+ function reset(){
+  	$('#zzjgdm').val('');   
+    $('#gszch').val('');   
+    $('#companyname').val('');  
+    $('#validCode0').val('');  
+ }  
+ function personalReset(){
+ 	$('#name').val('');  
+ 	$('#sfzhm').val('');  
+ 	$('#zyzhm').val('');  
+ 	$('#validCode0').val(''); 
+ }   
+function show(str){
+		var id=document.getElementById(str+"_0").value;
+		window.location.href='content'+id+"_1.html"; 
+}
+function reload(i){
+	if(i==1)
+ 	 window.location.href="qycheck.html";
+ 	 if(i==2)
+ 	 window.location.href="mycheck.html";
+ 	 if(i==3)
+ 	 window.location.href="qyyyshensu.html";
+}
+function goto(staus,name,index,size){
+	if(staus=='up'&&index!=1){
+		window.location.href=name+"_"+(index-1)+".html"; 
+	}else if(staus=='first'){
+		window.location.href=name+"_"+"1.html"; 
+	}else if(staus=='down'){
+		if(index!=size){
+			window.location.href=name+"_"+(index+1)+".html"; 
+		}
+	}else if(staus=='last'){
+		window.location.href=name+"_"+size+".html"; 
+	}
+}
+ function seachContent(){
+ 	//var channelid=document.getElementById("channelid").value;
+ 	//var title=document.getElementById("title").value;
+ 	//if(title==""){
+ 		//return;
+ 	//}else{
+ 		//window.location.href="../content/listContentByChannelId.action?channelid="+channelid+"&title="+title;   
+ 	//	window.location.href="../content/listContentByTitle.action?title="+title;   
+ 	//}
+ 	var title=document.getElementById("title").value;
+ 	if (title == '' || title == '请输入关键字') {
+ 	   alert('请输入关键字');
+ 	   return;
+ 	}
+ 	title = encodeURIComponent(title);
+ 	window.location.href="../content/listContentByTitle.action?title="+title; 
+ }
+ function query(){
+ 	 var checknumber=document.getElementById("checkNumber").value;
+ 	  var reg = new RegExp("^[0-9]*$");  
+    if(!reg.test(checknumber)){  
+        alert("请输入数字!");  
+        return;
+    }  
+ 	 if (checknumber == "") {
+ 	    alert("信用核查码不能为空！");
+ 	 } else {
+ 	        $.post('../seach/approveContent.action',
+            {checknumber: checknumber},
+            function(data){
+                 if (data == 1) {
+                      window.open("http://172.25.119.13/creditVerification/getDetailVerificationInfo.action?checkcode=" + checknumber,
+	               'newwindow','height=900,width=1000,top='+(window.screen.availHeight-30-900)/2+
+	                   ',left='+(window.screen.availWidth-10-1000)/2+
+	                 ',toolbar=no,menubar=no,scrollbars=yes,resizable=yes,location=no,status=no');
+               } else if (data == 2) {
+                     window.open("http://172.25.119.13/creditVerification/getgroupsDetailVerificationInfo.action?checkcode=" + checknumber,
+	                  'newwindow','height=900,width=1000,top='+(window.screen.availHeight-30-900)/2+
+	                   ',left='+(window.screen.availWidth-10-1000)/2+
+	                 ',toolbar=no,menubar=no,scrollbars=yes,resizable=yes,location=no,status=no');
+               }else {
+                   if (data == '-1') {
+                     alert("信用查询码不存在！");
+                   } else if (data == '-2') {
+                     alert("信用查询码已过期！");
+                   } else if (data == '-3') {
+                     alert("信用查询码已重新生成,请输入最新核查码!");
+                   }
+                }
+            },'json');
+ 	 }
+ }
+function SetWinHeight(obj)
+{
+
+} 
+
+function gotoPage(total,cid){
+	var p=$("#textFooter").val();
+	var i = parseInt(total);
+	if(p!=""){
+		var a=parseInt(p);
+		if(a>0&&a<=i)
+		window.location.href="../content"+cid+"_"+p+".html";
+		if(a>i)
+		window.location.href="../content"+cid+"_"+1+".html";
+	}
+}
+$(document).ready(function() {
+ 	$.ajax({
+        type: "post",//使用post方法访问后台
+        dataType: "json",//返回json格式的数据
+        url: "../getCCS.action",//要访问的后台地址
+        data:{},//要发送的数据
+        complete :function(){$("#load").hide();},//AJAX请求完成时隐藏loading提示
+        success: function(msg){//msg为返回的数据，在这里做数据绑定
+				$("#thrNum").html(msg);
+        }
+    });
+    $.ajax({
+        type: "post",//使用post方法访问后台
+        dataType: "json",//返回json格式的数据
+        url: "../content/findHOTKeyword.action",//要访问的后台地址
+        data:{},//要发送的数据
+        complete :function(){$("#load").hide();},//AJAX请求完成时隐藏loading提示
+        success: function(msg){//msg为返回的数据，在这里做数据绑定
+        	var b='关键字:&nbsp;';
+        	$.each(msg.rows, function(i, n){
+        	var a = '<a href="javascript:void(0)" onclick="byHotKwSeachContent(\''+msg.rows[i]+'\')" >'+msg.rows[i]+'</a>&nbsp;&nbsp;';
+        	b+=a;
+           });
+           $("#hotkw").html(b);
+        }
+    });
+});
+	function byHotKwSeachContent(str) {
+		var title = encodeURIComponent(str);
+		window.location.href = "../content/listContentByTitle.action?title="
+				+ title;
+	}	
+	function queryOfPreview(contentId, category){
+   		 window.location.href="../content/queryOfPreview.action?contentId="+contentId+"&date="+new Date();
+	}
+</script>
+</head>
+
+<body>
+<!--header begin-->
+<div class="header">
+	<div class="wrap">
+    	<div class="logo f_l"><a href="http://www.sipac.gov.cn/" target="_blank"><img src="images/logo.png" /></a></div>
+    	<div class="number f_r" id="thrNum">
+        </div>
+    </div>
+</div>
+<!--header over-->
+
+<!--nav begin-->
+<div class="nav">
+    <ul class="wrap tabs">
+        <li><a href="../goToIndex.action">首页</a></li>
+        	<li><a href="javascript:void(0)" id="22" onclick='show("22")'>信用动态</a></li>
+		        	<input type="hidden" id="22_0" value="365">
+		        	<input type="hidden" id="22_1" value="364">
+		        	<input type="hidden" id="22_2" value="335">
+        	<li><a href="javascript:void(0)" id="420" onclick='show("420")'>信用公示</a></li>
+		        	<input type="hidden" id="420_0" value="318">
+		        	<input type="hidden" id="420_1" value="60">
+		        	<input type="hidden" id="420_2" value="61">
+        	<li><a href="javascript:void(0)" id="26" onclick='show("26")'>重点领域</a></li>
+		        	<input type="hidden" id="26_0" value="486">
+		        	<input type="hidden" id="26_1" value="487">
+		        	<input type="hidden" id="26_2" value="488">
+		        	<input type="hidden" id="26_3" value="489">
+		        	<input type="hidden" id="26_4" value="490">
+		        	<input type="hidden" id="26_5" value="491">
+		        	<input type="hidden" id="26_6" value="492">
+		        	<input type="hidden" id="26_7" value="493">
+        	<li><a href="javascript:void(0)" id="423" onclick='show("423")'>专项资金</a></li>
+		        	<input type="hidden" id="423_0" value="469">
+        	<li><a href="javascript:void(0)" id="416" onclick='show("416")'>政策法规</a></li>
+		        	<input type="hidden" id="416_0" value="306">
+		        	<input type="hidden" id="416_1" value="334">
+		        	<input type="hidden" id="416_2" value="309">
+        <li><a href="http://gzjd.sipac.gov.cn/Web/BBS/MainList.aspx"  target="_blank">在线交流</a></li>
+    </ul>
+</div>
+<!--nav over-->
+
+<!--content begin-->
+<div class="cloud">
+    <!--notice begin-->
+    <div class="wrap">
+    	<div class="notice f_l"> 
+            <div class="notice_tit f_l f_b">通知公告</div>
+            <div class="f_l notice_list"  id="mq" onmouseover=iScrollAmount=0 style="overflow:hidden; width:500px; height:30px;color:#000" onmouseout=iScrollAmount=1 >
+                <ul>
+		                    <li><a href="javascript:queryOfPreview('1911122')">苏州出台省内首部《住房公积金个人失信惩戒实施细则》</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911059')">关于印发江苏省推行食品生产企业 “黑名单”制度指导意见(试行)的通知(苏食药监规</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911231')">家庭成员不履行抚养义务记入个人信用档案</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911061')">2015年我市电梯维保单位星级评定结果公示</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910971')">2015年度“诚信宣传周”活动开始啦</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910519')">2015年12月苏州工业园区公积金（社会保险）公示欠费单位名单</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910520')">苏州工业园区从业建筑业企业不良信用处罚公示汇总</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910381')">2015年11月苏州工业园区社会保险基金（公积金）公示欠费单位名单</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910282')">园区信用体系建设项目接受市领导专项督查并开展座谈会</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911034')">苏州积分落户制度2016年1月15日起实施 失信行为将扣减分</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910988')">关于做好2015年园区建筑业企业信用综合评价良好行为信息录入工作的通知</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910976')">诚信记录纳入流动人口积分管理</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910972')">江苏省研究生考试26日开考 省考试院提醒考生诚信参考</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910518')">2015年中国十佳诚信政府排行榜发布</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910467')">老忘交电费 当心成老赖失信</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910361')">首个国际征信论坛即将在沪登陆</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910338')">居民身份证将可异地换领补领 有不良信用记录的不予受理</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910329')">双十一”消费信用大数据监测评价启动</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910328')">发改委：年底前全面实施统一社会信用代码制度</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910310')">信用社会临近 央行征信系统已收录8.7亿人数据</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910307')">市食药监公布19批次质量不合格食品（附名单）</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910302')">园区地税提交457户企业列入园区失信法人库</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910177')">关于联合发布2014年长三角地区备案信用服务机构名单的通知</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910179')">2014年度“苏州市级信用管理示范企业”认定公示</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="search f_r">
+            <form id="searchform" action="../content/listContentByTitle.action" method="post">
+                <fieldset>
+                <table>
+                 	<tr>
+				      <td width="70%">
+				      	 <input type="text" onfocus="if(this.value =='请输入关键字') {this.value=''; }" onblur="if(this.value==''){this.value='请输入关键字';}" class="text_input" style="width:200px" value="请输入关键字" name="title" id="title">
+				         <input type="button" onclick="seachContent()" name="button"> 
+				      </td>
+				   	</tr>
+				   	<tr>
+				   		 <td id="hotkw"></td>
+				   	</tr>
+				  </table> 
+                </fieldset>
+            </form>
+        </div>
+    </div>
+    <script type="text/javascript" src="js/muqruujs.js"></script>
+    <!--notice over-->
+    <!--center begin-->
+    <div class="wrap mt5 content">
+        <div class="breadcrumbs">
+            <ul>
+                <li>当前位置：</li>
+          		<li><a href="content365_1.html">信用动态</a> > </li>
+            <li><a href="content365_1.html">苏州动态</a> > </li>
+                <li><em>详细</em></li>
+            </ul>
+        </div>
+        
+        <div class="pad50">
+            <div class="art_head">
+                <h1>征信“死角”如何扫？</h1>
+                <div class="tc art_date"> 【发布日期： 】【<a href="javascript:void(0)" onclick="window.print();">打印</a>】 </div>
+            </div>
+            <div class="artnr">
+                <p><div style='font-size: 18px;'><p style="margin-bottom: 16px; text-indent: 28px; line-height: 2em;"><span style="font-family: 宋体; font-size: 18px;">小微企业融资难、融资贵，金融机构有钱无处贷，这两大难题的同时存在，加大了普惠金融政策的实施难度。</span></p><p style="margin-bottom: 16px; text-indent: 28px; line-height: 2em;"><span style="font-size: 18px;"><span style="font-size: 18px; font-family: 宋体;">“出现这种情况不难理解。”苏州市副市长周伟强表示，“一方面，目前我国正在进行经济转型，很多传统经济领域出现产能过剩。金融机构很难适应这</span> <span style="font-size: 18px; font-family: 宋体;">种新变化，有钱不敢放出去，这就形成了资产配置荒；另一方面，很多小微企业受有效信用信息不足所限，融资渠道不畅，企业难以扩大规模甚至因此夭折。”</span></span></p><p style="margin-bottom: 16px; text-indent: 28px; line-height: 2em;"><span style="font-family: 宋体; font-size: 18px;">为解决上述矛盾，人民银行已经展开积极探索，而征信系统建设成为破题关键。</span></p><p style="margin-bottom: 16px; text-indent: 28px; line-height: 2em;"><span style="font-family: 宋体; font-size: 18px;">中山市的“一体化系统”</span></p><p style="margin-bottom: 16px; text-indent: 28px; line-height: 2em;"><span style="font-family: 宋体; font-size: 18px;">说起中山市的“一体化系统”，中山市三义贸易有限公司的姬启飞立刻连呼：“方便！直接！”该公司主要生产工业手套、针、线、小刀。作为一名小微企业主，姬启飞曾深受融资难之苦。</span></p><p style="margin-bottom: 16px; text-indent: 28px; line-height: 2em;"><span style="font-size: 18px;">&nbsp;<span style="font-size: 18px; font-family: 宋体;">“以前公司需要钱的时候，我得准备很多份材料，并且挨个去找每家银行谈。有时候要见到合适的业务人员并不容易，整个过程耗时费力。即便如此，很多银行对我所提供的信息也还是将信将疑。”他回忆道。</span></span></p><p style="margin-bottom: 16px; text-indent: 28px; line-height: 2em;"><span style="font-family: 宋体; font-size: 18px;">这种“求贷无门”的痛苦很多小微业主都曾切身体会过，而借助“一体化系统”，姬启飞的融资难题化解了。</span></p><p style="margin-bottom: 16px; text-indent: 28px; line-height: 2em;"><span style="font-size: 18px;">&nbsp;<span style="font-size: 18px; font-family: 宋体;">“这个平台上的信息都是由人民银行从政府部门采集过来的，含金量高，金融机构都信得过。我再也不用一家一家跑银行了，只要将我的需求挂在平台上面，银行就会通过系统查验我的资质和信息，然后直接发放贷款。如此一来，耗时短、效率高，融资问题也能真正得到解决。”</span></span></p><p style="margin-bottom: 16px; text-indent: 28px; line-height: 2em;"><span style="font-size: 18px;"><span style="font-size: 18px; font-family: 宋体;">姬启飞所说的“一体化系统”，指的是中山市社会征信与金融服务一体化系统。</span>2012<span style="font-size: 18px; font-family: 宋体;">年以来，人民银行中山市中心支行在总结</span>10<span style="font-size: 18px; font-family: 宋体;">多年来对非银行信</span> <span style="font-size: 18px; font-family: 宋体;">用信息采集实践基础上，自主研发了这项辖区金融基础设施系统。</span>2013<span style="font-size: 18px; font-family: 宋体;">年</span>10<span style="font-size: 18px; font-family: 宋体;">月，该系统正式上线，包括三个信息采集库、三个信息深加工平台以及三个开放型</span> <span style="font-size: 18px; font-family: 宋体;">的信息对接平台。</span></span></p><p style="margin-bottom: 16px; text-indent: 28px; line-height: 2em;"><span style="font-size: 18px;"><span style="font-size: 18px; font-family: 宋体;">其中，信息采集库与中山市</span>20<span style="font-size: 18px; font-family: 宋体;">多个政府部门、企事业单位的非银行信息对接，突破了部门隔离，连通了一个个信息“孤岛”，使不同政府部门间实现信息共享；为保证信息的动态化、可持续，该采集库还通过专线连接中山市政务信息中心，每天自动进行信息推送和更新。</span></span></p><p style="margin-bottom: 16px; text-indent: 28px; line-height: 2em;"><span style="font-size: 18px;"><span style="font-size: 18px; font-family: 宋体;">实际上，“一体化系统”不但是企业信用信息查询系统，更是一个金融产品交易平台。不仅企业将自己的融资需求公布在平台上，各金融机构也可贴出自</span> <span style="font-size: 18px; font-family: 宋体;">己的金融产品信息。这样一来，借款人可以全天候、足不出户地解决融资问题，通过在“一体化系统”的网站上浏览、比较、选择银行信贷产品，进行“淘宝式”的</span> <span style="font-size: 18px; font-family: 宋体;">信贷产品筛选，并在网上向指定或不指定银行提交借款申请。</span></span></p><p style="margin-bottom: 16px; text-indent: 28px; line-height: 2em;"><span style="font-family: 宋体; font-size: 18px;">新盛世公司代表张鹰就尝试了这一服务。“这种网上金融产品超市式的购物体验不仅新奇而且效率也高。”张鹰表示，“企业通过货比三家向指定或非指定金融机构提出申请后，还能通过互联网看到银行初审、终审的进度以及贷款发放情况，申请贷款的工作和流程大大简化了。”</span></p><p style="margin-bottom: 16px; text-indent: 28px; line-height: 2em;"><span style="font-size: 18px;">&nbsp;<span style="font-size: 18px; font-family: 宋体;">“系统的服务贯穿整个交易流程。在交易达成前，银行可借助‘一体化系统’获得企业的全面信息，而整个交易结束后，双方也会将相关信息反馈在该平台上，供后续交易者参考。”人民银行中山市中支副行长李杏梨补充道。</span></span></p><p style="margin-bottom: 16px; text-indent: 28px; line-height: 2em;"><span style="font-size: 18px;"><span style="font-size: 18px; font-family: 宋体;">通过“互联网</span>+<span style="font-size: 18px; font-family: 宋体;">搜索</span>+<span style="font-size: 18px; font-family: 宋体;">信贷产品对比”的模式，“一体化系统”极大地便利了各类市场主体与银行之间的互相发现、挖掘和交易，并缓解了小微企业、“三农”等薄弱环节融资难、融资贵问题。</span></span></p><p style="margin-bottom: 16px; text-indent: 28px; line-height: 2em;"><span style="font-family: 宋体; font-size: 18px;">苏州的企业征信服务模式</span></p><p style="margin-bottom: 16px; text-indent: 28px; line-height: 2em;"><span style="font-family: 宋体; font-size: 18px;">与人民银行中山市中支牵头、设计并推广应用的模式不同，苏州的征信平台是在人民银行、金融局牵头下，由企业设立完成。</span></p><p style="margin-bottom: 16px; text-indent: 28px; line-height: 2em;"><span style="font-size: 18px;">2014<span style="font-size: 18px; font-family: 宋体;">年</span>9<span style="font-size: 18px; font-family: 宋体;">月，苏州企业征信服务有限公司经苏州市人民政府批准，由苏州国际发展集团有限公司发起成立，是按照市场化运作模式开展企业征信服务的专业企业。</span></span></p><p style="margin-bottom: 16px; text-indent: 28px; line-height: 2em;"><span style="font-size: 18px;"><span style="font-size: 18px; font-family: 宋体;">与中山市的“一体化系统”类似，该公司所建设的企业征信信息服务平台采集了大量经过授权的非银行信贷信息，包括企业的公积金缴存信息、纳税信息</span> <span style="font-size: 18px; font-family: 宋体;">等。此外，该平台还会介绍企业</span>6<span style="font-size: 18px; font-family: 宋体;">个主要盈利项目及近</span>8<span style="font-size: 18px; font-family: 宋体;">个季度的发展趋势，立体化、实时化地呈现企业发展状况，以此形成征信报告，对企业进行多项信息分析，</span> <span style="font-size: 18px; font-family: 宋体;">提供风险预警服务。</span></span></p><p style="margin-bottom: 16px; text-indent: 28px; line-height: 2em;"><span style="font-family: 宋体; font-size: 18px;">该公司业务部负责人周旭峰解释了上述信息的运作原理：“单看企业的公积金缴存情况这项指标就可了解企业发展状况：如果企业全员申报公积金，说明其经营情况不错；如果只有很少部分员工甚至没有员工享受公积金福利，则侧面反映出企业人员稳定性较差。”</span></p><p style="margin-bottom: 16px; text-indent: 28px; line-height: 2em;"><span style="font-family: 宋体; font-size: 18px;">可以看到</span><span style="font-family: 宋体; font-size: 18px; text-decoration: none;">，</span><a style="font-family: 宋体; color: windowtext; font-size: 18px; text-decoration: none;" href="http://app.finance.china.com.cn/stock/cate/detail.php?symbol=400126767" target="http://finance.china.com.cn/money/efinance/yw/20151206/_blank" title="大数据 400126767"><span style="font-family: 宋体; color: windowtext; font-size: 18px;">大数据</span></a><span style="font-size: 18px;"><span style="font-size: 18px; font-family: 宋体;">解</span> <span style="font-size: 18px; font-family: 宋体;">决了如何建征信平台的问题，但谁来建设则未有定论。就此，记者向人民银行苏州市中心支行征信管理科副科长姚康抛出问题：“为什么要由国企来建设征信服务平</span> <span style="font-size: 18px; font-family: 宋体;">台”？姚康表示：“如果由纯民企来组建信用平台，无披露信息义务的企业可能不愿公开自己的行为信息和经营状况，而国企可借助政府强力推动和信用背书破题。</span> <span style="font-size: 18px; font-family: 宋体;">另外，由国企而非国家机关直接推动征信建设，则可以保证该平台以市场主体的方式运作，不为行政级别和审批流程所限，真正从市场实际需求出发，以实现经济效</span> <span style="font-size: 18px; font-family: 宋体;">益为目标，确保开展征信工作的长效性。”</span></span></p><p style="margin-bottom: 16px; text-indent: 28px; line-height: 2em;"><span style="font-size: 18px;">&nbsp;<span style="font-size: 18px; font-family: 宋体;">“当然，由企业建设征信服务平台、实现商业化经营过程中也面临很多挑战。一旦涉及经济利益，如何保证该平台的客观、独立和公信力又是一大难题。目前，我们仍在探索中。”苏州企业征信服务有限公司董事长黄建林表示。</span></span></p><p style="margin-bottom: 16px; text-indent: 28px; line-height: 2em;"><span style="font-family: 宋体; font-size: 18px;">征信业务发展模式仍在路上</span></p><p style="margin-bottom: 16px; text-indent: 28px; line-height: 2em;"><span style="font-family: 宋体; font-size: 18px;">必须承认，尽管我国征信系统建设已有初步发展，企业征信市场规模也在逐步提高，但离建设诚信社会的整体需求仍有相当差距。</span></p><p style="margin-bottom: 16px; text-indent: 28px; line-height: 2em;"><span style="font-family: 宋体; font-size: 18px;">“应当说，人民银行的征信系统信息比较完备，得到银企的广泛使用。但是，该系统对于企业非金融信息，比如经营能力、缴纳税款、销售业绩等指标衡量不足。”黄建林表示。</span></p><p style="margin-bottom: 16px; text-indent: 28px; line-height: 2em;"><span style="font-size: 18px;"><span style="font-size: 18px; font-family: 宋体;">央行征信系统的“死角”确实存在。人民银行杭州中心支行负责人介绍，截至</span>2013<span style="font-size: 18px; font-family: 宋体;">年年底，在央行征信中心收录的</span>8<span style="font-size: 18px; font-family: 宋体;">亿多自然人中，有征信记录的约</span>3.2<span style="font-size: 18px; font-family: 宋体;">亿人，占总人口数的</span>23.7%<span style="font-size: 18px; font-family: 宋体;">，远低于美国征信体系</span>85%<span style="font-size: 18px; font-family: 宋体;">的覆盖率。</span></span></p><p style="margin-bottom: 16px; text-indent: 28px; line-height: 2em;"><span style="font-family: 宋体; font-size: 18px;">无论是中山市的人民银行主导模式，还是苏州市的企业建设模式，都是各地从实际情况出发，结合区域特色进行的征信模式探索，旨在清扫目前征信体系的“死角”，为小微、“三农”等信用主体解除融资难、融资贵的困扰。</span></p><p style="margin-bottom: 16px; text-indent: 28px; line-height: 2em;"><span style="font-family: 宋体; font-size: 18px;">当然，征信业务的探索刚刚起步，扫清征信体系“死角”还需更长期、深入的探索实践。我们期待，随着各地探索实践的逐步深入，征信体系的“死角”会越来越少，而普惠金融的效率将日渐提高。</span></p><p style="margin-bottom: 16px; text-align: right; text-indent: 28px; line-height: 2em;"><span style="font-family: 宋体; font-size: 18px;">来源：</span><a style="font-family: 宋体; color: windowtext; font-size: 18px; text-decoration: none;" href="http://finance.ce.cn/rolling/201512/06/t20151206_7333963.shtml" target="http://finance.china.com.cn/money/efinance/yw/20151206/_blank"><span style="font-family: 宋体; color: windowtext; font-size: 18px;">金融时报</span></a></p></div></p>
+            </div>
+        </div>
+    </div>
+    <!--center over-->
+        
+    <!--footer begin-->
+    <div class="wrap mt10">
+        <div class="link">
+            <h1>友情链接</h1>
+            <ul class="l_list">
+                <li><a href="http://www.creditchina.gov.cn/" target="_blank">信用中国</a></li>
+                <li><a href="http://www.js.gov.cn/jsxy/index.htm" target="_blank">诚信江苏</a></li>
+                <li><a href="http://www.njcredit.gov.cn/" target="_blank">诚信南京</a></li>
+                <li><a href="http://www.szcredit.gov.cn/" target="_blank">诚信苏州</a></li>
+                <li><a href="http://credit.zjg.gov.cn/toIndex.action" target="_blank">诚信张家港</a></li>
+            </ul>
+        </div>
+        
+         <div class="foot">
+            <p><span>主办单位：苏州工业园区信用办 </span><span>技术支持：江苏中集科技有限公司</span><span><script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1256639142'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1256639142' type='text/javascript'%3E%3C/script%3E"));</script></span></p>
+        </div>
+        
+    </div>
+    <!--footer over-->
+</div>
+<!--content over-->
+    
+</body>
+</html>

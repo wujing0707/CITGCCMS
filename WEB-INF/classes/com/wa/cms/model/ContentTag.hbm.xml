@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2014-5-5 16:40:13 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.wa.cms.model.ContentTag" table="CONTENT_TAG" >
+        <comment>&#177;&#234;&#199;&#169;&#214;&#181;</comment>
+        <id name="contentTagId" type="long">
+            <column name="CONTENT_TAG_ID" precision="10" scale="0" />
+        </id>
+        <many-to-one name="content" class="com.wa.cms.model.Content" fetch="select">
+            <column name="CONTENT_ID" precision="10" scale="0" not-null="true" />
+        </many-to-one>
+        <property name="priority" type="java.lang.Byte">
+            <column name="PRIORITY" precision="2" scale="0">
+                <comment>&#208;&#242;&#186;&#197;</comment>
+            </column>
+        </property>
+        <property name="value" type="string">
+            <column name="VALUE" length="100" />
+        </property>
+        <property name="refCount" type="big_decimal">
+            <column name="REF_COUNT" precision="22" scale="0">
+                <comment>&#178;&#233;&#209;&#175;&#180;&#206;&#202;&#253;</comment>
+            </column>
+        </property>
+    </class>
+</hibernate-mapping>

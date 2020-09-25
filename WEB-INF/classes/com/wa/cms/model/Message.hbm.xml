@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2014-5-5 16:40:13 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.wa.cms.model.Message" table="MESSAGE">
+        <comment>&#193;&#244;&#209;&#212;&#177;&#237;</comment>
+        <id name="messageId" type="long">
+            <column name="MESSAGE_ID" precision="10" scale="0" />
+        </id>
+        <property name="title" type="string">
+            <column name="TITLE">
+                <comment>&#177;&#234;&#204;&#226;</comment>
+            </column>
+        </property>
+        <property name="message" type="string">
+            <column name="MESSAGE" length="512">
+                <comment>&#193;&#244;&#209;&#212;</comment>
+            </column>
+        </property>
+        <property name="createTime" type="timestamp">
+            <column name="CREATE_TIME" length="7" />
+        </property>
+        <set name="replies" table="REPLY" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="MESSAGE_ID" precision="10" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="com.wa.cms.model.Reply" />
+        </set>
+    </class>
+</hibernate-mapping>

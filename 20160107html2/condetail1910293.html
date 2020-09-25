@@ -1,0 +1,445 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
+<meta name="description" content=""/>
+<meta name="keyWords" content=""/>
+<title>诚信园区</title>
+<link type="text/css" href="css/common.css" rel="stylesheet" />
+<link href="js/artDialog2.0.6/skin/chrome/chrome.css" rel="stylesheet" />
+<script type="text/javascript" src="js/jquery-1.7.2.js"></script>
+<script type="text/javascript" src="js/artDialog2.0.6/artDialog.min.js"></script>
+
+<style type="text/css">  
+        .code{   
+            background-image:url("../html/images/QQ.jpg");   
+            margin-left: 10px !important;
+            font-family:Arial;   
+            font-style:italic;   
+            color:Red;   
+            padding:2px 3px;   
+            letter-spacing:3px;   
+            font-weight:bolder;     
+        }   
+</style> 
+<script type="text/javascript">
+$(function () {
+	createCode(0);
+	createCode(3);
+});
+ var code ; //在全局 定义验证码   
+ function createCode(no){    
+   code = "";   
+   var codeLength = 4;//验证码的长度   
+   var checkCode = document.getElementById("checkCodeID"+no);   
+   var selectChar = new Array(0,1,2,3,4,5,6,7,8,9);//所有候选组成验证码的字符，当然也可以用中文的      
+   for(var i=0;i<codeLength;i++){   
+    var charIndex = Math.floor(Math.random()*10);   
+    code +=selectChar[charIndex];   
+   }    
+   if(checkCode){   
+     checkCode.className="code";   
+     checkCode.value = code;
+     checkCode.blur();   
+   }        
+ }
+  function validate (i,t){  
+    //   var checkCode = document.getElementById("checkCodeID"+i).value;  
+       var inputCode = document.getElementById("validCode"+i).value;
+       var zzjgdm=$('#zzjgdm').val();   
+       var gszch=$('#gszch').val();   
+       var companyname=$('#companyname').val();   
+       if(inputCode.length <=0){   
+           alert("请输入验证码！");   
+       }   
+    //   else if(inputCode.toUpperCase()!=checkCode){   
+      //    alert("验证码输入错误！");   
+       //}
+       else if(zzjgdm==""&&gszch==""&&companyname==""){
+       		alert("请至少输入一个查询条件!");
+       }
+       else{   
+          //window.location.href="../seach/seachdetail.action?zzjgdm="+zzjgdm+"&gszch="+gszch+"&companyname="+companyname+"&template="+2; 
+            $.post('../seach/checkSeachdetail.action',
+            {zzjgdm: zzjgdm, gszch:gszch, companyname:companyname,vcode:inputCode, template:2 },
+            function(data){
+                 if (data == '1') {
+                     $('#seaForm').submit(); 
+                 }else if(data=='2'){
+                 	alert("验证码输入错误！");
+                 } else {
+                    alert("暂无相关数据");
+                 }
+               }, "json");   
+       }    
+ }
+ function seachList(i){
+ 	//   var checkCode = document.getElementById("checkCodeID0").value;  
+       var inputCode = document.getElementById("validCode0").value;
+       var name=$('#name').val();   
+       var sfzhm=$('#sfzhm').val();   
+       var zyzhm=$('#zyzhm').val(); 
+       if(inputCode.length <=0){   
+           alert("请输入验证码！");   
+   //    }else if(inputCode.toUpperCase()!=checkCode){   
+   //       alert("验证码输入错误！");   
+       }else if(name==""&&sfzhm==""&&zyzhm==""){
+       		alert("请至少输入一个查询条件!");
+       }else{   
+         //window.location.href="../seach/personalSeachList.action?zyzhm="+zyzhm+"&sfzhm="+sfzhm+"&name="+name+"&template=2";
+                     $.post('../seach/checkPersonalSeachList.action',
+            {zyzhm: zyzhm, sfzhm:sfzhm, name:name,vcode:inputCode,template:2 },
+            function(data){
+                 if (data == 1) {
+                     $('#personForm').submit(); 
+                 }else if(data=='2'){
+                 	alert("验证码输入错误！");
+                 } else {
+                    alert("暂无相关数据");
+                 }
+               }, "json"); 
+       }  
+ }
+ function reset(){
+  	$('#zzjgdm').val('');   
+    $('#gszch').val('');   
+    $('#companyname').val('');  
+    $('#validCode0').val('');  
+ }  
+ function personalReset(){
+ 	$('#name').val('');  
+ 	$('#sfzhm').val('');  
+ 	$('#zyzhm').val('');  
+ 	$('#validCode0').val(''); 
+ }   
+function show(str){
+		var id=document.getElementById(str+"_0").value;
+		window.location.href='content'+id+"_1.html"; 
+}
+function reload(i){
+	if(i==1)
+ 	 window.location.href="qycheck.html";
+ 	 if(i==2)
+ 	 window.location.href="mycheck.html";
+ 	 if(i==3)
+ 	 window.location.href="qyyyshensu.html";
+}
+function goto(staus,name,index,size){
+	if(staus=='up'&&index!=1){
+		window.location.href=name+"_"+(index-1)+".html"; 
+	}else if(staus=='first'){
+		window.location.href=name+"_"+"1.html"; 
+	}else if(staus=='down'){
+		if(index!=size){
+			window.location.href=name+"_"+(index+1)+".html"; 
+		}
+	}else if(staus=='last'){
+		window.location.href=name+"_"+size+".html"; 
+	}
+}
+ function seachContent(){
+ 	//var channelid=document.getElementById("channelid").value;
+ 	//var title=document.getElementById("title").value;
+ 	//if(title==""){
+ 		//return;
+ 	//}else{
+ 		//window.location.href="../content/listContentByChannelId.action?channelid="+channelid+"&title="+title;   
+ 	//	window.location.href="../content/listContentByTitle.action?title="+title;   
+ 	//}
+ 	var title=document.getElementById("title").value;
+ 	if (title == '' || title == '请输入关键字') {
+ 	   alert('请输入关键字');
+ 	   return;
+ 	}
+ 	title = encodeURIComponent(title);
+ 	window.location.href="../content/listContentByTitle.action?title="+title; 
+ }
+ function query(){
+ 	 var checknumber=document.getElementById("checkNumber").value;
+ 	  var reg = new RegExp("^[0-9]*$");  
+    if(!reg.test(checknumber)){  
+        alert("请输入数字!");  
+        return;
+    }  
+ 	 if (checknumber == "") {
+ 	    alert("信用核查码不能为空！");
+ 	 } else {
+ 	        $.post('../seach/approveContent.action',
+            {checknumber: checknumber},
+            function(data){
+                 if (data == 1) {
+                      window.open("http://172.25.119.13/creditVerification/getDetailVerificationInfo.action?checkcode=" + checknumber,
+	               'newwindow','height=900,width=1000,top='+(window.screen.availHeight-30-900)/2+
+	                   ',left='+(window.screen.availWidth-10-1000)/2+
+	                 ',toolbar=no,menubar=no,scrollbars=yes,resizable=yes,location=no,status=no');
+               } else if (data == 2) {
+                     window.open("http://172.25.119.13/creditVerification/getgroupsDetailVerificationInfo.action?checkcode=" + checknumber,
+	                  'newwindow','height=900,width=1000,top='+(window.screen.availHeight-30-900)/2+
+	                   ',left='+(window.screen.availWidth-10-1000)/2+
+	                 ',toolbar=no,menubar=no,scrollbars=yes,resizable=yes,location=no,status=no');
+               }else {
+                   if (data == '-1') {
+                     alert("信用查询码不存在！");
+                   } else if (data == '-2') {
+                     alert("信用查询码已过期！");
+                   } else if (data == '-3') {
+                     alert("信用查询码已重新生成,请输入最新核查码!");
+                   }
+                }
+            },'json');
+ 	 }
+ }
+function SetWinHeight(obj)
+{
+
+} 
+
+function gotoPage(total,cid){
+	var p=$("#textFooter").val();
+	var i = parseInt(total);
+	if(p!=""){
+		var a=parseInt(p);
+		if(a>0&&a<=i)
+		window.location.href="../content"+cid+"_"+p+".html";
+		if(a>i)
+		window.location.href="../content"+cid+"_"+1+".html";
+	}
+}
+$(document).ready(function() {
+ 	$.ajax({
+        type: "post",//使用post方法访问后台
+        dataType: "json",//返回json格式的数据
+        url: "../getCCS.action",//要访问的后台地址
+        data:{},//要发送的数据
+        complete :function(){$("#load").hide();},//AJAX请求完成时隐藏loading提示
+        success: function(msg){//msg为返回的数据，在这里做数据绑定
+				$("#thrNum").html(msg);
+        }
+    });
+    $.ajax({
+        type: "post",//使用post方法访问后台
+        dataType: "json",//返回json格式的数据
+        url: "../content/findHOTKeyword.action",//要访问的后台地址
+        data:{},//要发送的数据
+        complete :function(){$("#load").hide();},//AJAX请求完成时隐藏loading提示
+        success: function(msg){//msg为返回的数据，在这里做数据绑定
+        	var b='关键字:&nbsp;';
+        	$.each(msg.rows, function(i, n){
+        	var a = '<a href="javascript:void(0)" onclick="byHotKwSeachContent(\''+msg.rows[i]+'\')" >'+msg.rows[i]+'</a>&nbsp;&nbsp;';
+        	b+=a;
+           });
+           $("#hotkw").html(b);
+        }
+    });
+});
+	function byHotKwSeachContent(str) {
+		var title = encodeURIComponent(str);
+		window.location.href = "../content/listContentByTitle.action?title="
+				+ title;
+	}	
+	function queryOfPreview(contentId, category){
+   		 window.location.href="../content/queryOfPreview.action?contentId="+contentId+"&date="+new Date();
+	}
+</script>
+</head>
+
+<body>
+<!--header begin-->
+<div class="header">
+	<div class="wrap">
+    	<div class="logo f_l"><a href="http://www.sipac.gov.cn/" target="_blank"><img src="images/logo.png" /></a></div>
+    	<div class="number f_r" id="thrNum">
+        </div>
+    </div>
+</div>
+<!--header over-->
+
+<!--nav begin-->
+<div class="nav">
+    <ul class="wrap tabs">
+        <li><a href="../goToIndex.action">首页</a></li>
+        	<li><a href="javascript:void(0)" id="22" onclick='show("22")'>信用动态</a></li>
+		        	<input type="hidden" id="22_0" value="365">
+		        	<input type="hidden" id="22_1" value="364">
+		        	<input type="hidden" id="22_2" value="335">
+        	<li><a href="javascript:void(0)" id="420" onclick='show("420")'>信用公示</a></li>
+		        	<input type="hidden" id="420_0" value="318">
+		        	<input type="hidden" id="420_1" value="60">
+		        	<input type="hidden" id="420_2" value="61">
+        	<li><a href="javascript:void(0)" id="26" onclick='show("26")'>重点领域</a></li>
+		        	<input type="hidden" id="26_0" value="486">
+		        	<input type="hidden" id="26_1" value="487">
+		        	<input type="hidden" id="26_2" value="488">
+		        	<input type="hidden" id="26_3" value="489">
+		        	<input type="hidden" id="26_4" value="490">
+		        	<input type="hidden" id="26_5" value="491">
+		        	<input type="hidden" id="26_6" value="492">
+		        	<input type="hidden" id="26_7" value="493">
+        	<li><a href="javascript:void(0)" id="423" onclick='show("423")'>专项资金</a></li>
+		        	<input type="hidden" id="423_0" value="469">
+        	<li><a href="javascript:void(0)" id="416" onclick='show("416")'>政策法规</a></li>
+		        	<input type="hidden" id="416_0" value="306">
+		        	<input type="hidden" id="416_1" value="334">
+		        	<input type="hidden" id="416_2" value="309">
+        <li><a href="http://gzjd.sipac.gov.cn/Web/BBS/MainList.aspx"  target="_blank">在线交流</a></li>
+    </ul>
+</div>
+<!--nav over-->
+
+<!--content begin-->
+<div class="cloud">
+    <!--notice begin-->
+    <div class="wrap">
+    	<div class="notice f_l"> 
+            <div class="notice_tit f_l f_b">通知公告</div>
+            <div class="f_l notice_list"  id="mq" onmouseover=iScrollAmount=0 style="overflow:hidden; width:500px; height:30px;color:#000" onmouseout=iScrollAmount=1 >
+                <ul>
+		                    <li><a href="javascript:queryOfPreview('1911122')">苏州出台省内首部《住房公积金个人失信惩戒实施细则》</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911059')">关于印发江苏省推行食品生产企业 “黑名单”制度指导意见(试行)的通知(苏食药监规</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911231')">家庭成员不履行抚养义务记入个人信用档案</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911061')">2015年我市电梯维保单位星级评定结果公示</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910971')">2015年度“诚信宣传周”活动开始啦</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910519')">2015年12月苏州工业园区公积金（社会保险）公示欠费单位名单</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910520')">苏州工业园区从业建筑业企业不良信用处罚公示汇总</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910381')">2015年11月苏州工业园区社会保险基金（公积金）公示欠费单位名单</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910282')">园区信用体系建设项目接受市领导专项督查并开展座谈会</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911034')">苏州积分落户制度2016年1月15日起实施 失信行为将扣减分</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910988')">关于做好2015年园区建筑业企业信用综合评价良好行为信息录入工作的通知</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910976')">诚信记录纳入流动人口积分管理</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910972')">江苏省研究生考试26日开考 省考试院提醒考生诚信参考</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910518')">2015年中国十佳诚信政府排行榜发布</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910467')">老忘交电费 当心成老赖失信</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910361')">首个国际征信论坛即将在沪登陆</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910338')">居民身份证将可异地换领补领 有不良信用记录的不予受理</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910329')">双十一”消费信用大数据监测评价启动</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910328')">发改委：年底前全面实施统一社会信用代码制度</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910310')">信用社会临近 央行征信系统已收录8.7亿人数据</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910307')">市食药监公布19批次质量不合格食品（附名单）</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910302')">园区地税提交457户企业列入园区失信法人库</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910177')">关于联合发布2014年长三角地区备案信用服务机构名单的通知</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910179')">2014年度“苏州市级信用管理示范企业”认定公示</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="search f_r">
+            <form id="searchform" action="../content/listContentByTitle.action" method="post">
+                <fieldset>
+                <table>
+                 	<tr>
+				      <td width="70%">
+				      	 <input type="text" onfocus="if(this.value =='请输入关键字') {this.value=''; }" onblur="if(this.value==''){this.value='请输入关键字';}" class="text_input" style="width:200px" value="请输入关键字" name="title" id="title">
+				         <input type="button" onclick="seachContent()" name="button"> 
+				      </td>
+				   	</tr>
+				   	<tr>
+				   		 <td id="hotkw"></td>
+				   	</tr>
+				  </table> 
+                </fieldset>
+            </form>
+        </div>
+    </div>
+    <script type="text/javascript" src="js/muqruujs.js"></script>
+    <!--notice over-->
+    <!--center begin-->
+    <div class="wrap mt5 content">
+        <div class="breadcrumbs">
+            <ul>
+                <li>当前位置：</li>
+          		<li><a href="content365_1.html">信用动态</a> > </li>
+            <li><a href="content335_1.html">国内动态</a> > </li>
+                <li><em>详细</em></li>
+            </ul>
+        </div>
+        
+        <div class="pad50">
+            <div class="art_head">
+                <h1>成都市明年将建成信用信息共享交换平台</h1>
+                <div class="tc art_date"> 【发布日期： 】【<a href="javascript:void(0)" onclick="window.print();">打印</a>】 </div>
+            </div>
+            <div class="artnr">
+                <p><div style='font-size: 19px;'><p style="margin-top: 21px; margin-bottom: 0px; line-height: 35px;"><span style="font-family: 黑体; font-size: 19px;">失信行为联合惩戒机制今年启动建立</span></p><p style="margin-top: 21px; margin-bottom: 0px; line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　
+　推进社会信用体系建设是一个系统工程，涉及面广、时间跨度长，《实施意见》是整个系统工程的重要一环。记者了解到，《实施意见》在制定的过程中，认真贯
+彻了关于加快推进社会信用体系建设的相关决策部署，并按照《成都市社会信用体系建设规划(2015-2020年)》要求，围绕政务诚信、商务诚信、社会诚
+信和司法公信建设，推进信用记录和信用产品的广泛应用，同时强调加大宣传和教育力度，从而努力提高全社会的诚信意识和信用水平，为我市的经济社会发展营造
+良好的信用环境。</span></span></p><p style="margin-top: 21px; margin-bottom: 0px; line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　
+　同时,《实施意见》还明确了年度目标，提出在2015年，成都市将建立创建社会信用体系建设示范城市的工作体系和运行机制，落实专门工作机构、人员和经
+费保障;实施统一的社会信用代码制度;以行政执法信用记录为重点，建立健全公民、法人和其他组织各领域的信用记录，启动信用信息共享交换平台建设;率先在
+行政审批、招标投标、政府采购、财政性资金使用等领域使用信用记录和信用产品;在若干重点领域建立并实施失信行为联合惩戒机制，大力开展诚信教育、诚信宣
+传活动。</span></span></p><p style="margin-top: 21px; margin-bottom: 0px; line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　
+　到2016年，将建成信用信息共享交换平台，实现与国家统一的信用信息共享交换平台和“信用中国”网站的互联互通;在行政管理和公共服务各领域广泛应用
+信用记录和信用产品;全面建立事前信用承诺、事中信用分类监管、事后信用联合惩戒制度，初步建立以信用为核心的市场监管体系，全社会诚信意识明显提高。</span></span></p><p style="margin-top: 21px; margin-bottom: 0px; line-height: 35px;"><span style="font-family: 黑体; font-size: 19px;">　　行政许可和行政处罚推进7日公示制度</span></p><p style="margin-top: 21px; margin-bottom: 0px; line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　
+　记者从《实施意见》中了解到，成都市明确了创建社会信用体系建设示范城市的工作部署，通过明确责任单位、完成时限以确保各项创建工作顺利完成。而分工落
+实主要在于在前期工作的开展中就强化了顶层设计，据了解，早在今年4月份我市正式出台了《成都市社会信用体系建设规划(2015-2020年)》，围绕政
+务诚信、商务诚信、社会诚信和司法公信建设，以健全信用法律法规和标准体系、形成覆盖全社会的征信系统为基础，以推进诚信文化建设、建立守信激励和失信惩
+戒机制为重点，明确了成都市社会信用体系建设的目标任务、关键环节和时间步骤。</span></span></p><p style="margin-top: 21px; margin-bottom: 0px; line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　
+　作为《实施意见》提出的今年的年度目标之一，推进社会统一信用代码制度已在我市工商企业登记领域得到落实。记者从发改委了解到，我市于今年8月就出台了
+《成都市“三证合一”登记制度改革实施方案》，并于9月1日率先在工商企业登记领域正式实施统一社会信用代码制度。同时，为进一步加大政府信息公开和数据
+开放力度，成都市正在推进行政许可和行政处罚7日公示相关工作，初步形成以“市级部门—市政务服务中心和政务服务办—信用信息共享交换平台”为实施路径的
+公示机制，实现与“信用中国”网站的信息共享交换。</span></span></p><p style="margin-top: 21px; margin-bottom: 0px; line-height: 35px;"><span style="font-family: 黑体; font-size: 19px;">　　崇州和高新试点农村和小微企业信用体系建设</span></p><p style="margin-top: 21px; margin-bottom: 0px; line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　　值得一提的是，成都市还深化了农村和小微企业信用体系试点。</span></span></p><p style="margin-top: 21px; margin-bottom: 0px; line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　　今年7月，成都获批成为全国首个农村金融服务综合改革试点城市。在农村信用体系建设方面，以崇州市为试点，已累计采集各类涉农信息近20余万条，并建立了信用评价和信用激励约束机制，引导金融机构向守信主体加大信贷资源和政策资源的倾斜力度。</span></span></p><p style="margin-top: 21px; margin-bottom: 0px; line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　
+　人民银行成都分行营业管理部也在探索实现新型农业经营主体信息共享，促进农村金融服务创新与现代农业发展需求有效对接。据悉，目前在崇州开展的建设新型
+农业经营主体信息共享机制工作取得积极进展，信用激励奖惩和风险基金持续补充机制初步建立，明确了对失信行为的惩戒措施，促进了该市金融机构信贷资源向守
+信主体倾斜。截至9月末，崇州市农户贷款余额23亿元。金融机构向示范信用镇桤泉镇的信用户发放了全省首批经济林木(竹、果)权抵押贷款授信400万元，
+向信用镇隆兴镇、白头镇的信用专合社发放首宗农村土地经营权直接抵押贷款130万元、农业生产经营设施所有权抵押贷款140万元。农商银行等使用人民银行
+支农再贷款向包含8个乡镇(其中7个为信用镇)的10万亩粮食高产综合示范基地发放贷款9000万元。</span></span></p><p style="margin-top: 21px; margin-bottom: 0px; line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　　小微企业信用体系的建设也在紧锣密鼓地开展之中。小微企业信用体系建设方面以高新区为试点，正在打造科技金融服务平台，实现科技资源和金融资源的深入对接。</span></span></p><p style="margin-top: 21px; margin-bottom: 0px; line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　
+　人民银行成都分行营业管理部与成都市科技局共同建立创业天府科技金融服务平台，已初步完成平台系统搭建和上线测试。此外，为缓解中小企业融资难，盘活企
+业应收账款，大力推动“中征应收账款融资服务平台”的运用，8月底，该部与市经信委、财政局、国资委研究落实《四川省应收账款融资甘泉行动计划》。截至9
+月末，我市已开通平台金融机构用户219户，开通借款企业用户146户，上传平台账款84笔，平台成交金额92.91亿元。成交的85笔业务中，78%的
+借款企业为各类生产或商贸企业，51%的企业单笔借款金额少于1亿元，其中低于1000万元的应收账款融资13笔。</span></span></p><p style="margin-top: 21px; margin-bottom: 0px; line-height: 35px;"><span style="font-family: 黑体; font-size: 19px;">　　建立信用信息共享交换平台可进行信用查询</span></p><p style="margin-top: 21px; margin-bottom: 0px; line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　　下一步的工作重点有哪些呢?根据《实施意见》提出的年度目标，我市还将从数个方面加大社会信用体系建设的推进力度。</span></span></p><p style="margin-top: 21px; margin-bottom: 0px; line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　
+　加快公共信用信息系统建设。依托成都市已经建立的数据交换平台、企业信用信息系统、公民信息管理系统和部门数据交换机制，结合“互联网+”和大数据应
+用，建立开放的公共信用信息共享交换平台。以“成都信用网”为门户网站，为公民、企业、社会组织、政府部门提供信用查询及相关服务。</span></span></p><p style="margin-top: 21px; margin-bottom: 0px; line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　
+　同时，成都市还将做好信用信息数据归集工作，通过完善信用信息数据清单，形成《成都市公共信用信息目录》;并充分利用大数据的理念、技术和资源，加快整
+合各类政府信息平台，建成成都市公共信用信息共享交换平台，实现与国家统一的信用信息共享交换平台和“信用中国”网站的互联互通。</span></span></p><p style="margin-top: 21px; margin-bottom: 0px; line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　
+　记者从发改委获悉，成都市还将率先在食品药品安全、环境保护、医疗卫生等关系到经济健康发展和社会和谐稳定的重点领域推行信用记录和信用报告。而这是加
+快以政府示范带动为先导的信用市场培育的重要内容，从而引导法人、自然人等社会主体在市场交易、就业、公共业务办理等领域依法使用信用信息，推动征信机
+构、信用市场的培育和发展。</span></span></p><p style="margin-top: 21px; margin-bottom: 0px; line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　
+　同时，下一步，成都市还将初步建立以信用为核心的市场监管体系。具体而言，将率先在工商登记领域建立市场主体准入前信用承诺制度;在税务、建筑、交通等
+领域扩大事中信用分类监管制度;在财政资金补助、政府采购、政府购买服务等领域建立健全守信激励和失信联合惩戒机制。同时，积极推进信用信息应用示范工
+程、小微企业信用体系建设工程、农村信用体系建设工程、信用服务机构培育工程、信用人才培养工程以及诚信文化示范工程六大创新性示范工程，发挥示范型工程
+带动引领作用。记者徐璨马玉宝</span></span></p><p style="margin-top: 21px; margin-bottom: 0px; line-height: 35px;"><span style="font-family: 黑体; font-size: 19px;">　　个人信用</span></p><p style="margin-top: 21px; margin-bottom: 0px; line-height: 35px;"><span style="font-family: 黑体; font-size: 19px;">　　8个查询点查询</span></p><p style="margin-top: 21px; margin-bottom: 0px; line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　
+　在面对公众的征信服务方面，记者了解到，人民银行成都分行营业管理部已在主城区设立了6个个人信用报告代理查询点，在龙泉驿和青白江各设立了1个代理查
+询点。截至9月末，辖内受理企业、个人信用报告查询分别为1.5万户次、24.4万人次，同比分别增长30%和16%。</span></span></p><p style="margin-top: 21px; margin-bottom: 0px; line-height: 35px;"><span style="font-size: 19px;">　</span><span style="font-family: 黑体; font-size: 19px;">　金融信用</span></p><p style="margin-top: 21px; margin-bottom: 0px; line-height: 35px;"><span style="font-family: 黑体; font-size: 19px;">　　10家小贷公司已开通查询服务</span></p><p style="margin-top: 21px; margin-bottom: 0px; line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　
+　记者从人民银行成都分行营业管理部了解到，该部正深入推进金融信用信息基础数据库建设，不断提高征信系统覆盖面。目前，辖内主要银行业金融机构及信托投
+资公司、财务公司均已成功接入金融信用信息基础数据库，我市首批获准接入的10家小贷公司已开通了查询服务，第二批24家小贷、担保机构已获批接入人民银
+行征信系统，第三批10家机构已完成接入初审。</span></span></p><p style="margin-top: 21px; margin-bottom: 0px; line-height: 35px;"><span style="font-size: 19px;">　</span><span style="font-family: 黑体; font-size: 19px;">　企业信用</span></p><p style="margin-top: 21px; margin-bottom: 0px; line-height: 35px;"><span style="font-family: 黑体; font-size: 19px;">　　已披露267批失信黑名单　企业信贷将受限</span></p><p style="margin-top: 21px; margin-bottom: 0px; line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　
+　诚信二字说来容易，真正做到却并不简单。按照市委、市政府打造“诚信成都”的战略部署和成都市创建社会信用体系示范城市的要求，市工商局围绕商事制度改
+革任务，大力推进企业信用体系建设，有效提升了企业守法诚信经营意识，促进了企业法定代表人勤勉履行职责义务，提高了工商、市场监管部门的执法权威。</span></span></p><p style="margin-top: 21px; margin-bottom: 0px; line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　
+　“为进一步推动企业信用信息系统建设，我们构建了‘一中心一平台一门户四系统’的企业信用信息网络体系。”据成都市工商局信用中心副主任杨勇介绍，市工
+商局建立了以电子政务云中心为载体、统一数据交换平台为基础、“成都信用网”为门户网站，包含企业、个体、工商户、中介机构和重点人群四个子系统，集信息
+归集、交换、共享和披露于一体的网络体系，实现了我市195余万户市场主体信息(含注销、吊销)的全覆盖。</span></span></p><p style="margin-top: 21px; margin-bottom: 0px; line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　
+　同时，成都市工商局在开发面向移动互联网的微应用的同时，还积极拓展企业信用信息征集与互联互通。“我们紧紧围绕商事制度改革和创建信用示范城市需要，
+扩大信息公示范围，强化社会监督。”杨勇说，今年上半年，“成都信用网”已与全国企业信用信息公示系统(四川)实现对接。目前采用自动采集上传数据的成员
+单位由8家增至13家，通过自动交换共享数据的单位由1家增至8家，极大地提高了数据采集的及时性和准确性。</span></span></p><p style="margin-top: 21px; margin-bottom: 0px; line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　
+　与此同时，成都市还通过“成都信用网”“红黑名单榜”，加大对金融、食药、质监、工商、法院等单位掌握的严重失信企业信息进行披露。截至今年10月，
+“成都信用网”累计公布红名单129批，黑名单267批。对未按照《企业信息公示暂行条例》规定期限公示年度报告的企业列入企业经营异常名录。商业银行可
+通过“成都信用网”查询，对列入经营异常名录企业做出信贷限制。</span></span></p><p><br/></p></div></p>
+            </div>
+        </div>
+    </div>
+    <!--center over-->
+        
+    <!--footer begin-->
+    <div class="wrap mt10">
+        <div class="link">
+            <h1>友情链接</h1>
+            <ul class="l_list">
+                <li><a href="http://www.creditchina.gov.cn/" target="_blank">信用中国</a></li>
+                <li><a href="http://www.js.gov.cn/jsxy/index.htm" target="_blank">诚信江苏</a></li>
+                <li><a href="http://www.njcredit.gov.cn/" target="_blank">诚信南京</a></li>
+                <li><a href="http://www.szcredit.gov.cn/" target="_blank">诚信苏州</a></li>
+                <li><a href="http://credit.zjg.gov.cn/toIndex.action" target="_blank">诚信张家港</a></li>
+            </ul>
+        </div>
+        
+         <div class="foot">
+            <p><span>主办单位：苏州工业园区信用办 </span><span>技术支持：江苏中集科技有限公司</span><span><script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1256639142'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1256639142' type='text/javascript'%3E%3C/script%3E"));</script></span></p>
+        </div>
+        
+    </div>
+    <!--footer over-->
+</div>
+<!--content over-->
+    
+</body>
+</html>

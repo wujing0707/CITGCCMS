@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+    
+    <context:component-scan base-package="com.wa.cms.dao,com.wa.cms.service,com.wa.framework.dao,com.wa.framework.service,com.wa.cms.freemarker"/>
+
+	<!-- 定义受环境影响易变的变量 -->
+	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<!-- PropertyPlaceholderConfigurer除了支持配置的properties文件外,还支持系统属性 -->
+		<property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />
+		<!-- locations里面配置的properties文件如果找不到的话,就可以忽略找不到的文件 -->
+		<property name="ignoreResourceNotFound" value="true" />
+		<property name="locations">
+			<list>
+				<!-- 标准配置 -->
+				<value>classpath:config/db.properties</value>
+			</list>
+		</property>
+	</bean>
+	<!-- 标准库数据源 -->
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="${jdbc.system.driver}"/>
+        <property name="url" value="${jdbc.system.url}"/>
+        <property name="username" value="${jdbc.system.username}"/>
+        <property name="password" value="${jdbc.system.password}"/>
+        <property name="initialSize" value="${dbcp.initialSize}" />
+        <property name="maxActive" value="${dbcp.maxActive}"/>
+    	<property name="maxIdle" value="${dbcp.maxIdle}"/>
+    	<property name="minIdle" value="${dbcp.minIdle}" />
+    	<property name="maxWait" value="${dbcp.maxWait}"/>
+    	<property name="removeAbandoned" value="${dbcp.removeAbandoned}"/>
+    	<property name="removeAbandonedTimeout" value="${dbcp.removeAbandonedTimeout}"/>
+    	<property name="logAbandoned" value="${dbcp.logAbandoned}"/> 
+	</bean>
+	
+	
+	<!-- 业务管理系统数据源 -->
+	<bean id="dataSource1" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="${jdbc.yqsystem.driver}"/>
+        <property name="url" value="${jdbc.yqsystem.url}"/>
+        <property name="username" value="${jdbc.yqsystem.username}"/>
+        <property name="password" value="${jdbc.yqsystem.password}"/>
+        <property name="initialSize" value="${dbcp.initialSize}" />
+        <property name="maxActive" value="${dbcp.maxActive}"/>
+    	<property name="maxIdle" value="${dbcp.maxIdle}"/>
+    	<property name="minIdle" value="${dbcp.minIdle}" />
+    	<property name="maxWait" value="${dbcp.maxWait}"/>
+    	<property name="removeAbandoned" value="${dbcp.removeAbandoned}"/>
+    	<property name="removeAbandonedTimeout" value="${dbcp.removeAbandonedTimeout}"/>
+    	<property name="logAbandoned" value="${dbcp.logAbandoned}"/> 
+	</bean>
+	
+	<bean id="baseSessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"/>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">${hibernate.system.dialect}</prop>
+				<prop key="hibernate.hbm2ddl.auto">${hibernate.system.hbm2ddl.auto}</prop>
+				<prop key="hibernate.show_sql">false</prop>
+				<prop key="hibernate.format_sql">${hibernate.system.format_sql}</prop>
+				<prop key="javax.persistence.validation.mode">none</prop> 
+			</props>
+		</property>
+		<property name="mappingLocations">
+			<list>
+				<value>classpath:com/wa/cms/model/*.hbm.xml</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
+		<constructor-arg ref="dataSource"/>  
+	</bean>
+	
+	<bean id="jdbcTemplate1" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
+		<constructor-arg ref="dataSource1"/>  
+	</bean>
+	
+	
+	
+	<bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+        <property name="sessionFactory" ref="baseSessionFactory" />
+    </bean>
+	
+	<tx:annotation-driven transaction-manager="transactionManager" />
+</beans>

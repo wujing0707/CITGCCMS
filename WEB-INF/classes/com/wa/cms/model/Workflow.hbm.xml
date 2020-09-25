@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2014-5-5 16:40:13 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.wa.cms.model.Workflow" table="WORKFLOW">
+        <comment>&#185;&#164;&#215;&#247;&#193;&#247;&#177;&#237;</comment>
+          <id name="workflowId" type="long">
+            <column name="WORKFLOW_ID" precision="10" scale="0" />
+        </id>
+        <property name="name" type="string">
+            <column name="NAME" length="512">
+                <comment>&#185;&#164;&#215;&#247;&#193;&#247;&#195;&#251;&#179;&#198;</comment>
+            </column>
+        </property>
+        <property name="description" type="string">
+            <column name="DESCRIPTION" length="512">
+                <comment>&#195;&#232;&#202;&#246;</comment>
+            </column>
+        </property>
+        <property name="priority" type="java.lang.Short">
+            <column name="PRIORITY" precision="4" scale="0">
+                <comment>&#203;&#179;&#208;&#242;</comment>
+            </column>
+        </property>
+        <property name="type" type="string">
+            <column name="TYPE" length="10">
+                <comment>
+                &#192;&#224;&#208;&#205;(&#190;&#252;&#208;&#221;&#214;&#208;&#208;&#196;&#193;&#247;&#179;&#204;&#163;&#172;&#190;&#252;&#208;&#221;&#203;&#249;&#193;&#247;&#179;&#204;)</comment>
+            </column>
+        </property>
+        <property name="isCurrent" type="java.lang.Short">
+            <column name="IS_CURRENT" precision="4" scale="0">
+                <comment>&#202;&#199;&#183;&#241;&#202;&#199;&#181;&#177;&#199;&#176;&#201;&#243;&#197;&#250;&#193;&#247;&#179;&#204;:0-&#202;&#199;,1-&#183;&#241;</comment>
+            </column>
+        </property>
+        <set name="workflowPriorities" table="WORKFLOW_PRIORITY" inverse="true" lazy="true" fetch="select" cascade="all" order-by="priority asc">
+            <key>
+                <column name="WORKFLOW_ID" precision="10" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="com.wa.cms.model.WorkflowPriority" />
+        </set>
+    </class>
+</hibernate-mapping>

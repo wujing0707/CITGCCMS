@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2014-5-5 16:40:13 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.wa.cms.model.FriendlylinkType" table="FRIENDLYLINK_TYPE">
+        <id name="friendlylinkTypeId" type="long">
+            <column name="FRIENDLYLINK_TYPE_ID" precision="10" scale="0" />
+        </id>
+        <property name="name" type="string">
+            <column name="NAME">
+                <comment>&#192;&#224;&#208;&#205;&#195;&#251;&#179;&#198;</comment>
+            </column>
+        </property>
+        <property name="priority" type="java.lang.Byte">
+            <column name="PRIORITY" precision="2" scale="0">
+                <comment>&#203;&#179;&#208;&#242;</comment>
+            </column>
+        </property>
+        <property name="type" type="string">
+            <column name="TYPE" length="50" />
+        </property>
+        <set name="friendlylinks" table="FRIENDLYLINK" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="FRIENDLYLINK_TYPE_ID" precision="10" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="com.wa.cms.model.Friendlylink" />
+        </set>
+    </class>
+</hibernate-mapping>

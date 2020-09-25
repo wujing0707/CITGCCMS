@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2014-5-5 16:40:13 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.wa.cms.model.WorkflowPriority" table="WORKFLOW_PRIORITY">
+        <id name="workflowPriorityId" type="long">
+            <column name="WORKFLOW_PRIORITY_ID" precision="10" scale="0" />
+        </id>
+        <many-to-one name="role" class="com.wa.cms.model.Role" fetch="select">
+            <column name="ROLE_ID" precision="10" scale="0" not-null="true" />
+        </many-to-one>
+        <many-to-one name="workflow" class="com.wa.cms.model.Workflow" fetch="select">
+            <column name="WORKFLOW_ID" precision="10" scale="0" not-null="true" />
+        </many-to-one>
+        <property name="priority" type="java.lang.Short">
+            <column name="PRIORITY" precision="4" scale="0" />
+        </property>
+    </class>
+</hibernate-mapping>

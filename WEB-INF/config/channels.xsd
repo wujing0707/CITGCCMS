@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.citgc.com/schema/cms" xmlns="http://www.citgc.com/schema/cms"
+	elementFormDefault="qualified">
+	<xsd:element name="channels" >
+			<xsd:complexType>
+					<xsd:sequence>
+							<xsd:element name="path" type="xsd:string"/>
+							<xsd:element name="targetpath" type="xsd:string"/>
+							<xsd:element ref="channel" minOccurs="1"  maxOccurs="unbounded"></xsd:element>
+					</xsd:sequence>
+			</xsd:complexType>
+	</xsd:element>
+	<xsd:element  name="channel">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="id" type="xsd:long"  default="-1"/>
+				<xsd:element name="name" type="xsd:string" />
+				<xsd:element name="type" type="xsd:long" default="-1"/>
+				<xsd:element name="size" type="xsd:integer" default="10"/>
+				<xsd:element name="tag" type="xsd:string" />
+			</xsd:sequence>
+			</xsd:complexType>
+	</xsd:element>
+</xsd:schema>

@@ -1,0 +1,409 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
+<meta name="description" content=""/>
+<meta name="keyWords" content=""/>
+<title>诚信园区</title>
+<link type="text/css" href="css/common.css" rel="stylesheet" />
+<link href="js/artDialog2.0.6/skin/chrome/chrome.css" rel="stylesheet" />
+<script type="text/javascript" src="js/jquery-1.7.2.js"></script>
+<script type="text/javascript" src="js/artDialog2.0.6/artDialog.min.js"></script>
+
+<style type="text/css">  
+        .code{   
+            background-image:url("../html/images/QQ.jpg");   
+            margin-left: 10px !important;
+            font-family:Arial;   
+            font-style:italic;   
+            color:Red;   
+            padding:2px 3px;   
+            letter-spacing:3px;   
+            font-weight:bolder;     
+        }   
+</style> 
+<script type="text/javascript">
+$(function () {
+	createCode(0);
+	createCode(3);
+});
+ var code ; //在全局 定义验证码   
+ function createCode(no){    
+   code = "";   
+   var codeLength = 4;//验证码的长度   
+   var checkCode = document.getElementById("checkCodeID"+no);   
+   var selectChar = new Array(0,1,2,3,4,5,6,7,8,9);//所有候选组成验证码的字符，当然也可以用中文的      
+   for(var i=0;i<codeLength;i++){   
+    var charIndex = Math.floor(Math.random()*10);   
+    code +=selectChar[charIndex];   
+   }    
+   if(checkCode){   
+     checkCode.className="code";   
+     checkCode.value = code;
+     checkCode.blur();   
+   }        
+ }
+  function validate (i,t){  
+    //   var checkCode = document.getElementById("checkCodeID"+i).value;  
+       var inputCode = document.getElementById("validCode"+i).value;
+       var zzjgdm=$('#zzjgdm').val();   
+       var gszch=$('#gszch').val();   
+       var companyname=$('#companyname').val();   
+       if(inputCode.length <=0){   
+           alert("请输入验证码！");   
+       }   
+    //   else if(inputCode.toUpperCase()!=checkCode){   
+      //    alert("验证码输入错误！");   
+       //}
+       else if(zzjgdm==""&&gszch==""&&companyname==""){
+       		alert("请至少输入一个查询条件!");
+       }
+       else{   
+          //window.location.href="../seach/seachdetail.action?zzjgdm="+zzjgdm+"&gszch="+gszch+"&companyname="+companyname+"&template="+2; 
+            $.post('../seach/checkSeachdetail.action',
+            {zzjgdm: zzjgdm, gszch:gszch, companyname:companyname,vcode:inputCode, template:2 },
+            function(data){
+                 if (data == '1') {
+                     $('#seaForm').submit(); 
+                 }else if(data=='2'){
+                 	alert("验证码输入错误！");
+                 } else {
+                    alert("暂无相关数据");
+                 }
+               }, "json");   
+       }    
+ }
+ function seachList(i){
+ 	//   var checkCode = document.getElementById("checkCodeID0").value;  
+       var inputCode = document.getElementById("validCode0").value;
+       var name=$('#name').val();   
+       var sfzhm=$('#sfzhm').val();   
+       var zyzhm=$('#zyzhm').val(); 
+       if(inputCode.length <=0){   
+           alert("请输入验证码！");   
+   //    }else if(inputCode.toUpperCase()!=checkCode){   
+   //       alert("验证码输入错误！");   
+       }else if(name==""&&sfzhm==""&&zyzhm==""){
+       		alert("请至少输入一个查询条件!");
+       }else{   
+         //window.location.href="../seach/personalSeachList.action?zyzhm="+zyzhm+"&sfzhm="+sfzhm+"&name="+name+"&template=2";
+                     $.post('../seach/checkPersonalSeachList.action',
+            {zyzhm: zyzhm, sfzhm:sfzhm, name:name,vcode:inputCode,template:2 },
+            function(data){
+                 if (data == 1) {
+                     $('#personForm').submit(); 
+                 }else if(data=='2'){
+                 	alert("验证码输入错误！");
+                 } else {
+                    alert("暂无相关数据");
+                 }
+               }, "json"); 
+       }  
+ }
+ function reset(){
+  	$('#zzjgdm').val('');   
+    $('#gszch').val('');   
+    $('#companyname').val('');  
+    $('#validCode0').val('');  
+ }  
+ function personalReset(){
+ 	$('#name').val('');  
+ 	$('#sfzhm').val('');  
+ 	$('#zyzhm').val('');  
+ 	$('#validCode0').val(''); 
+ }   
+function show(str){
+		var id=document.getElementById(str+"_0").value;
+		window.location.href='content'+id+"_1.html"; 
+}
+function reload(i){
+	if(i==1)
+ 	 window.location.href="qycheck.html";
+ 	 if(i==2)
+ 	 window.location.href="mycheck.html";
+ 	 if(i==3)
+ 	 window.location.href="qyyyshensu.html";
+}
+function goto(staus,name,index,size){
+	if(staus=='up'&&index!=1){
+		window.location.href=name+"_"+(index-1)+".html"; 
+	}else if(staus=='first'){
+		window.location.href=name+"_"+"1.html"; 
+	}else if(staus=='down'){
+		if(index!=size){
+			window.location.href=name+"_"+(index+1)+".html"; 
+		}
+	}else if(staus=='last'){
+		window.location.href=name+"_"+size+".html"; 
+	}
+}
+ function seachContent(){
+ 	//var channelid=document.getElementById("channelid").value;
+ 	//var title=document.getElementById("title").value;
+ 	//if(title==""){
+ 		//return;
+ 	//}else{
+ 		//window.location.href="../content/listContentByChannelId.action?channelid="+channelid+"&title="+title;   
+ 	//	window.location.href="../content/listContentByTitle.action?title="+title;   
+ 	//}
+ 	var title=document.getElementById("title").value;
+ 	if (title == '' || title == '请输入关键字') {
+ 	   alert('请输入关键字');
+ 	   return;
+ 	}
+ 	title = encodeURIComponent(title);
+ 	window.location.href="../content/listContentByTitle.action?title="+title; 
+ }
+ function query(){
+ 	 var checknumber=document.getElementById("checkNumber").value;
+ 	  var reg = new RegExp("^[0-9]*$");  
+    if(!reg.test(checknumber)){  
+        alert("请输入数字!");  
+        return;
+    }  
+ 	 if (checknumber == "") {
+ 	    alert("信用核查码不能为空！");
+ 	 } else {
+ 	        $.post('../seach/approveContent.action',
+            {checknumber: checknumber},
+            function(data){
+                 if (data == 1) {
+                      window.open("http://172.25.119.13/creditVerification/getDetailVerificationInfo.action?checkcode=" + checknumber,
+	               'newwindow','height=900,width=1000,top='+(window.screen.availHeight-30-900)/2+
+	                   ',left='+(window.screen.availWidth-10-1000)/2+
+	                 ',toolbar=no,menubar=no,scrollbars=yes,resizable=yes,location=no,status=no');
+               } else if (data == 2) {
+                     window.open("http://172.25.119.13/creditVerification/getgroupsDetailVerificationInfo.action?checkcode=" + checknumber,
+	                  'newwindow','height=900,width=1000,top='+(window.screen.availHeight-30-900)/2+
+	                   ',left='+(window.screen.availWidth-10-1000)/2+
+	                 ',toolbar=no,menubar=no,scrollbars=yes,resizable=yes,location=no,status=no');
+               }else {
+                   if (data == '-1') {
+                     alert("信用查询码不存在！");
+                   } else if (data == '-2') {
+                     alert("信用查询码已过期！");
+                   } else if (data == '-3') {
+                     alert("信用查询码已重新生成,请输入最新核查码!");
+                   }
+                }
+            },'json');
+ 	 }
+ }
+function SetWinHeight(obj)
+{
+
+} 
+
+function gotoPage(total,cid){
+	var p=$("#textFooter").val();
+	var i = parseInt(total);
+	if(p!=""){
+		var a=parseInt(p);
+		if(a>0&&a<=i)
+		window.location.href="../content"+cid+"_"+p+".html";
+		if(a>i)
+		window.location.href="../content"+cid+"_"+1+".html";
+	}
+}
+$(document).ready(function() {
+ 	$.ajax({
+        type: "post",//使用post方法访问后台
+        dataType: "json",//返回json格式的数据
+        url: "../getCCS.action",//要访问的后台地址
+        data:{},//要发送的数据
+        complete :function(){$("#load").hide();},//AJAX请求完成时隐藏loading提示
+        success: function(msg){//msg为返回的数据，在这里做数据绑定
+				$("#thrNum").html(msg);
+        }
+    });
+    $.ajax({
+        type: "post",//使用post方法访问后台
+        dataType: "json",//返回json格式的数据
+        url: "../content/findHOTKeyword.action",//要访问的后台地址
+        data:{},//要发送的数据
+        complete :function(){$("#load").hide();},//AJAX请求完成时隐藏loading提示
+        success: function(msg){//msg为返回的数据，在这里做数据绑定
+        	var b='关键字:&nbsp;';
+        	$.each(msg.rows, function(i, n){
+        	var a = '<a href="javascript:void(0)" onclick="byHotKwSeachContent(\''+msg.rows[i]+'\')" >'+msg.rows[i]+'</a>&nbsp;&nbsp;';
+        	b+=a;
+           });
+           $("#hotkw").html(b);
+        }
+    });
+});
+	function byHotKwSeachContent(str) {
+		var title = encodeURIComponent(str);
+		window.location.href = "../content/listContentByTitle.action?title="
+				+ title;
+	}	
+	function queryOfPreview(contentId, category){
+   		 window.location.href="../content/queryOfPreview.action?contentId="+contentId+"&date="+new Date();
+	}
+</script>
+</head>
+
+<body>
+<!--header begin-->
+<div class="header">
+	<div class="wrap">
+    	<div class="logo f_l"><a href="http://www.sipac.gov.cn/" target="_blank"><img src="images/logo.png" /></a></div>
+    	<div class="number f_r" id="thrNum">
+        </div>
+    </div>
+</div>
+<!--header over-->
+
+<!--nav begin-->
+<div class="nav">
+    <ul class="wrap tabs">
+        <li><a href="../goToIndex.action">首页</a></li>
+        	<li><a href="javascript:void(0)" id="22" onclick='show("22")'>信用动态</a></li>
+		        	<input type="hidden" id="22_0" value="365">
+		        	<input type="hidden" id="22_1" value="364">
+		        	<input type="hidden" id="22_2" value="335">
+        	<li><a href="javascript:void(0)" id="420" onclick='show("420")'>信用公示</a></li>
+		        	<input type="hidden" id="420_0" value="318">
+		        	<input type="hidden" id="420_1" value="60">
+		        	<input type="hidden" id="420_2" value="61">
+        	<li><a href="javascript:void(0)" id="26" onclick='show("26")'>重点领域</a></li>
+		        	<input type="hidden" id="26_0" value="486">
+		        	<input type="hidden" id="26_1" value="487">
+		        	<input type="hidden" id="26_2" value="488">
+		        	<input type="hidden" id="26_3" value="489">
+		        	<input type="hidden" id="26_4" value="490">
+		        	<input type="hidden" id="26_5" value="491">
+		        	<input type="hidden" id="26_6" value="492">
+		        	<input type="hidden" id="26_7" value="493">
+        	<li><a href="javascript:void(0)" id="423" onclick='show("423")'>专项资金</a></li>
+		        	<input type="hidden" id="423_0" value="469">
+        	<li><a href="javascript:void(0)" id="416" onclick='show("416")'>政策法规</a></li>
+		        	<input type="hidden" id="416_0" value="306">
+		        	<input type="hidden" id="416_1" value="334">
+		        	<input type="hidden" id="416_2" value="309">
+        <li><a href="http://gzjd.sipac.gov.cn/Web/BBS/MainList.aspx"  target="_blank">在线交流</a></li>
+    </ul>
+</div>
+<!--nav over-->
+
+<!--content begin-->
+<div class="cloud">
+    <!--notice begin-->
+    <div class="wrap">
+    	<div class="notice f_l"> 
+            <div class="notice_tit f_l f_b">通知公告</div>
+            <div class="f_l notice_list"  id="mq" onmouseover=iScrollAmount=0 style="overflow:hidden; width:500px; height:30px;color:#000" onmouseout=iScrollAmount=1 >
+                <ul>
+		                    <li><a href="javascript:queryOfPreview('1911122')">苏州出台省内首部《住房公积金个人失信惩戒实施细则》</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911059')">关于印发江苏省推行食品生产企业 “黑名单”制度指导意见(试行)的通知(苏食药监规</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911231')">家庭成员不履行抚养义务记入个人信用档案</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911061')">2015年我市电梯维保单位星级评定结果公示</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910971')">2015年度“诚信宣传周”活动开始啦</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910519')">2015年12月苏州工业园区公积金（社会保险）公示欠费单位名单</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910520')">苏州工业园区从业建筑业企业不良信用处罚公示汇总</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910381')">2015年11月苏州工业园区社会保险基金（公积金）公示欠费单位名单</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910282')">园区信用体系建设项目接受市领导专项督查并开展座谈会</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911034')">苏州积分落户制度2016年1月15日起实施 失信行为将扣减分</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910988')">关于做好2015年园区建筑业企业信用综合评价良好行为信息录入工作的通知</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910976')">诚信记录纳入流动人口积分管理</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910972')">江苏省研究生考试26日开考 省考试院提醒考生诚信参考</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910518')">2015年中国十佳诚信政府排行榜发布</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910467')">老忘交电费 当心成老赖失信</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910361')">首个国际征信论坛即将在沪登陆</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910338')">居民身份证将可异地换领补领 有不良信用记录的不予受理</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910329')">双十一”消费信用大数据监测评价启动</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910328')">发改委：年底前全面实施统一社会信用代码制度</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910310')">信用社会临近 央行征信系统已收录8.7亿人数据</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910307')">市食药监公布19批次质量不合格食品（附名单）</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910302')">园区地税提交457户企业列入园区失信法人库</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910177')">关于联合发布2014年长三角地区备案信用服务机构名单的通知</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910179')">2014年度“苏州市级信用管理示范企业”认定公示</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="search f_r">
+            <form id="searchform" action="../content/listContentByTitle.action" method="post">
+                <fieldset>
+                <table>
+                 	<tr>
+				      <td width="70%">
+				      	 <input type="text" onfocus="if(this.value =='请输入关键字') {this.value=''; }" onblur="if(this.value==''){this.value='请输入关键字';}" class="text_input" style="width:200px" value="请输入关键字" name="title" id="title">
+				         <input type="button" onclick="seachContent()" name="button"> 
+				      </td>
+				   	</tr>
+				   	<tr>
+				   		 <td id="hotkw"></td>
+				   	</tr>
+				  </table> 
+                </fieldset>
+            </form>
+        </div>
+    </div>
+    <script type="text/javascript" src="js/muqruujs.js"></script>
+    <!--notice over-->
+    <!--center begin-->
+    <div class="wrap mt5 content">
+        <div class="breadcrumbs">
+            <ul>
+                <li>当前位置：</li>
+          		<li><a href="content469_1.html">专项资金</a> > </li>
+            <li><a href="content469_1.html">专项资金</a> > </li>
+                <li><em>详细</em></li>
+            </ul>
+        </div>
+        
+        <div class="pad50">
+            <div class="art_head">
+                <h1>征信市场应开放分享数据 实现普惠</h1>
+                <div class="tc art_date"> 【发布日期： 】【<a href="javascript:void(0)" onclick="window.print();">打印</a>】 </div>
+            </div>
+            <div class="artnr">
+                <p><div style='font-size: 19px;'><p><span style="font-size: 19px;"><span style="font-family: 宋体;">近
+日，央行对八家征信机构的验收工作已经收尾，预计牌照将于近期正式颁发。各大征信机构推出的个人征信产品成为关注的焦点。据悉，各家征信产品均是利用各自
+独特的数据为客户评分或评级，也就是说，各家机构给同一个人打分，分数也会有高有低。对于中国市场来说，征信数据还属“新鲜事物”，那么这种“分数”是否
+真正具备“公信力”，多种不同的评价体系是否会形成壁垒，对应用行业又会产生什么样的作用?我们先来看看美国市场。</span></span></p><p style="margin: 21px 0px 0px; line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　
+　美国是征信市场发展非常成熟的国家，上世纪50年代，其征信市场呈爆发式增长，直至1956年，工程师BillFair和数学家EarlIsaac成立
+了FairIsaac公司，共同发明了著名的FICO评分方法，一统江湖。随着市场的发展，美国有关个人信用的数据主要由三大信用管理局，即
+Experian、Equifax和TransUnion来提供。然而时至今日，FICO评分仍然是美国最通用的个人信用评分模式。</span></span></p><p style="margin: 21px 0px 0px; line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　　FICO评分方法的实质，是应用数学模型对个人信用报告包含的信息进行量化分析。该模型主要的评估内容是客户以往发生的信用行为，其对近期行为的衡量权重要高于远期行为，该模型包含以下五个方面的因素：</span></span></p><p style="margin: 21px 0px 0px; line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　　(1)以往支付历史。占总影响因素的35%，主要包括：各种账户的支付信息;负面公共记录以及诸如破产、抵押等报告事项，账户及应付款的违约情况以及公共记录的细节;支付账户未出现延期的天数。</span></span></p><p style="margin: 21px 0px 0px; line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　　(2)信贷欠款数额。占总影响因素的30%，主要包括：各种不同类型账户的欠款数额、有信贷余额的账户的数目等。</span></span></p><p style="margin: 21px 0px 0px; line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　　(3)立信时间长短。占总影响因素的15%，主要包括：信用账户开立的最早时间、平均时间;该客户使用某个账户的时间等。</span></span></p><p style="margin: 21px 0px 0px; line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　　(4)新开信用账户。占总影响因素的10%，主要包括：新开立账户的数目、帐龄;贷款方查询客户信用状况的次数、间隔时间等。</span></span></p><p style="margin: 21px 0px 0px; line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　　(5)信用组合类型。占总影响因素的10%，主要包括：客户拥有的信用账户类型、数目，各种类型的账户中新开立账户的数目及比例;不同信用机构的信用查询次数、间隔时间等。</span></span></p><p style="margin: 21px 0px 0px; line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　
+　曾在Equifax多年任职首席统计学家的George表示：“模型的实质是靠找到人的本质特征来预测行为，我们在美国做的所有案例都表明金额征信数据
+是最能代表人的本质特征，别的数据达不到这样的效果。只有算法而没有适合建模的数据，由此得到的模型预测效果不理想。”由此可见，模型建立的难点之一，是
+找到适合建模的数据。该专家从技术的角度进一步解释：“评价模型效果的指标可以参考KS(Komolgorov-Smirnov)和Lift 
+Chart。模型的好坏和KS(Komolgorov-Smirnov)指数不是线性关系，KS在25以下基本是随机模型，KS在70以上实际中基本达不
+到，FICO在美国的模型差不多在50左右。</span></span></p><p style="margin: 21px 0px 0px; line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　　截至目前，国内各家征信公司已陆续推出自己的主打征信产品，阿里旗下的芝麻信用分、腾讯信用分、拉卡拉的“考拉分”、中诚信征信的“万象分”、华道征信的“猪猪分”、前海征信的“好信度”等已陆续上线或开始内测，并且已经开始尝试和机构合作测试。</span></span></p><p style="margin: 21px 0px 0px; line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　
+　同时，笔者了解到，目前各家的数据使用场景也没有太大差异。腾讯征信、阿里征信以及前海征信纷纷表示，在已经开发的征信产品中，主要是为P2P、小贷公
+司、消费金融以及中小银行提供相关的风控管理支持。而传统的征信机构也在耕耘这一领域，如鹏元征信、上海资信等，均将网贷、小贷、消费金融公司作为“主打
+战场”。</span></span></p><p style="margin: 21px 0px 0px; line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　　征信数据专家George：征信市场应开放分享数据，实现普惠</span></span></p><p style="margin: 21px 0px 0px; line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　　那么，这些征信数据的使用者，如何看待这些五花八门的征信产品和数据呢?</span></span></p><p style="margin: 21px 0px 0px; line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　　George目前是国内首家互联网消费金融公司马上消费金融的首席数据官，他对记者表示，对于消费金融公司来说，征信数据的应用是非常重要的，甚至可以说是业务能够顺利流转的重要一环。</span></span></p><p style="margin: 21px 0px 0px; line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　　消费金融领域的两大类主要风险是欺诈风险和个人信用风险。</span></span></p><p style="margin: 21px 0px 0px; line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　　1.欺诈风险是主官预谋的，是犯罪行为。这种风险的防范要靠事前模式识别和事后的信息共享以及执法。</span></span></p><p style="margin: 21px 0px 0px; line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　　2.信用风险是由人的行为模式决定的，模式的改变需要有主观的认识和有意识的纠正。目前我国个人征信起步不久，个人信贷不够普遍，需要正确的引导和教育来让消费者意识到信用的价值，改正一些行为模式以增加和维护信用。</span></span></p><p style="margin: 21px 0px 0px; line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　　3.信用风险的管理关键在于识别风险和找到对应措施。识别风险的最佳方式莫过于精确的量化每一个消费者的信用风险，对应措施莫过于对消费者有一个全面了解，了解他们的行为，了解他们对消费金融的价值，然后有一个量化的价值和风险的平衡。</span></span></p><p style="margin: 21px 0px 0px; line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　　“这些正是我们有丰富经验和知识的地方，是我们的能力所在。发挥这些能力需要大数据支撑，需要我们不但能获取数据，还要自己建立模型整合数据。”George表示。马上消费金融将在充分利用征信数据的基础上，结合各类数据信息，自主开发信用风险模型。</span></span></p><p style="margin: 21px 0px 0px; line-height: 35px;"><span style="font-size: 19px;"><span style="font-family: 宋体;">　
+　前不久，央行等十部委发布了“关于促进互联网金融健康发展的指导意见”，“指导意见”中也明确提到了数据共享合作。对此，George特别说到，“数据
+不应该是壁垒，不应该是准入条件，相反应该对称、共享。这是对全社会有益的是，更是对互联网金融蓬勃发展，良币驱劣币的有益的事。我们愿意建立公开平台分
+享数据，甚至分享我们有知识产权的数据产品。这个行业的健康蓬勃发展不是一家做大，而是通过竞争、创新降低成本，包括数据、资金、市场、运营，提高用户体
+验，最终实现实实在在的普惠。”</span></span></p><p><br/></p></div></p>
+            </div>
+        </div>
+    </div>
+    <!--center over-->
+        
+    <!--footer begin-->
+    <div class="wrap mt10">
+        <div class="link">
+            <h1>友情链接</h1>
+            <ul class="l_list">
+                <li><a href="http://www.creditchina.gov.cn/" target="_blank">信用中国</a></li>
+                <li><a href="http://www.js.gov.cn/jsxy/index.htm" target="_blank">诚信江苏</a></li>
+                <li><a href="http://www.njcredit.gov.cn/" target="_blank">诚信南京</a></li>
+                <li><a href="http://www.szcredit.gov.cn/" target="_blank">诚信苏州</a></li>
+                <li><a href="http://credit.zjg.gov.cn/toIndex.action" target="_blank">诚信张家港</a></li>
+            </ul>
+        </div>
+        
+         <div class="foot">
+            <p><span>主办单位：苏州工业园区信用办 </span><span>技术支持：江苏中集科技有限公司</span><span><script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1256639142'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1256639142' type='text/javascript'%3E%3C/script%3E"));</script></span></p>
+        </div>
+        
+    </div>
+    <!--footer over-->
+</div>
+<!--content over-->
+    
+</body>
+</html>

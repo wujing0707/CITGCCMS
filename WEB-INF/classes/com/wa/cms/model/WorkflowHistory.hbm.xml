@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2014-5-5 16:40:13 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.wa.cms.model.WorkflowHistory" table="WORKFLOW_HISTORY">
+        <id name="workflowHistoryId" type="long">
+            <column name="WORKFLOW_HISTORY_ID" precision="10" scale="0" />
+        </id>
+        <many-to-one name="sysUser" class="com.wa.cms.model.SysUser" fetch="select">
+            <column name="USER_ID" precision="10" scale="0" />
+        </many-to-one>
+        <many-to-one name="content" class="com.wa.cms.model.Content" fetch="select">
+            <column name="CONTENT_ID" precision="10" scale="0" not-null="true" />
+        </many-to-one>
+        <property name="stage" type="java.lang.Byte">
+            <column name="STAGE" precision="2" scale="0">
+                <comment>&#189;&#215;&#182;&#206;</comment>
+            </column>
+        </property>
+        <property name="status" type="string">
+            <column name="STATUS" length="10">
+                <comment>&#215;&#180;&#204;&#172;(&#180;&#253;&#201;&#243;&#197;&#250;&#163;&#172;&#205;&#168;&#185;&#253;&#163;&#172;&#190;&#220;&#190;&#248;)</comment>
+            </column>
+        </property>
+        <property name="summary" type="string">
+            <column name="SUMMARY" length="512">
+                <comment>&#197;&#250;&#215;&#162;</comment>
+            </column>
+        </property>
+        <property name="createTime" type="timestamp">
+            <column name="CREATE_TIME" length="7">
+                <comment>&#180;&#180;&#189;&#168;&#202;&#177;&#188;&#228;</comment>
+            </column>
+        </property>
+        <property name="roleId" type="java.lang.Long">
+            <column name="ROLE_ID" precision="10" scale="0" />
+        </property>
+    </class>
+</hibernate-mapping>

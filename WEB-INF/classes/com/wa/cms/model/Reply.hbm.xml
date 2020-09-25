@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2014-5-5 16:40:13 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.wa.cms.model.Reply" table="REPLY" >
+        <id name="replyId" type="long">
+            <column name="REPLY_ID" precision="10" scale="0" />
+        </id>
+        <many-to-one name="sysUser" class="com.wa.cms.model.SysUser" fetch="select">
+            <column name="USER_ID" precision="10" scale="0" not-null="true" />
+        </many-to-one>
+        <many-to-one name="message" class="com.wa.cms.model.Message" fetch="select">
+            <column name="MESSAGE_ID" precision="10" scale="0" not-null="true" />
+        </many-to-one>
+        <property name="reply" type="string">
+            <column name="REPLY">
+                <comment>&#187;&#216;&#184;&#180;</comment>
+            </column>
+        </property>
+        <property name="createTime" type="timestamp">
+            <column name="CREATE_TIME" length="7" />
+        </property>
+    </class>
+</hibernate-mapping>

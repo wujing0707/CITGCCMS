@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2014-5-5 16:40:13 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.wa.cms.model.SysGroup" table="SYS_GROUP">
+        <comment>&#215;&#233;&#177;&#237;</comment>
+        <id name="groupId" type="long">
+            <column name="GROUP_ID" precision="10" scale="0" />
+        </id>
+        <many-to-one name="sysGroup" class="com.wa.cms.model.SysGroup" fetch="select">
+            <column name="PARENT_ID" precision="10" scale="0" />
+        </many-to-one>
+        <property name="name" type="string">
+            <column name="NAME" length="100">
+                <comment>&#215;&#233;&#214;&#175;&#195;&#251;&#179;&#198;</comment>
+            </column>
+        </property>
+        <property name="type" type="string">
+            <column name="TYPE" length="50">
+                <comment>&#192;&#224;&#208;&#205;(&#190;&#252;&#208;&#221;&#214;&#208;&#208;&#196;,&#190;&#252;&#208;&#221;&#203;&#249;)</comment>
+            </column>
+        </property>
+        <property name="description" type="string">
+            <column name="DESCRIPTION" />
+        </property>
+        <set name="sysUsers" table="SYS_USER" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="GROUP_ID" precision="10" scale="0" />
+            </key>
+            <one-to-many class="com.wa.cms.model.SysUser" />
+        </set>
+        <set name="contents" table="CONTENT" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="GROUP_ID" precision="10" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="com.wa.cms.model.Content" />
+        </set>
+        <set name="sysMembers" table="SYS_MEMBER" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="GROUP_ID" precision="10" scale="0" />
+            </key>
+            <one-to-many class="com.wa.cms.model.SysMember" />
+        </set>
+        <set name="sysGroups" table="SYS_GROUP" inverse="true" lazy="false" fetch="select" order-by="groupId asc">
+            <key>
+                <column name="PARENT_ID" precision="10" scale="0" />
+            </key>
+            <one-to-many class="com.wa.cms.model.SysGroup" />
+        </set>
+    </class>
+</hibernate-mapping>

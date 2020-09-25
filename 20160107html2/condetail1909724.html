@@ -1,0 +1,393 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
+<meta name="description" content=""/>
+<meta name="keyWords" content=""/>
+<title>诚信园区</title>
+<link type="text/css" href="css/common.css" rel="stylesheet" />
+<link href="js/artDialog2.0.6/skin/chrome/chrome.css" rel="stylesheet" />
+<script type="text/javascript" src="js/jquery-1.7.2.js"></script>
+<script type="text/javascript" src="js/artDialog2.0.6/artDialog.min.js"></script>
+
+<style type="text/css">  
+        .code{   
+            background-image:url("../html/images/QQ.jpg");   
+            margin-left: 10px !important;
+            font-family:Arial;   
+            font-style:italic;   
+            color:Red;   
+            padding:2px 3px;   
+            letter-spacing:3px;   
+            font-weight:bolder;     
+        }   
+</style> 
+<script type="text/javascript">
+$(function () {
+	createCode(0);
+	createCode(3);
+});
+ var code ; //在全局 定义验证码   
+ function createCode(no){    
+   code = "";   
+   var codeLength = 4;//验证码的长度   
+   var checkCode = document.getElementById("checkCodeID"+no);   
+   var selectChar = new Array(0,1,2,3,4,5,6,7,8,9);//所有候选组成验证码的字符，当然也可以用中文的      
+   for(var i=0;i<codeLength;i++){   
+    var charIndex = Math.floor(Math.random()*10);   
+    code +=selectChar[charIndex];   
+   }    
+   if(checkCode){   
+     checkCode.className="code";   
+     checkCode.value = code;
+     checkCode.blur();   
+   }        
+ }
+  function validate (i,t){  
+    //   var checkCode = document.getElementById("checkCodeID"+i).value;  
+       var inputCode = document.getElementById("validCode"+i).value;
+       var zzjgdm=$('#zzjgdm').val();   
+       var gszch=$('#gszch').val();   
+       var companyname=$('#companyname').val();   
+       if(inputCode.length <=0){   
+           alert("请输入验证码！");   
+       }   
+    //   else if(inputCode.toUpperCase()!=checkCode){   
+      //    alert("验证码输入错误！");   
+       //}
+       else if(zzjgdm==""&&gszch==""&&companyname==""){
+       		alert("请至少输入一个查询条件!");
+       }
+       else{   
+          //window.location.href="../seach/seachdetail.action?zzjgdm="+zzjgdm+"&gszch="+gszch+"&companyname="+companyname+"&template="+2; 
+            $.post('../seach/checkSeachdetail.action',
+            {zzjgdm: zzjgdm, gszch:gszch, companyname:companyname,vcode:inputCode, template:2 },
+            function(data){
+                 if (data == '1') {
+                     $('#seaForm').submit(); 
+                 }else if(data=='2'){
+                 	alert("验证码输入错误！");
+                 } else {
+                    alert("暂无相关数据");
+                 }
+               }, "json");   
+       }    
+ }
+ function seachList(i){
+ 	//   var checkCode = document.getElementById("checkCodeID0").value;  
+       var inputCode = document.getElementById("validCode0").value;
+       var name=$('#name').val();   
+       var sfzhm=$('#sfzhm').val();   
+       var zyzhm=$('#zyzhm').val(); 
+       if(inputCode.length <=0){   
+           alert("请输入验证码！");   
+   //    }else if(inputCode.toUpperCase()!=checkCode){   
+   //       alert("验证码输入错误！");   
+       }else if(name==""&&sfzhm==""&&zyzhm==""){
+       		alert("请至少输入一个查询条件!");
+       }else{   
+         //window.location.href="../seach/personalSeachList.action?zyzhm="+zyzhm+"&sfzhm="+sfzhm+"&name="+name+"&template=2";
+                     $.post('../seach/checkPersonalSeachList.action',
+            {zyzhm: zyzhm, sfzhm:sfzhm, name:name,vcode:inputCode,template:2 },
+            function(data){
+                 if (data == 1) {
+                     $('#personForm').submit(); 
+                 }else if(data=='2'){
+                 	alert("验证码输入错误！");
+                 } else {
+                    alert("暂无相关数据");
+                 }
+               }, "json"); 
+       }  
+ }
+ function reset(){
+  	$('#zzjgdm').val('');   
+    $('#gszch').val('');   
+    $('#companyname').val('');  
+    $('#validCode0').val('');  
+ }  
+ function personalReset(){
+ 	$('#name').val('');  
+ 	$('#sfzhm').val('');  
+ 	$('#zyzhm').val('');  
+ 	$('#validCode0').val(''); 
+ }   
+function show(str){
+		var id=document.getElementById(str+"_0").value;
+		window.location.href='content'+id+"_1.html"; 
+}
+function reload(i){
+	if(i==1)
+ 	 window.location.href="qycheck.html";
+ 	 if(i==2)
+ 	 window.location.href="mycheck.html";
+ 	 if(i==3)
+ 	 window.location.href="qyyyshensu.html";
+}
+function goto(staus,name,index,size){
+	if(staus=='up'&&index!=1){
+		window.location.href=name+"_"+(index-1)+".html"; 
+	}else if(staus=='first'){
+		window.location.href=name+"_"+"1.html"; 
+	}else if(staus=='down'){
+		if(index!=size){
+			window.location.href=name+"_"+(index+1)+".html"; 
+		}
+	}else if(staus=='last'){
+		window.location.href=name+"_"+size+".html"; 
+	}
+}
+ function seachContent(){
+ 	//var channelid=document.getElementById("channelid").value;
+ 	//var title=document.getElementById("title").value;
+ 	//if(title==""){
+ 		//return;
+ 	//}else{
+ 		//window.location.href="../content/listContentByChannelId.action?channelid="+channelid+"&title="+title;   
+ 	//	window.location.href="../content/listContentByTitle.action?title="+title;   
+ 	//}
+ 	var title=document.getElementById("title").value;
+ 	if (title == '' || title == '请输入关键字') {
+ 	   alert('请输入关键字');
+ 	   return;
+ 	}
+ 	title = encodeURIComponent(title);
+ 	window.location.href="../content/listContentByTitle.action?title="+title; 
+ }
+ function query(){
+ 	 var checknumber=document.getElementById("checkNumber").value;
+ 	  var reg = new RegExp("^[0-9]*$");  
+    if(!reg.test(checknumber)){  
+        alert("请输入数字!");  
+        return;
+    }  
+ 	 if (checknumber == "") {
+ 	    alert("信用核查码不能为空！");
+ 	 } else {
+ 	        $.post('../seach/approveContent.action',
+            {checknumber: checknumber},
+            function(data){
+                 if (data == 1) {
+                      window.open("http://172.25.119.13/creditVerification/getDetailVerificationInfo.action?checkcode=" + checknumber,
+	               'newwindow','height=900,width=1000,top='+(window.screen.availHeight-30-900)/2+
+	                   ',left='+(window.screen.availWidth-10-1000)/2+
+	                 ',toolbar=no,menubar=no,scrollbars=yes,resizable=yes,location=no,status=no');
+               } else if (data == 2) {
+                     window.open("http://172.25.119.13/creditVerification/getgroupsDetailVerificationInfo.action?checkcode=" + checknumber,
+	                  'newwindow','height=900,width=1000,top='+(window.screen.availHeight-30-900)/2+
+	                   ',left='+(window.screen.availWidth-10-1000)/2+
+	                 ',toolbar=no,menubar=no,scrollbars=yes,resizable=yes,location=no,status=no');
+               }else {
+                   if (data == '-1') {
+                     alert("信用查询码不存在！");
+                   } else if (data == '-2') {
+                     alert("信用查询码已过期！");
+                   } else if (data == '-3') {
+                     alert("信用查询码已重新生成,请输入最新核查码!");
+                   }
+                }
+            },'json');
+ 	 }
+ }
+function SetWinHeight(obj)
+{
+
+} 
+
+function gotoPage(total,cid){
+	var p=$("#textFooter").val();
+	var i = parseInt(total);
+	if(p!=""){
+		var a=parseInt(p);
+		if(a>0&&a<=i)
+		window.location.href="../content"+cid+"_"+p+".html";
+		if(a>i)
+		window.location.href="../content"+cid+"_"+1+".html";
+	}
+}
+$(document).ready(function() {
+ 	$.ajax({
+        type: "post",//使用post方法访问后台
+        dataType: "json",//返回json格式的数据
+        url: "../getCCS.action",//要访问的后台地址
+        data:{},//要发送的数据
+        complete :function(){$("#load").hide();},//AJAX请求完成时隐藏loading提示
+        success: function(msg){//msg为返回的数据，在这里做数据绑定
+				$("#thrNum").html(msg);
+        }
+    });
+    $.ajax({
+        type: "post",//使用post方法访问后台
+        dataType: "json",//返回json格式的数据
+        url: "../content/findHOTKeyword.action",//要访问的后台地址
+        data:{},//要发送的数据
+        complete :function(){$("#load").hide();},//AJAX请求完成时隐藏loading提示
+        success: function(msg){//msg为返回的数据，在这里做数据绑定
+        	var b='关键字:&nbsp;';
+        	$.each(msg.rows, function(i, n){
+        	var a = '<a href="javascript:void(0)" onclick="byHotKwSeachContent(\''+msg.rows[i]+'\')" >'+msg.rows[i]+'</a>&nbsp;&nbsp;';
+        	b+=a;
+           });
+           $("#hotkw").html(b);
+        }
+    });
+});
+	function byHotKwSeachContent(str) {
+		var title = encodeURIComponent(str);
+		window.location.href = "../content/listContentByTitle.action?title="
+				+ title;
+	}	
+	function queryOfPreview(contentId, category){
+   		 window.location.href="../content/queryOfPreview.action?contentId="+contentId+"&date="+new Date();
+	}
+</script>
+</head>
+
+<body>
+<!--header begin-->
+<div class="header">
+	<div class="wrap">
+    	<div class="logo f_l"><a href="http://www.sipac.gov.cn/" target="_blank"><img src="images/logo.png" /></a></div>
+    	<div class="number f_r" id="thrNum">
+        </div>
+    </div>
+</div>
+<!--header over-->
+
+<!--nav begin-->
+<div class="nav">
+    <ul class="wrap tabs">
+        <li><a href="../goToIndex.action">首页</a></li>
+        	<li><a href="javascript:void(0)" id="22" onclick='show("22")'>信用动态</a></li>
+		        	<input type="hidden" id="22_0" value="365">
+		        	<input type="hidden" id="22_1" value="364">
+		        	<input type="hidden" id="22_2" value="335">
+        	<li><a href="javascript:void(0)" id="420" onclick='show("420")'>信用公示</a></li>
+		        	<input type="hidden" id="420_0" value="318">
+		        	<input type="hidden" id="420_1" value="60">
+		        	<input type="hidden" id="420_2" value="61">
+        	<li><a href="javascript:void(0)" id="26" onclick='show("26")'>重点领域</a></li>
+		        	<input type="hidden" id="26_0" value="486">
+		        	<input type="hidden" id="26_1" value="487">
+		        	<input type="hidden" id="26_2" value="488">
+		        	<input type="hidden" id="26_3" value="489">
+		        	<input type="hidden" id="26_4" value="490">
+		        	<input type="hidden" id="26_5" value="491">
+		        	<input type="hidden" id="26_6" value="492">
+		        	<input type="hidden" id="26_7" value="493">
+        	<li><a href="javascript:void(0)" id="423" onclick='show("423")'>专项资金</a></li>
+		        	<input type="hidden" id="423_0" value="469">
+        	<li><a href="javascript:void(0)" id="416" onclick='show("416")'>政策法规</a></li>
+		        	<input type="hidden" id="416_0" value="306">
+		        	<input type="hidden" id="416_1" value="334">
+		        	<input type="hidden" id="416_2" value="309">
+        <li><a href="http://gzjd.sipac.gov.cn/Web/BBS/MainList.aspx"  target="_blank">在线交流</a></li>
+    </ul>
+</div>
+<!--nav over-->
+
+<!--content begin-->
+<div class="cloud">
+    <!--notice begin-->
+    <div class="wrap">
+    	<div class="notice f_l"> 
+            <div class="notice_tit f_l f_b">通知公告</div>
+            <div class="f_l notice_list"  id="mq" onmouseover=iScrollAmount=0 style="overflow:hidden; width:500px; height:30px;color:#000" onmouseout=iScrollAmount=1 >
+                <ul>
+		                    <li><a href="javascript:queryOfPreview('1911122')">苏州出台省内首部《住房公积金个人失信惩戒实施细则》</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911059')">关于印发江苏省推行食品生产企业 “黑名单”制度指导意见(试行)的通知(苏食药监规</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911231')">家庭成员不履行抚养义务记入个人信用档案</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911061')">2015年我市电梯维保单位星级评定结果公示</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910971')">2015年度“诚信宣传周”活动开始啦</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910519')">2015年12月苏州工业园区公积金（社会保险）公示欠费单位名单</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910520')">苏州工业园区从业建筑业企业不良信用处罚公示汇总</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910381')">2015年11月苏州工业园区社会保险基金（公积金）公示欠费单位名单</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910282')">园区信用体系建设项目接受市领导专项督查并开展座谈会</a></li>
+		                    <li><a href="javascript:queryOfPreview('1911034')">苏州积分落户制度2016年1月15日起实施 失信行为将扣减分</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910988')">关于做好2015年园区建筑业企业信用综合评价良好行为信息录入工作的通知</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910976')">诚信记录纳入流动人口积分管理</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910972')">江苏省研究生考试26日开考 省考试院提醒考生诚信参考</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910518')">2015年中国十佳诚信政府排行榜发布</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910467')">老忘交电费 当心成老赖失信</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910361')">首个国际征信论坛即将在沪登陆</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910338')">居民身份证将可异地换领补领 有不良信用记录的不予受理</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910329')">双十一”消费信用大数据监测评价启动</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910328')">发改委：年底前全面实施统一社会信用代码制度</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910310')">信用社会临近 央行征信系统已收录8.7亿人数据</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910307')">市食药监公布19批次质量不合格食品（附名单）</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910302')">园区地税提交457户企业列入园区失信法人库</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910177')">关于联合发布2014年长三角地区备案信用服务机构名单的通知</a></li>
+		                    <li><a href="javascript:queryOfPreview('1910179')">2014年度“苏州市级信用管理示范企业”认定公示</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="search f_r">
+            <form id="searchform" action="../content/listContentByTitle.action" method="post">
+                <fieldset>
+                <table>
+                 	<tr>
+				      <td width="70%">
+				      	 <input type="text" onfocus="if(this.value =='请输入关键字') {this.value=''; }" onblur="if(this.value==''){this.value='请输入关键字';}" class="text_input" style="width:200px" value="请输入关键字" name="title" id="title">
+				         <input type="button" onclick="seachContent()" name="button"> 
+				      </td>
+				   	</tr>
+				   	<tr>
+				   		 <td id="hotkw"></td>
+				   	</tr>
+				  </table> 
+                </fieldset>
+            </form>
+        </div>
+    </div>
+    <script type="text/javascript" src="js/muqruujs.js"></script>
+    <!--notice over-->
+    <!--center begin-->
+    <div class="wrap mt5 content">
+        <div class="breadcrumbs">
+            <ul>
+                <li>当前位置：</li>
+          		<li><a href="content306_1.html">政策法规</a> > </li>
+            <li><a href="content309_1.html">本地法规</a> > </li>
+                <li><em>详细</em></li>
+            </ul>
+        </div>
+        
+        <div class="pad50">
+            <div class="art_head">
+                <h1>江苏省个人信用征信管理暂行办法</h1>
+                <div class="tc art_date"> 【发布日期： 】【<a href="javascript:void(0)" onclick="window.print();">打印</a>】 </div>
+            </div>
+            <div class="artnr">
+                <p><div style='font-size:font-size:px;'><p><span style="font-size: small;">《江苏省个人信用征信管理暂行办法》已于2007年9月11日经省人民政府第98次常务会议讨论通过，现予发布，自2007年 &nbsp;11月1日起施行。 <br/><br/>&nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 省长 &nbsp;梁保华 <br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ 二○○七年九月十三日 <br/><br/>江苏省个人信用征信管理暂行办法 <br/><br/>第一章 &nbsp;总 &nbsp;则 <br/><br/>第一条 &nbsp;为了规范个人信用征信活动，保障个人信用征信机构客观、公正地提供个人信用征信服务，保证个人信用信息的准确、安全以及正当使用，保护当事人的合法权益，根据有关法律、法规，结合本省实际，制定本办法。 <br/><br/>第二条 &nbsp;本办法所称个人信用征信，是指个人信用征信机构（以下简称征信机构）对个人信用信息进行采集、储存、加工、使用等活动；所称个人信用信息，是指自然人在社会与经济活动中形成的履行义务记录和相关数据。 <br/><br/>第三条　本办法适用于本省行政区域内个人信用信息的采集、加工、使用及其监督管理。 <br/><br/>第四条 &nbsp;省人民政府信用管理机构负责对全省个人信用征信工作的指导和监督管理。设区的市人民政府信用管理机构负责对本辖区内个人信用征信工作的指导和监督管理。 <br/><br/>省、设区的市人民政府其他有关部门按照各自职责，协同做好个人信用征信工作的指导和监督管理。 <br/><br/>第五条　个人信用征信实行特许经营。特许经营权授予办法由省信用管理机构制定，报省人民政府批准。 <br/><br/>第六条 &nbsp;征信机构应当通过合法的途径采集个人信用信息，客观记录信用信息，科学、公正制作个人信用产品。 <br/><br/>第二章 &nbsp;个人信用信息的采集 <br/><br/>第七条　个人信用信息包括下列内容： <br/><br/>（一）据以识别个人身份以及反映个人家庭、职业等情况的个人基本信息； <br/><br/>（二）个人与金融机构、住房公积金管理机构发生信贷关系而形成的个人信贷信息； <br/><br/>（三）个人与商业机构、公用事业单位发生赊购关系而形成的个人履约信息； <br/><br/>（四）行政机关、司法机关、行使公共管理职能的组织等在行使职权过程中形成的与个人信用相关的信息; <br/><br/>（五）其他与个人信用有关的信息。 <br/><br/>第八条 &nbsp;行政机关、司法机关、行使公共管理职能的组织、公用事业单位、行业组织在个人信用信息生成之后，应当及时、准确、完整地向省政府指定的个人基础信用信息数据库提供。 <br/><br/>具体提供信息的范围、时间、方式、格式等，由省信用管理机构商有关信息提供单位后，报省政府确定。 <br/><br/>个人基础信用信息数据库应当对行政机关、司法机关、行使公共管理职能的组织、公用事业单位、行业组织提供信息查询服务。 <br/><br/>第九条 &nbsp;征信机构可以从省政府指定的个人基础信用信息数据库获取个人信用信息。 <br/><br/>征信机构可以自行采集个人信用信息。 <br/><br/>第十条 &nbsp;采集个人信用信息，应当征得被征信人的书面同意，但有下列情形除外： <br/><br/>（一）在信用交易活动中受侵害一方当事人提供且属实的对方不良信用信息； <br/><br/>（二）鉴证、评估、经纪、咨询等中介服务行业的执业人员，因违反诚实信用原则受到行业组织惩戒的记录； <br/><br/>（三）行政机关、司法机关、行使公共管理职能的组织等在行使职权过程中形成的与个人信用相关的信息； <br/><br/>（四）其他已经依法公开的个人信用信息。 <br/><br/>第十一条 &nbsp;禁止采集下列个人信息，但本人自愿提供的除外： <br/><br/>（一）民族、种族、宗教信仰、政治信仰； <br/><br/>（二）身体形态、基因、血型、疾病和病史等可能影响被征信人正常生活的信息； <br/><br/>（三）其他与个人信用无关或者法律、法规禁止采集的个人信息。 <br/><br/>第十二条 &nbsp;本办法第十一条规定禁止采集的个人信息除本人自愿提供外，禁止录入个人基础信用信息数据库。 <br/><br/>第十三条 &nbsp;征信机构所采集的个人信用信息应当是对客观事实准确的记录，个人信用信息的来源应当合法。 <br/><br/>禁止以欺骗、盗窃、胁迫、利用计算机网络侵入或者其他不正当手段采集个人信用信息。 <br/><br/>第十四条 &nbsp;被征信人可以向个人基础信用信息数据库查询本人的信用信息。 <br/><br/>第三章 &nbsp;个人信用信息的加工 <br/><br/>第十五条 &nbsp;征信机构应当建立个人信用信息数据库和信息系统，及时、准确地录入个人信用信息，不得虚构或者篡改。 <br/><br/>第十六条 &nbsp;征信机构应当制定信息匹配规则，采用有效的个人身份识别标志匹配所采集的个人信用信息，确保信息录入的准确性。 <br/><br/>第十七条　征信机构根据个人信用信息制作个人信用报告、个人信用评估报告等信用产品。 <br/><br/>个人信用报告应当客观反映个人信用信息，不得进行推断和评估。 <br/><br/>个人信用评估报告应当以科学、合理的评估指标体系和标准为依据，保证评估结果的公正。 <br/><br/>第十八条　征信机构应当建立管理制度，采取必要的技术措施，保证个人信用信息数据库的运行安全和个人信用信息的保密安全。 <br/><br/>征信机构应当对个人信用信息数据库进行加密备份，防止信息丢失。 <br/><br/>征信机构应当设置个人信用信息系统访问权限，记录系统访问日志，防止系统被越权访问或者越权处理。 <br/><br/>第四章 &nbsp;个人信用信息的使用 <br/><br/>第十九条　征信机构提供和使用个人信用信息，应当得到被征信人同意。法律、法规、规章另有规定从其规定。 <br/><br/>第二十条 &nbsp;未经被征信人同意，征信机构不得在个人信用报告或者个人信用评估报告中，披露本办法第十一条规定的禁止采集但由被征信人自愿提供的个人信息。 <br/><br/>第二十一条 &nbsp;个人不良信用信息的披露或者使用期限，最长为自不良信用行为终止之日起7年。法律、法规另有规定的，从其规定。 <br/><br/>征信机构不得在个人信用报告或者个人信用评估报告中披露或者使用超过规定期限的债务拖欠信息、行业惩戒、行政处分或者行政处罚记录以及除犯罪记录以外的其他不良信用信息。 <br/><br/>第二十二条　征信机构不得向用户以外的单位或者个人披露个人信用报告、个人信用评估报告以及其中反映的个人信用信息。 <br/><br/>第二十三条　征信机构提供的个人信用报告和个人信用评估报告，作为用户判断被征信人信用状况的参考依据。 <br/><br/>第二十四条 &nbsp;征信机构应当根据被征信人的要求，为其提供下列信息的查询服务： <br/><br/>（一）本人的信用信息； <br/><br/>（二）本人信用信息的来源； <br/><br/>（三）获取本人信用报告或者信用评估报告的用户。 <br/><br/>第二十五条　个人信用征信实行有偿服务。 <br/><br/>征信机构提供个人信用报告和个人信用评估报告的收费标准，由省价格主管部门会同省信用管理机构确定。 <br/><br/>司法机关、行政机关在办理案件、行政管理过程中需要使用个人信用信息的，可以向征信机构无偿查询。 <br/><br/>第五章 &nbsp;异议信息的处理 <br/><br/>第二十六条　被征信人或者用户认为个人信用信息有错误的，可以向征信机构书面提出异议申请，要求予以更正。 <br/><br/>异议申请人应当就异议内容提供相关证据。 <br/><br/>第二十七条 &nbsp;异议信息是自行采集的，征信机构应当在收到异议申请之日起20日内，按照下列规定处理： <br/><br/>（一）异议信息经核实确有必要更正的，应当及时予以更正，并告知异议申请人以及被征信人； <br/><br/>（二）异议信息经核实无须更正或者无法核实的，可以对异议信息不作修改，但应当告知异议申请人。异议信息无法核实的不得披露。 <br/><br/>异议信息不是自行采集的，征信机构应当通知信息提供单位进行核实。信息提供单位应当在10日内作出答复。 <br/><br/>异议信息处理期限内，该信息暂不披露和使用。 <br/><br/>第二十八条 &nbsp;向征信机构提供个人信用信息的单位和个人，发现其所提供的个人信用信息错误的，应当及时书面通知征信机构。征信机构应当在接到通知后2日内对相关信息予以更正。 <br/><br/>第二十九条　个人信用信息被更正的，征信机构应当给被征信人无偿提供一份更正后的个人信用报告，并及时更正根据异议信息制作的信用产品。 <br/><br/>第三十条 &nbsp;征信机构在收到异议申请之日起20日内不作处理的，异议申请人可以申请信用管理机构对异议申请作出处理，信用管理机构应当在收到申请之日起30日内作出处理决定。 <br/><br/>第六章 &nbsp;监督管理 <br/><br/>第三十一条　征信机构应当将下列事项报信用管理机构备案： <br/><br/>（一）征信机构采集、加工、处理个人信用信息的方法、标准，以及业务操作规则； <br/><br/>（二）保证个人信用信息系统安全运行的规章制度； <br/><br/>（三）依法需要备案的其他事项。 &nbsp;<br/><br/>信用管理机构应当为征信机构保守商业秘密。 <br/><br/>第三十二条　征信机构应当通过营业场所公示等方式向社会公开下列事项，并接受社会监督： <br/><br/>（一）个人信用信息的采集规范和披露时限； <br/><br/>（二）获得个人信用报告和个人信用评估服务的方式； <br/><br/>（三）个人信用报告和个人信用评估服务的收费标准； <br/><br/>（四）异议处理程序； <br/><br/>（五）依法需要公开的其他事项。 <br/><br/>第三十三条 &nbsp;征信机构应当在每年第一季度向信用管理机构报告上一年度的下列情况： <br/><br/>（一）个人信用信息采集、加工和使用情况； <br/><br/>（二）个人信用信息系统运行和信用信息安全保密、数据维护等相关规章制度的制定和执行情况； <br/><br/>（三）个人信用信息采集、查询和评估服务的情况； <br/><br/>（四）异议处理和答复情况。 <br/><br/>第三十四条　征信机构发生个人信用信息系统重大运行故障、个人信用信息严重泄露等情况时，应当及时作出处理，并向信用管理机构及相关部门报告。 <br/><br/>第三十五条　任何单位和个人认为征信机构的征信活动侵犯其合法权益，或者存在其他违法行为的，可以向信用管理机构投诉或者举报。 <br/><br/>信用管理机构应当自受理投诉或者举报之日起30日内作出处理和答复。 <br/><br/>第三十六条　征信机构发生解散、被撤销、破产等营业终止事项时，应当按照以下方式处理个人信用信息数据库： <br/><br/>（一）移交省信用管理机构； <br/><br/>（二）在省信用管理机构的监督下，转让给其他合法征信机构； <br/><br/>（三）在省信用管理机构的监督下销毁。 <br/><br/>第七章 &nbsp;法律责任 <br/><br/>第三十七条 &nbsp;征信机构违反本办法规定，有下列行为之一的，由信用管理机构责令改正，给予警告，并可处1000元以上1万元以下罚款： <br/><br/>（一）未及时、准确录入个人信用信息的； <br/><br/>（二）未向被征信人提供查询服务的； <br/><br/>（三）未按照第三十一条规定备案或者未按照第三十三条报告相关情况的； <br/><br/>（四）未按照第三十二条规定公开有关事项的。 <br/><br/>第三十八条 &nbsp;征信机构违反本办法规定，有下列行为之一的，由信用管理机构责令改正，给予警告，并可处5000元以上2万元以下罚款；造成损害的，依法承担民事责任；构成犯罪的，依法追究刑事责任： <br/><br/>（一）采集本办法第十条规定情形以外的信息而未征得被征信人同意的； <br/><br/>（二）采集禁止采集的个人信息的； <br/><br/>（三）虚构、篡改个人信用信息，或者擅自录入禁止录入信息的； <br/><br/>（四）未及时处理异议信息、更正信用产品造成损失的。 <br/><br/>第三十九条　征信机构违反本办法规定，有下列行为之一的，由信用管理机构责令改正，并可处5000元以上3万元以下罚款；造成损害的，依法承担民事责任；构成犯罪的，依法追究刑事责任： <br/><br/>（一）以欺骗、盗窃、胁迫、利用计算机网络侵入或者其他不正当手段采集个人信用信息的； <br/><br/>（二）未经被征信人同意擅自向其他单位和个人提供个人信用报告、个人信用评估报告或者披露个人信用信息的； <br/><br/>（三）在个人信用报告中披露或者使用有关不得披露和使用的信息的。 <br/><br/>第四十条 &nbsp;行政机关、行使公共管理职能的组织及其工作人员，违反本办法规定，不提供个人信用信息、提供虚假信息或者不及时处理异议信息的，由其所在单位或者上级机关予以通报；对直接负责的主管人员和其他直接责任人员，视情节轻重，给予警告、记过、记大过的处分。 <br/><br/>第八章 &nbsp;附 &nbsp;则 <br/><br/>第四十一条 &nbsp;个人基础信用信息数据库采集信贷信息，应当遵守国家有关规定。 <br/><br/>信贷征信机构从事个人社会征信业务，应当遵守本办法。 <br/><br/>第四十二条　本办法自2007年11月1日起施行。 </span></p></div></p>
+            </div>
+        </div>
+    </div>
+    <!--center over-->
+        
+    <!--footer begin-->
+    <div class="wrap mt10">
+        <div class="link">
+            <h1>友情链接</h1>
+            <ul class="l_list">
+                <li><a href="http://www.creditchina.gov.cn/" target="_blank">信用中国</a></li>
+                <li><a href="http://www.js.gov.cn/jsxy/index.htm" target="_blank">诚信江苏</a></li>
+                <li><a href="http://www.njcredit.gov.cn/" target="_blank">诚信南京</a></li>
+                <li><a href="http://www.szcredit.gov.cn/" target="_blank">诚信苏州</a></li>
+                <li><a href="http://credit.zjg.gov.cn/toIndex.action" target="_blank">诚信张家港</a></li>
+            </ul>
+        </div>
+        
+         <div class="foot">
+            <p><span>主办单位：苏州工业园区信用办 </span><span>技术支持：江苏中集科技有限公司</span><span><script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1256639142'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1256639142' type='text/javascript'%3E%3C/script%3E"));</script></span></p>
+        </div>
+        
+    </div>
+    <!--footer over-->
+</div>
+<!--content over-->
+    
+</body>
+</html>

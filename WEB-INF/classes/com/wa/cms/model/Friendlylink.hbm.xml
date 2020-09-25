@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2014-5-5 16:40:13 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.wa.cms.model.Friendlylink" table="FRIENDLYLINK" >
+        <id name="friendlylinkId" type="long">
+            <column name="FRIENDLYLINK_ID" precision="10" scale="0" />
+        </id>
+        <many-to-one name="friendlylinkType" class="com.wa.cms.model.FriendlylinkType" fetch="select">
+            <column name="FRIENDLYLINK_TYPE_ID" precision="10" scale="0" not-null="true" />
+        </many-to-one>
+        <property name="siteName" type="string">
+            <column name="SITE_NAME" length="100">
+                <comment>&#205;&#248;&#213;&#190;&#195;&#251;&#179;&#198;</comment>
+            </column>
+        </property>
+        <property name="domain" type="string">
+            <column name="DOMAIN">
+                <comment>&#211;&#242;&#195;&#251;</comment>
+            </column>
+        </property>
+        <property name="priority" type="java.lang.Short">
+            <column name="PRIORITY" precision="4" scale="0">
+                <comment>&#203;&#179;&#208;&#242;</comment>
+            </column>
+        </property>
+        <property name="viewTimes" type="big_decimal">
+            <column name="VIEW_TIMES" precision="22" scale="0">
+                <comment>&#183;&#195;&#206;&#202;&#180;&#206;&#202;&#253;</comment>
+            </column>
+        </property>
+        <property name="logo" type="string">
+            <column name="LOGO">
+                <comment>&#205;&#188;&#177;&#234;&#181;&#216;&#214;&#183;</comment>
+            </column>
+        </property>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2014-5-5 16:40:13 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.wa.cms.model.Model" table="MODEL">
+        <comment>&#196;&#163;&#208;&#205;&#177;&#237;</comment>
+        <id name="modelId" type="long">
+            <column name="MODEL_ID" precision="10" scale="0" />
+        </id>
+        <property name="name" type="string">
+            <column name="NAME" length="100">
+                <comment>&#195;&#251;&#179;&#198;</comment>
+            </column>
+        </property>
+        <property name="path" type="string">
+            <column name="PATH" length="50">
+                <comment>&#194;&#183;&#190;&#182;</comment>
+            </column>
+        </property>
+        <property name="priority" type="java.lang.Short">
+            <column name="PRIORITY" precision="4" scale="0">
+                <comment>&#203;&#179;&#208;&#242;</comment>
+            </column>
+        </property>
+        <property name="hasContent" type="java.lang.Byte">
+            <column name="HAS_CONTENT" precision="2" scale="0">
+                <comment>&#202;&#199;&#183;&#241;&#211;&#208;&#196;&#218;&#200;&#221;</comment>
+            </column>
+        </property>
+        <property name="isDisabled" type="java.lang.Byte">
+            <column name="IS_DISABLED" precision="2" scale="0">
+                <comment>&#202;&#199;&#183;&#241;&#191;&#201;&#211;&#195;</comment>
+            </column>
+        </property>
+        <property name="tplChannelPrefix" type="string">
+            <column name="TPL_CHANNEL_PREFIX" length="100">
+                <comment>&#192;&#184;&#196;&#191;&#196;&#163;&#176;&#229;&#199;&#176;&#215;&#186;</comment>
+            </column>
+        </property>
+        <set name="channels" table="CHANNEL" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="MODEL_ID" precision="10" scale="0" />
+            </key>
+            <one-to-many class="com.wa.cms.model.Channel" />
+        </set>
+        <set name="modelItems" table="MODEL_ITEM" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="MODEL_ID" precision="10" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="com.wa.cms.model.ModelItem" />
+        </set>
+        <set name="channelModels" table="CHANNEL_MODEL" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="MODEL_ID" precision="10" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="com.wa.cms.model.ChannelModel" />
+        </set>
+    </class>
+</hibernate-mapping>

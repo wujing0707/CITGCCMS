@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2014-5-5 16:40:13 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.wa.cms.model.ContentPicture" table="CONTENT_PICTURE" >
+        <comment>&#196;&#218;&#200;&#221;&#205;&#188;&#198;&#172;&#177;&#237;</comment>
+        <id name="contentPictureId" type="long">
+            <column name="CONTENT_PICTURE_ID" precision="10" scale="0" />
+        </id>
+        <many-to-one name="content" class="com.wa.cms.model.Content" fetch="select">
+            <column name="CONTENT_ID" precision="10" scale="0" not-null="true" />
+        </many-to-one>
+        <property name="priority" type="byte">
+            <column name="PRIORITY" precision="2" scale="0" not-null="true">
+                <comment>&#208;&#242;&#186;&#197;</comment>
+            </column>
+        </property>
+        <property name="imgPath" type="string">
+            <column name="IMG_PATH" length="1024">
+                <comment>&#205;&#188;&#198;&#172;&#194;&#183;&#190;&#182;</comment>
+            </column>
+        </property>
+        <property name="description" type="string">
+            <column name="DESCRIPTION" length="510">
+                <comment>&#205;&#188;&#198;&#172;&#195;&#232;&#202;&#246;</comment>
+            </column>
+        </property>
+    </class>
+</hibernate-mapping>
